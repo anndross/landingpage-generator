@@ -7,7 +7,7 @@ interface ItemType {
   name: string;
 }
 
-export const Preview: FC = (props) => {
+export const Preview: FC = () => {
   const [state, setState] = useState<ItemType[]>([
   ]);
 

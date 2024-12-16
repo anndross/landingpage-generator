@@ -5,10 +5,10 @@ import { ReactSortable } from "react-sortablejs";
 interface ItemType {
   id: number;
   name: string;
-  data: any
+  data: string
 }
 
-export const Section: FC = (props) => {
+export const Section: FC = () => {
   const [state, setState] = useState<ItemType[]>([
     { id: 1, name: "shrek", data: '' },
     { id: 2, name: "fiona", data: '' },
