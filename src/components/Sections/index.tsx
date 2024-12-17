@@ -2,22 +2,22 @@
 import React, { FC, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 
-interface ItemType {
+export interface ItemType {
   id: number;
   name: string;
-  data: string
+  type: 'text' | 'image'
 }
 
 export const Section: FC = () => {
   const [state, setState] = useState<ItemType[]>([
-    { id: 1, name: "shrek", data: '' },
-    { id: 2, name: "fiona", data: '' },
+    { id: 1, name: "Texto", type: 'text' },
+    { id: 2, name: "Imagem", type: 'image' },
   ]);
 
   return (
-    <div>
+    <div className="flex flex-col justify-between gap-2">
         <h2>Seções</h2>
-        <div className="h-60 bg-slate-200 rounded-lg p-4">
+        <div className="h-96 bg-slate-200 rounded-lg p-4">
             <ReactSortable 
                 style={{width: '100%', height: '100%'}}
                 group={{

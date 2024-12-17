@@ -1,0 +1,7 @@
+{
+    "rich-text#text": {
+        "props": {
+            "text": ""
+        }
+    }
+}
