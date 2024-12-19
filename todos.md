@@ -10,4 +10,4 @@ As seções dentro do preview poderá ser movida em qualquer ordem.
 
 ## Deve haver um botão de exportar os componentes já estruturado na ordem correta para uma página VTEX IO
 
-OBS: seria interessante poder adicionar novas opções de exportações para usos futuros.
+OBS: seria interessante poder adicionar novas opções de exportações para usos  futuros.

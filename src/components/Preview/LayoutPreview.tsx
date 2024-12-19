@@ -1,18 +1,14 @@
 import { ReactSortable } from "react-sortablejs";
 import { ItemType } from "../Sections";
-import { FC, useState } from "react";
+import { FC, useId, useState } from "react";
 import { EditableImage } from "./components/EditableImage";
 import { EditableText } from "./components/EditableText";
 
-
-interface LayoutPreviewProps {
-    code: any
-    setCode: (code: any) => void
-}
-
-export const LayoutPreview = ({code, setCode}: LayoutPreviewProps) => {
+export const LayoutPreview = () => {
     const [state, setState] = useState<ItemType[]>([
     ]);
+    const id = useId()
+
 
     const components = {
         image: EditableImage,
@@ -25,15 +21,21 @@ export const LayoutPreview = ({code, setCode}: LayoutPreviewProps) => {
             group={{
                 name: 'shared',
                 pull: true,
-                put: true
-            }} 
+                put: true,
+            }}
+            dropBubble
             list={state} 
-            setList={setState}
+            setList={(newState, sortable, store) => {
+                console.log(`newState`, newState)
+                console.log(`sortable`, sortable)
+                console.log(`store`, store)
+                setState(Array.from(new Map(newState.map(obj => [obj.id + id, obj])).values()))
+            }}
         >
                 {state.map((item) => {
                     const Component = components[item.type]
 
-                    return  <Component value={item.name} key={item.id} code={code} setCode={setCode} />
+                    return  <Component value={item.name} key={item.id} />
             })}
         </ReactSortable>
     )

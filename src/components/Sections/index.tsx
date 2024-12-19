@@ -3,7 +3,7 @@ import React, { FC, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 
 export interface ItemType {
-  id: number;
+  id: number | string;
   name: string;
   type: 'text' | 'image'
 }
@@ -23,10 +23,10 @@ export const Section: FC = () => {
                 group={{
                     name: 'shared',
                     pull: 'clone',
-                    put: false
+                    put: true,
+
                 }} 
                 sort={false} 
-                dropBubble 
                 onSort={(evt) => console.log(evt)} 
                 list={state} 
                 setList={setState}
