@@ -1,14 +1,13 @@
 import { ReactSortable } from "react-sortablejs";
 import { ItemType } from "../Sections";
-import { FC, useId, useState } from "react";
+import { useState } from "react";
 import { EditableImage } from "./components/EditableImage";
 import { EditableText } from "./components/EditableText";
+import { nanoid } from "nanoid";
 
 export const LayoutPreview = () => {
     const [state, setState] = useState<ItemType[]>([
     ]);
-    const id = useId()
-
 
     const components = {
         image: EditableImage,
@@ -26,10 +25,41 @@ export const LayoutPreview = () => {
             dropBubble
             list={state} 
             setList={(newState, sortable, store) => {
-                console.log(`newState`, newState)
-                console.log(`sortable`, sortable)
-                console.log(`store`, store)
-                setState(Array.from(new Map(newState.map(obj => [obj.id + id, obj])).values()))
+                setState(newState)
+                // function findDuplicates(arr: typeof newState) {
+                //     const counts: any = {};
+                //     const duplicates = [];
+                  
+                //     for (const item of arr) {
+                //       counts[item.id] = (counts[item.id] || 0) + 1;
+
+                //       if (counts[item.id] === 2) { // Adicionar ao array de duplicados apenas na segunda ocorrência
+                //         duplicates.push(item);
+                //       }
+                //     }
+                  
+                //     return duplicates;
+                // }
+
+
+                // const newStateSet = new Set(newState)
+
+                // const duplicates = findDuplicates(newState)
+
+                // duplicates.forEach(item => {
+                //     const id = nanoid()
+
+                //     item.id = id
+
+                //     console.log('newState', item, item.id, id)
+                //     newStateSet.add(item)
+                // })
+
+
+                // console.log(`newState`, newState, newStateSet)
+                // console.log(`sortable`, sortable)
+                // console.log(`store`, store)
+                // setState(Array.from(newStateSet))
             }}
         >
                 {state.map((item) => {

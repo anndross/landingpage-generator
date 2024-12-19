@@ -2,20 +2,20 @@ import { ItemType } from '@/components/Sections'
 import richTextJson from '../vtex-io-components/rich-text.json'
 import imageJson from '../vtex-io-components/image.json'
 
-export function updateFinalComponent(type: ItemType['type'], content: string, code: Object) {
-    return updateVtexIoComponents(type, content, code)
+export function updateFinalComponent(type: ItemType['type'], id: string, content: string, code: Object) {
+    return updateVtexIoComponents(type, id, content, code)
 }
 
-export function updateVtexIoComponents(type: ItemType['type'], content: string, code: Object) {
+export function updateVtexIoComponents(type: ItemType['type'], id: string, content: string, code: Object) {
 
     function richText() {
-        if(code) richTextJson['rich-text#text']['props']['text'] = content
+        if(code) richTextJson['rich-text#']['props']['text'] = content
 
         return richTextJson
     }
 
     function image() {
-        if(code) imageJson['image#image']['props']['src'] = content
+        if(code) imageJson['image#']['props']['src'] = content
 
         return imageJson
     }
