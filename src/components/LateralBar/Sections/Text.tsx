@@ -1,4 +1,5 @@
 'use client';
+import context from "@/app/context";
 import { Input } from "@/components/ui/input"
 import {
     Select,
@@ -7,8 +8,11 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import { useContext } from "react";
 
 export function Text() {
+    const { setPreviewElements } = useContext(context)
+
     const tagOptions = [
         {value: "h1", label: "h1"},
         {value: "h2", label: "h2"},
