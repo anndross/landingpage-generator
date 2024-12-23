@@ -16,7 +16,7 @@ export function CodePreview() {
     return (
         <Highlight code={formattedCode} language="json" theme={themes.github}>
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre className={className} style={style}>
+            <pre className={className} style={{...style, width: '100%', height: '100%' }}>
                 {tokens.map((line, i) => (
                 <div {...getLineProps({ line, key: i })} key={i}>
                     {line.map((token, key) => (

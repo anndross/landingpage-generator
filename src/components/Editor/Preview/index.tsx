@@ -12,8 +12,8 @@ export function Preview() {
 
   return (
     <CodeContext.Provider value={{ code, setCode }}>
-      <div className="flex flex-col justify-between gap-2">
-        <div className="flex items-start justify-between">
+      <div className="relative flex flex-col justify-between gap-2 h-full w-full pt-14">
+        <div className="flex items-center px-4 justify-between absolute w-full h-14 top-0 bg-slate-200">
           <h2>Preview</h2>
           <button onClick={() => setShowCode((prev) => !prev)} className="bg-slate-500 text-white rounded-md px-2 p-1 hover:bg-slate-400 active:bg-slate-500 duration-100">
             {!showCode ? 'CODE' : 'PREVIEW' }
@@ -22,7 +22,7 @@ export function Preview() {
 
         <div 
           className={clsx({
-            "w-[600px] h-96": true,
+            "w-full h-full": true,
             "hidden": !showCode
           })}
         >
@@ -31,7 +31,7 @@ export function Preview() {
 
         <div 
           className={clsx({
-            "w-[600px] h-96": true,
+            "w-full h-full": true,
             "hidden": showCode
           })}
         >
