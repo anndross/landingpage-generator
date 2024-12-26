@@ -1,4 +1,4 @@
-"use client";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -8,7 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function Text() {
+interface TextProps {
+  clear: () => void;
+}
+
+export function Text({ clear }: TextProps) {
   const tagOptions = [
     { value: "h1", label: "h1" },
     { value: "h2", label: "h2" },
@@ -18,15 +22,27 @@ export function Text() {
     { value: "h6", label: "h6" },
     { value: "p", label: "p" },
     { value: "span", label: "span" },
+    { value: "a", label: "a" },
   ];
+
+  const handleToAdd = async () => {
+    await fetch("/api/create-element", {
+      method: "POST",
+      body: JSON.stringify({
+        teste: "testeeeee",
+      }),
+    });
+
+    clear();
+  };
 
   return (
     <div>
-      <div className="flex gap-2">
-        <Input className="w-1/2" placeholder="Seu texto aqui..." />
+      <div className="flex flex-col gap-2">
+        <Input className="w-full" placeholder="Seu texto aqui..." />
 
         <Select>
-          <SelectTrigger className="w-1/2">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={"Escolha sua tag..."} />
           </SelectTrigger>
           <SelectContent>
@@ -38,6 +54,7 @@ export function Text() {
           </SelectContent>
         </Select>
       </div>
+      <Button onClick={handleToAdd}>Adicionar</Button>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -15,13 +14,11 @@ import { Image } from "./Image";
 export function CreateSection() {
   const [value, setValue] = useState<string>("");
 
-  const components: { [key: string]: ReactNode } = {
-    text: <Text />,
-    image: <Image />,
-  };
+  const clear = () => setValue("");
 
-  const handleToAdd = () => {
-    setValue("");
+  const components: { [key: string]: ReactNode } = {
+    text: <Text clear={clear} />,
+    image: <Image />,
   };
 
   return (
@@ -47,7 +44,6 @@ export function CreateSection() {
       </div>
 
       {components[value]}
-      {value && <Button onClick={handleToAdd}>Adicionar</Button>}
     </div>
   );
 }

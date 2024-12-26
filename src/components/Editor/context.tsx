@@ -1,7 +1,13 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
 export interface ImageElementI {
-  url: string;
+  images: {
+    url: string;
+    alt: string;
+    title: string;
+    width: string;
+    height: string;
+  }[];
 }
 
 export interface PreviewElements extends Partial<ImageElementI> {

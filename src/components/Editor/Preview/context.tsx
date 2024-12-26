@@ -1,13 +1,13 @@
-import { createContext } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 
 interface CodeContextI {
-    code: any
-    setCode: (code: Object) => void
+  code: Object;
+  setCode: Dispatch<SetStateAction<CodeContextI["code"]>>;
 }
 
 const CodeContext = createContext<CodeContextI>({
-    code: {},
-    setCode: (code: {}) => {}
-})
+  code: {},
+  setCode: () => {},
+});
 
-export default CodeContext
+export default CodeContext;

@@ -1,17 +1,16 @@
 import { ReactSortable } from "react-sortablejs";
 import { useState } from "react";
-import { EditableImage } from "./editableComponents/EditableImage";
-import { EditableText } from "./editableComponents/EditableText";
 import { PreviewElements } from "../context";
+// import { Text } from "@/editableComponents/Text";
+import { Image as EditableImage } from "@/editableComponents/Image";
 
 export const LayoutPreview = () => {
   const [state, setState] = useState<PreviewElements[]>([]);
 
-  const components = {
-    image: EditableImage,
-    text: EditableText,
-  };
-
+  // const components = {
+  //   image: EditableImage,
+  //   text: Text,
+  // };
   return (
     <ReactSortable
       className="w-full h-full bg-slate-200 p-4 flex flex-col"
@@ -35,9 +34,9 @@ export const LayoutPreview = () => {
       }}
     >
       {state.map((item) => {
-        const Component = components[item.type];
+        // const Component = components[item.type];
 
-        return <Component value={item.name} key={item.id} />;
+        return <EditableImage key={item.id} />;
       })}
     </ReactSortable>
   );
