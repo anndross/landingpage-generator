@@ -1,27 +1,33 @@
 "use client";
-import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
+import { PreviewElements } from "../../context";
+import { useState } from "react";
 import { ModalEditor } from "./ModalEditor";
 
-export function Sections() {
-  const [state, setState] = useState<
-    { id: number; name: string; type: string }[]
-  >([
-    { id: 1, name: "Texto", type: "text" },
-    { id: 2, name: "Imagem", type: "image" },
-  ]);
+interface ElementsProps {
+  data: PreviewElements[];
+}
+
+export function SortableElements({ data }: ElementsProps) {
+  const [state, setState] = useState(data || []);
 
   return (
     <ReactSortable
       tag={"ul"}
+      group={{
+        name: "elements",
+        pull: "clone",
+        put: false,
+      }}
       className="w-full h-full overflow-y-auto flex flex-col gap-2 my-6"
+      sort
       list={state}
       setList={setState}
     >
-      {state.map((item) => (
+      {data.map((item) => (
         <li
           className="flex select-none justify-between items-center w-full p-1 px-2 border shadow-sm rounded-lg"
-          key={item.id}
+          key={item._id}
         >
           <span className="w-full cursor-grab">{item.name}</span>
 

@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
+import { ItemInterface } from "react-sortablejs";
 
 export interface ImageElementI {
   images: {
@@ -10,8 +11,8 @@ export interface ImageElementI {
   }[];
 }
 
-export interface PreviewElements extends Partial<ImageElementI> {
-  id: string | number;
+export interface PreviewElements extends Partial<ImageElementI>, ItemInterface {
+  _id: string | number;
   name: string;
   type: "text" | "image";
 }

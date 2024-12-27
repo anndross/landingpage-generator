@@ -7,12 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FormEvent } from "react";
 
-interface TextProps {
-  clear: () => void;
-}
-
-export function Text({ clear }: TextProps) {
+export function Text() {
   const tagOptions = [
     { value: "h1", label: "h1" },
     { value: "h2", label: "h2" },
@@ -25,19 +22,20 @@ export function Text({ clear }: TextProps) {
     { value: "a", label: "a" },
   ];
 
-  const handleToAdd = async () => {
+  async function handleToAdd(event: FormEvent) {
+    event.preventDefault();
+    console.log(event);
+
     await fetch("/api/create-element", {
       method: "POST",
       body: JSON.stringify({
         teste: "testeeeee",
       }),
     });
-
-    clear();
-  };
+  }
 
   return (
-    <div>
+    <form onSubmit={handleToAdd} className="flex flex-col gap-2" method="POST">
       <div className="flex flex-col gap-2">
         <Input className="w-full" placeholder="Seu texto aqui..." />
 
@@ -54,7 +52,9 @@ export function Text({ clear }: TextProps) {
           </SelectContent>
         </Select>
       </div>
-      <Button onClick={handleToAdd}>Adicionar</Button>
-    </div>
+      <Button className="w-full" type="submit">
+        Adicionar
+      </Button>
+    </form>
   );
 }

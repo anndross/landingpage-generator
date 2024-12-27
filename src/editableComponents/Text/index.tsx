@@ -1,17 +1,17 @@
 import { ChangeEvent, useCallback, useState } from "react";
 
 interface TextProps {
-  value: string;
+  content: string;
 }
 
-export function Text({ value }: TextProps) {
-  const [content, setContent] = useState(value || "");
+export function Text({ content }: TextProps) {
+  const [editableContent, setEditableContent] = useState(content || "");
   const [isEditable, setIsEditable] = useState(false);
 
   const onContentBlur = useCallback((evt: ChangeEvent<HTMLHeadingElement>) => {
     setIsEditable(false);
 
-    setContent(evt.currentTarget.innerHTML);
+    setEditableContent(evt.currentTarget.innerHTML);
   }, []);
 
   return (
@@ -19,7 +19,7 @@ export function Text({ value }: TextProps) {
       contentEditable={isEditable}
       onBlur={onContentBlur}
       onDoubleClick={() => setIsEditable(true)}
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: editableContent }}
     />
   );
 }

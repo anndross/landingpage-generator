@@ -1,4 +1,4 @@
 [
-    {"value": "text", "label": "Texto"},
-    {"value": "image", "label": "Imagem"}
+  { "value": "text", "label": "Texto" },
+  { "value": "image", "label": "Imagem" }
 ]

@@ -8,17 +8,14 @@ import {
 } from "@/components/ui/select";
 import componentsOptions from "@/data/componentsOptions.json";
 import { ReactNode, useState } from "react";
-import { Text } from "./Text";
-import { Image } from "./Image";
+import { Text } from "./Elements/Text";
+// import { Image } from "./Image";
 
 export function CreateSection() {
   const [value, setValue] = useState<string>("");
 
-  const clear = () => setValue("");
-
   const components: { [key: string]: ReactNode } = {
-    text: <Text clear={clear} />,
-    image: <Image />,
+    text: <Text />,
   };
 
   return (
