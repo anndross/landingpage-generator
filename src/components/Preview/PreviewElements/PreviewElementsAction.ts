@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { PreviewElements } from "../context";
+import { PreviewElements } from "../../Editor/context";
 
 export async function ElementsPreviewAction(state: PreviewElements[]) {
   const propsToRemove = ["chosen", "selected", "id"];

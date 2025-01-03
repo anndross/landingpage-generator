@@ -1,4 +1,4 @@
-import { SortableElements } from "./SortableElements";
+import { ElementsSortable } from "./ElementsSortable";
 
 export async function Elements() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
@@ -7,6 +7,6 @@ export async function Elements() {
       tags: ["get-elements"],
     },
   }).then((res) => res.json());
-
-  return <SortableElements data={data} />;
+  console.log(data);
+  return <ElementsSortable data={JSON.parse(data)} />;
 }
