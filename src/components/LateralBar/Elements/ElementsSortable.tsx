@@ -1,12 +1,13 @@
 "use client";
 import { ReactSortable } from "react-sortablejs";
 import { ElementType, useEffect, useState } from "react";
-import { TextModal } from "./Modals/TextModal";
-import { PreviewElements } from "@/components/Preview/context";
+import { TextModal } from "./Modals/Text";
+import { PreviewElement } from "@/components/Preview/context";
+import { DeleteModal } from "./Modals/Delete";
 
 interface ElementsProps {
   data: {
-    elements: PreviewElements[];
+    elements: PreviewElement[];
   };
 }
 
@@ -17,7 +18,7 @@ export function ElementsSortable({ data }: ElementsProps) {
     setState(data.elements);
   }, [data]);
 
-  const modals: Partial<{ [key in PreviewElements["type"]]: ElementType }> = {
+  const modals: Partial<{ [key in PreviewElement["type"]]: ElementType }> = {
     text: TextModal,
   };
 
@@ -46,10 +47,12 @@ export function ElementsSortable({ data }: ElementsProps) {
 
         return (
           <li
-            className="flex select-none justify-between items-center w-full p-1 px-2 border shadow-sm rounded-lg"
+            title={item.value}
+            className="flex select-none justify-between items-center w-full p-1 px-2 gap-1 border shadow-sm rounded-lg"
             key={item.id}
           >
-            <span className="w-full cursor-grab">{item.value}</span>
+            <span className="truncate w-full cursor-grab">{item.value}</span>
+            <DeleteModal id={item.id} {...props[item.type]} />
             {Modal && <Modal id={item.id} {...props[item.type]} />}
           </li>
         );

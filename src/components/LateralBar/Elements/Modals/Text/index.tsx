@@ -11,8 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { TagSelect } from "../../Creator/ElementText";
-import { handleToUpdate } from "./Actions";
+import { TagSelect } from "../../../Creator/ElementText";
+import { handleToUpdate } from "./Action";
 
 interface TextModalProps {
   value: string;

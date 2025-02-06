@@ -1,11 +1,11 @@
-import { Options, PreviewElements } from "@/components/Preview/context";
+import { Options, PreviewElement } from "@/components/Preview/context";
 
 import richTextJson from "@/mappedComponents/vtexIo/rich-text.json";
 import imageJson from "@/mappedComponents/vtexIo/image.json";
 
 export function codeConverter(
   type: Options["code"] | false,
-  elements: PreviewElements[] | undefined
+  elements: PreviewElement[] | undefined
 ) {
   const methods = {
     "VTEX IO": vtexIoConverter,
@@ -18,8 +18,8 @@ export function codeConverter(
   return instance(elements);
 }
 
-export function vtexIoConverter(elements: PreviewElements[]) {
-  function richText(el: PreviewElements) {
+export function vtexIoConverter(elements: PreviewElement[]) {
+  function richText(el: PreviewElement) {
     const richText = {
       [`rich-text#${el.id}`]: JSON.parse(
         JSON.stringify(richTextJson["rich-text"])
@@ -31,7 +31,7 @@ export function vtexIoConverter(elements: PreviewElements[]) {
     return richText;
   }
 
-  function image(el: PreviewElements) {
+  function image(el: PreviewElement) {
     if (el) imageJson["image"]["props"]["src"] = "";
 
     return imageJson;

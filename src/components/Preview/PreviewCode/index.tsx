@@ -14,7 +14,6 @@ export function PreviewCode() {
   };
 
   const code = codeConverter(previewType, previewElements);
-  console.log("code", code, previewType, previewElements);
 
   return (
     <Highlight

@@ -1,14 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import { LayoutPreview } from "./PreviewElements";
+import React, { ReactNode, useEffect, useState } from "react";
 import { PreviewCode } from "./PreviewCode";
 import clsx from "clsx";
-import PreviewContext, { PreviewContextI, PreviewElements } from "./context";
+import PreviewContext, { PreviewContextI, PreviewElement } from "./context";
 import { PreviewSelect } from "./PreviewSelect";
 
-export function Preview() {
+interface PreviewProps {
+  children: ReactNode
+}
+
+export function Preview({children}: PreviewProps) {
   const [previewElements, setPreviewElements] = useState<
-    PreviewElements[] | undefined
+    PreviewElement[] | undefined
   >();
 
   const [preview, setPreview] = useState<PreviewContextI["preview"]>({
@@ -46,7 +49,7 @@ export function Preview() {
             hidden: preview.type !== "layout",
           })}
         >
-          <LayoutPreview />
+          {children}
         </div>
       </div>
     </PreviewContext.Provider>

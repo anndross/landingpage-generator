@@ -17,11 +17,12 @@ export interface TextElementI {
   tag: AvailableTags;
 }
 
-export interface PreviewElements
+export interface PreviewElement
   extends Partial<ImageElementI>,
     Partial<TextElementI>,
     ItemInterface {
   name: string;
+  _id: string | number
   type: "text" | "image";
 }
 
@@ -44,7 +45,7 @@ export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
 }
 
 export interface PreviewContextI {
-  previewElements: PreviewElements[] | undefined;
+  previewElements: PreviewElement[] | undefined;
   preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
   setPreview: Dispatch<SetStateAction<PreviewContextI["preview"]>>;
   setPreviewElements: Dispatch<

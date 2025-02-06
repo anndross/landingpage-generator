@@ -13,10 +13,10 @@ export async function ElementsPreviewAction(state: PreviewElements[]) {
   );
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  await fetch(`${baseUrl}/api/update-all-elements`, {
-    method: "PUT",
-    body: JSON.stringify(cleanedData),
-  }).then(async (res) => console.log(res));
+  // await fetch(`${baseUrl}/api/update-all-elements`, {
+  //   method: "PUT",
+  //   body: JSON.stringify(cleanedData),
+  // }).then(async (res) => console.log(res));
 
   revalidateTag("get-elements");
 }

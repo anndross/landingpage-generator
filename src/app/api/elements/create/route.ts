@@ -1,13 +1,13 @@
 import { db } from "@/config/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-const elementsCollections = collection(db, "elements");
+const elementsCollection = collection(db, "elements");
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const docRef = await addDoc(elementsCollections, body);
+    const docRef = await addDoc(elementsCollection, body);
     console.log("Novo elemento adicionado com ID:", docRef.id);
 
     return new Response(
