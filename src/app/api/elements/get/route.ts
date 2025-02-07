@@ -12,12 +12,10 @@ export async function GET() {
       ...doc.data(),
     }));
 
-    return Response.json(
-      JSON.stringify({
-        elements,
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+    return Response.json(elements, {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Erro ao pegar os elementos:", error);
     return new Response(

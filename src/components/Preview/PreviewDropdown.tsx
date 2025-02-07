@@ -11,7 +11,7 @@ import {
 import { useContext } from "react";
 import PreviewContext from "./context";
 
-export function PreviewSelect({}) {
+export function PreviewDropdown({}) {
   const { setPreview } = useContext(PreviewContext);
 
   return (

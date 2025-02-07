@@ -3,7 +3,7 @@ import { Preview } from "@/components/Preview";
 import { LayoutPreview } from "@/components/Preview/PreviewElements";
 import { Header } from "@/components/ui/Header";
 
-export default function Home() {
+export default function Editor() {
   return (
     <div className="w-full min-h-screen">
       <Header />

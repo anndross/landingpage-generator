@@ -3,13 +3,13 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { PreviewCode } from "./PreviewCode";
 import clsx from "clsx";
 import PreviewContext, { PreviewContextI, PreviewElement } from "./context";
-import { PreviewSelect } from "./PreviewSelect";
+import { PreviewDropdown } from "./PreviewDropdown";
 
 interface PreviewProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-export function Preview({children}: PreviewProps) {
+export function Preview({ children }: PreviewProps) {
   const [previewElements, setPreviewElements] = useState<
     PreviewElement[] | undefined
   >();
@@ -26,14 +26,13 @@ export function Preview({children}: PreviewProps) {
       <div className="relative flex flex-col justify-between gap-2 h-full w-full pt-14">
         <div
           className={clsx({
-            "flex items-center px-4 justify-between absolute w-full h-14 top-0 bg-transparent":
+            "flex items-center pt-1 px-4 justify-between absolute w-full h-14 top-0 bg-transparent":
               true,
             "bg-[#f6f8fa]": preview.type === "code",
           })}
         >
-          <PreviewSelect />
+          <PreviewDropdown />
         </div>
-
         <div
           className={clsx({
             "w-full h-full p-4 bg-[#f6f8fa]": true,
@@ -42,7 +41,6 @@ export function Preview({children}: PreviewProps) {
         >
           <PreviewCode />
         </div>
-
         <div
           className={clsx({
             "w-full h-full": true,

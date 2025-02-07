@@ -13,14 +13,9 @@ import { Label } from "@/components/ui/label";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { TagSelect } from "../../../Creator/ElementText";
 import { handleToUpdate } from "./Action";
+import { TextProps } from ".";
 
-interface TextModalProps {
-  value: string;
-  tag: string;
-  id: string;
-}
-
-export function TextModal({ tag, value, id }: TextModalProps) {
+export function ModalEditor({ tag, value, id }: TextProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -39,16 +34,14 @@ export function TextModal({ tag, value, id }: TextModalProps) {
               </Label>
               <Input
                 required
-                name="value"
+                id="value"
                 defaultValue={value}
                 className="w-full"
                 placeholder="Seu texto aqui..."
               />
             </div>
             <div className="w-full flex items-center gap-4">
-              <Label htmlFor="tag" className="text-right">
-                Tag
-              </Label>
+              <Label className="text-right">Tag</Label>
               <TagSelect defaultValue={tag} />
             </div>
           </div>

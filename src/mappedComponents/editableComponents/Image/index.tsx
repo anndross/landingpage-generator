@@ -1,4 +1,4 @@
-import { ImageElementI } from "@/components/Editor/context";
+import { ImageElementI } from "@/components/Preview/context";
 
 export const Image = ({}: ImageElementI) => {
   return (

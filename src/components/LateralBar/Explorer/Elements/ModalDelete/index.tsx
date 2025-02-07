@@ -10,13 +10,11 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { handleToDelete } from "./Action";
 
-interface TextModalProps {
-  value: string;
-  tag: string;
+interface DeleteModalProps {
   id: string;
 }
 
-export function DeleteModal({ id }: TextModalProps) {
+export function DeleteModal({ id }: DeleteModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -26,11 +24,17 @@ export function DeleteModal({ id }: TextModalProps) {
         <form action={() => handleToDelete(id)}>
           <DialogHeader>
             <DialogTitle>Tem certeza que deseja deletar?</DialogTitle>
-            <DialogDescription>Se deletar perderá permanentemente esses dados.</DialogDescription>
+            <DialogDescription>
+              Se deletar perderá permanentemente esses dados.
+            </DialogDescription>
           </DialogHeader>
           <div className="flex gap-4 pt-4">
-              <Button variant='outline' className="w-full">Não</Button>
-              <Button variant='destructive' className="w-full">Deletar</Button>
+            <Button variant="outline" className="w-full">
+              Não
+            </Button>
+            <Button variant="destructive" className="w-full">
+              Deletar
+            </Button>
           </div>
         </form>
       </DialogContent>

@@ -22,8 +22,9 @@ export interface PreviewElement
     Partial<TextElementI>,
     ItemInterface {
   name: string;
-  _id: string | number
-  type: "text" | "image";
+  _id: string;
+  id: string;
+  type: "text" | "wrapper" | "image";
 }
 
 export type Options = {

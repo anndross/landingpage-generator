@@ -1,4 +1,4 @@
-import { Elements } from "./Elements";
+import { Elements } from "./Explorer";
 import { Creator } from "./Creator";
 
 export function LateralBar() {
