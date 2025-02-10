@@ -2,7 +2,11 @@ import { AvailableTags } from "@/types/components/text";
 import { createContext, Dispatch, SetStateAction } from "react";
 import { ItemInterface } from "react-sortablejs";
 
-export interface ImageElementI {
+export interface BaseProps {
+  id: string;
+  type: "text" | "image" | "wrapper";
+}
+export type ImageProps = BaseProps & {
   images: {
     url: string;
     alt: string;
@@ -10,22 +14,18 @@ export interface ImageElementI {
     width: string;
     height: string;
   }[];
-}
+};
 
-export interface TextElementI {
+export type TextProps = BaseProps & {
   value: string;
-  tag: AvailableTags;
-}
+  as: AvailableTags;
+};
 
-export interface PreviewElement
-  extends Partial<ImageElementI>,
-    Partial<TextElementI>,
-    ItemInterface {
-  name: string;
-  _id: string;
-  id: string;
-  type: "text" | "wrapper" | "image";
-}
+export type WrapperProps = BaseProps & {
+  childs: any[];
+};
+
+export type PreviewElement = ImageProps | TextProps | WrapperProps;
 
 export type Options = {
   layout: "desktop" | "mobile";
@@ -43,6 +43,7 @@ export type PreviewOption<T extends PreviewType> = T extends "layout"
 export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
   type: T;
   option: PreviewOption<T>;
+  canEdit: boolean;
 }
 
 export interface PreviewContextI {
@@ -60,6 +61,7 @@ const PreviewContext = createContext<PreviewContextI>({
   preview: {
     type: "layout",
     option: "desktop",
+    canEdit: true,
   },
   setPreview: () => {},
 });

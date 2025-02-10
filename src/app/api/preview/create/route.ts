@@ -7,20 +7,18 @@ export async function POST(req: Request) {
   async function deleteAllDocuments() {
     const querySnapshot = await getDocs(previewCollection);
     querySnapshot.forEach(async (doc) => {
-        await deleteDoc(doc.ref);
+      await deleteDoc(doc.ref);
     });
-    console.log('All documents deleted from the collection!');
   }
 
   try {
-    
     const body = await req.json();
-    
-    await deleteAllDocuments()
+
+    await deleteAllDocuments();
 
     const docRef = await addDoc(previewCollection, body);
 
-    console.log("Preview adicionado com ID:", docRef.id);
+    console.info("Preview adicionado com ID:", docRef.id);
 
     return new Response(
       JSON.stringify({

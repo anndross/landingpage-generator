@@ -11,27 +11,33 @@ export interface ElementsProps {
 }
 
 export function Explorer({ data }: ElementsProps) {
-  const [state, setState] = useState(data || []);
-
-  useEffect(() => {
-    setState(data);
-  }, [data]);
-
-  console.log("Explorer state:", state);
+  const [state, setState] = useState<PreviewElement[]>([
+    {
+      id: "texto",
+      type: "text",
+      as: "p",
+      value: "Texto",
+    },
+    {
+      id: "wrapper",
+      type: "wrapper",
+      childs: [],
+    },
+  ]);
 
   return (
     <ReactSortable
       tag={"div"}
       group={{
         name: "shared",
-        pull: true,
-        put: true,
+        pull: "clone",
+        put: false,
       }}
       animation={150}
       swapThreshold={0.65}
       fallbackOnBody
       ghostClass="ghost"
-      className="w-full h-full overflow-y-auto flex flex-col gap-2 my-6"
+      className="w-full h-full overflow-y-auto grid grid-cols-2 gap-2"
       list={state}
       setList={setState}
     >
@@ -39,18 +45,11 @@ export function Explorer({ data }: ElementsProps) {
         const elements: Partial<{
           [key in PreviewElement["type"]]: ReactNode;
         }> = {
-          text: (
-            <Text
-              key={item.id}
-              id={item.id}
-              value={item.value}
-              tag={item.tag}
-            />
-          ),
-          wrapper: <Wrapper setList={setState} key={item.id} id={item.id} />,
+          text: <Text key={item.id} />,
+          wrapper: <Wrapper key={item.id} />,
         };
 
-        const element: ReactNode = elements?.[item.type] || <></>;
+        const element: ReactNode = elements?.[item.type];
 
         return element;
       })}

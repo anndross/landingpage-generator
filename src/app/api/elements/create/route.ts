@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const docRef = await addDoc(elementsCollection, body);
-    console.log("Novo elemento adicionado com ID:", docRef.id);
+    console.info("Novo elemento adicionado com ID:", docRef.id);
 
     return new Response(
       JSON.stringify({

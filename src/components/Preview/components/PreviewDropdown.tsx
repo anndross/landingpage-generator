@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useContext } from "react";
-import PreviewContext from "./context";
+import PreviewContext from "../context";
 
 export function PreviewDropdown({}) {
   const { setPreview } = useContext(PreviewContext);
@@ -27,6 +27,7 @@ export function PreviewDropdown({}) {
               setPreview({
                 type: "layout",
                 option: "desktop",
+                canEdit: false,
               })
             }
           >
@@ -41,6 +42,7 @@ export function PreviewDropdown({}) {
               setPreview({
                 type: "code",
                 option: "VTEX IO",
+                canEdit: false,
               })
             }
           >

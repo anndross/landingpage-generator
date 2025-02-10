@@ -37,14 +37,17 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     return imageJson;
   }
 
-  const components = {
+  const components: {
+    [key in PreviewElement["type"]]: (el: PreviewElement) => object;
+  } = {
     text: richText,
     image: image,
+    wrapper: () => ({}),
   };
 
   const mappedElements = elements.map((el) => {
     const instance = components[el.type];
-    console.log("mappedElements", instance, el);
+
     return instance(el);
   });
 

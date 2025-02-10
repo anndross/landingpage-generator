@@ -1,7 +1,7 @@
 "use server";
 import { Preview } from "./Preview";
 
-export async function LayoutPreview() {
+export async function Layout() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   const data = await fetch(`${baseUrl}/api/preview/get`, {

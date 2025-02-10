@@ -1,6 +1,6 @@
 import { LateralBar } from "@/components/LateralBar";
 import { Preview } from "@/components/Preview";
-import { LayoutPreview } from "@/components/Preview/PreviewElements";
+import { Layout } from "@/components/Preview/Layout";
 import { Header } from "@/components/ui/Header";
 
 export default function Editor() {
@@ -10,7 +10,7 @@ export default function Editor() {
       <main className="w-full h-screen flex items-center justify-left">
         <LateralBar />
         <Preview>
-          <LayoutPreview />
+          <Layout />
         </Preview>
       </main>
     </div>
