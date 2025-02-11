@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { PreviewElement } from "@/components/Preview/context";
+import { PreviewElement } from "@/modules/Editor/Preview/context";
 import { LuSquareDashed } from "react-icons/lu";
 import { GenericElement } from "../GenericElement";
 

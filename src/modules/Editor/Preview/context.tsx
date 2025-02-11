@@ -22,7 +22,7 @@ export type TextProps = BaseProps & {
 };
 
 export type WrapperProps = BaseProps & {
-  childs: any[];
+  children: any[];
 };
 
 export type PreviewElement = ImageProps | TextProps | WrapperProps;
@@ -47,7 +47,7 @@ export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
 }
 
 export interface PreviewContextI {
-  previewElements: PreviewElement[] | undefined;
+  previewElements: PreviewElement[];
   preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
   setPreview: Dispatch<SetStateAction<PreviewContextI["preview"]>>;
   setPreviewElements: Dispatch<

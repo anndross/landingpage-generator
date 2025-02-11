@@ -11,9 +11,7 @@ interface PreviewProps {
 }
 
 export function Preview({ children }: PreviewProps) {
-  const [previewElements, setPreviewElements] = useState<
-    PreviewElement[] | undefined
-  >();
+  const [previewElements, setPreviewElements] = useState<PreviewElement[]>([]);
 
   const [preview, setPreview] = useState<PreviewContextI["preview"]>({
     type: "layout",

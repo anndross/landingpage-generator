@@ -1,7 +1,7 @@
 import { AvailableTags } from "@/types/components/text";
 import { ChangeEvent, JSX, useCallback, useContext, useState } from "react";
 import { handleToUpdate } from "./Action";
-import PreviewContext from "@/components/Preview/context";
+import PreviewContext from "@/modules/Editor/Preview/context";
 
 type AS = Extract<keyof JSX.IntrinsicElements, AvailableTags>;
 interface TextProps {

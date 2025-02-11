@@ -1,4 +1,4 @@
-import { Options, PreviewElement } from "@/components/Preview/context";
+import { Options, PreviewElement } from "@/modules/Editor/Preview/context";
 
 import richTextJson from "@/mappedComponents/vtexIo/rich-text.json";
 import imageJson from "@/mappedComponents/vtexIo/image.json";
