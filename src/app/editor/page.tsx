@@ -1,7 +1,7 @@
 import { LateralBar } from "@/modules/Editor/LateralBar";
 import { Preview } from "@/modules/Editor/Preview";
 import { Layout } from "@/modules/Editor/Preview/Layout";
-import { Header } from "@/components/ui/Header";
+import { Header } from "@/components/Header";
 
 export default async function Editor() {
   return (

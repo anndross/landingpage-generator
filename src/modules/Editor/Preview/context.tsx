@@ -1,10 +1,11 @@
 import { AvailableTags } from "@/types/components/text";
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
 import { ItemInterface } from "react-sortablejs";
 
-export interface BaseProps {
+export interface BaseProps extends ItemInterface {
   id: string;
   type: "text" | "image" | "wrapper";
+  indexPath: number[]; // Referência ao elemento pai
 }
 export type ImageProps = BaseProps & {
   images: {
@@ -22,7 +23,7 @@ export type TextProps = BaseProps & {
 };
 
 export type WrapperProps = BaseProps & {
-  children: any[];
+  children: PreviewElement[];
 };
 
 export type PreviewElement = ImageProps | TextProps | WrapperProps;
@@ -47,7 +48,16 @@ export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
 }
 
 export interface PreviewContextI {
-  previewElements: PreviewElement[];
+  previewElements: {
+    children: PreviewElement[];
+  };
+  tree: boolean;
+  setTree: Dispatch<SetStateAction<PreviewContextI["tree"]>>;
+  subEditor: {
+    open: boolean;
+    element: PreviewElement | null;
+  };
+  setSubEditor: Dispatch<SetStateAction<PreviewContextI["subEditor"]>>;
   preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
   setPreview: Dispatch<SetStateAction<PreviewContextI["preview"]>>;
   setPreviewElements: Dispatch<
@@ -56,7 +66,16 @@ export interface PreviewContextI {
 }
 
 const PreviewContext = createContext<PreviewContextI>({
-  previewElements: [],
+  previewElements: {
+    children: [],
+  },
+  tree: false,
+  setTree: () => {},
+  subEditor: {
+    open: false,
+    element: null,
+  },
+  setSubEditor: () => {},
   setPreviewElements: () => {},
   preview: {
     type: "layout",
@@ -65,5 +84,9 @@ const PreviewContext = createContext<PreviewContextI>({
   },
   setPreview: () => {},
 });
+
+export function usePreview() {
+  return useContext(PreviewContext);
+}
 
 export default PreviewContext;

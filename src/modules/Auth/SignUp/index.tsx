@@ -4,7 +4,7 @@ import { Input } from "../../../components/ui/input";
 import { useAuth } from "@/app/AuthContext";
 
 export function SignUpForm() {
-  const { signUp, logOut } = useAuth();
+  const { signUp } = useAuth();
 
   return (
     <form className="w-1/2 h-full flex flex-col items-center justify-center p-6 gap-10">
@@ -26,9 +26,6 @@ export function SignUpForm() {
         onClick={() => signUp("andreysoares.dev@gmail.com", "52242914@An")}
       >
         Cadastrar
-      </Button>
-      <Button type="button" onClick={logOut}>
-        Sair
       </Button>
     </form>
   );

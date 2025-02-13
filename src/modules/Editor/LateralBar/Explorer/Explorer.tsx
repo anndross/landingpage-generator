@@ -1,16 +1,15 @@
 "use client";
 import { ReactSortable } from "react-sortablejs";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { PreviewElement } from "@/modules/Editor/Preview/context";
 import { Text } from "./Elements/Text";
 import { Wrapper } from "./Elements/Wrapper";
-import { handleToDelete } from "./Elements/ModalDelete/Action";
 
 export interface ElementsProps {
   data: PreviewElement[];
 }
 
-export function Explorer({ data }: ElementsProps) {
+export function Explorer({}: ElementsProps) {
   const [state, setState] = useState<PreviewElement[]>([
     {
       id: "texto",

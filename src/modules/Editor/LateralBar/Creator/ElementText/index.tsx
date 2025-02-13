@@ -31,7 +31,7 @@ export function ElementText() {
         <TagSelect />
       </div>
       <Button className="w-full" type="submit">
-        Adicionar
+        Salvar
       </Button>
     </form>
   );

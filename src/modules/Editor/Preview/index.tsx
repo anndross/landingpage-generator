@@ -2,22 +2,34 @@
 import React, { ReactNode, useState } from "react";
 import { PreviewCode } from "./Code";
 import clsx from "clsx";
-import PreviewContext, { PreviewContextI, PreviewElement } from "./context";
+import PreviewContext, { PreviewContextI } from "./context";
 import { PreviewDropdown } from "./components/PreviewDropdown";
 import { EditToggle } from "./components/EditToggle";
+import { Button } from "@/components/ui/button";
+import { TbBinaryTree } from "react-icons/tb";
+import { Tree } from "./Tree";
+import { SubEditor } from "./SubEditor";
 
 interface PreviewProps {
   children: ReactNode;
 }
 
 export function Preview({ children }: PreviewProps) {
-  const [previewElements, setPreviewElements] = useState<PreviewElement[]>([]);
+  const [previewElements, setPreviewElements] = useState<
+    PreviewContextI["previewElements"]
+  >({ children: [] });
 
   const [preview, setPreview] = useState<PreviewContextI["preview"]>({
     type: "layout",
     option: "desktop",
     canEdit: true,
   });
+
+  const [subEditor, setSubEditor] = useState<PreviewContextI["subEditor"]>({
+    open: false,
+    element: null,
+  });
+  const [tree, setTree] = useState<boolean>(false);
 
   function handleToggleCanEdit(state: boolean) {
     setPreview((prev) => ({
@@ -28,24 +40,42 @@ export function Preview({ children }: PreviewProps) {
 
   return (
     <PreviewContext.Provider
-      value={{ previewElements, setPreviewElements, preview, setPreview }}
+      value={{
+        tree,
+        setTree,
+        subEditor,
+        setSubEditor,
+        previewElements,
+        setPreviewElements,
+        preview,
+        setPreview,
+      }}
     >
-      <div className="relative flex flex-col justify-between gap-2 h-full w-full pt-14">
+      <Tree />
+      <SubEditor />
+
+      <div className="relative flex flex-col justify-between gap-2 h-full w-[calc(100%-256px)] pt-14">
         <div
           className={clsx({
-            "flex items-center pt-1 px-4 justify-start gap-4 absolute w-full h-14 top-0 bg-transparent":
+            "flex items-center pt-1 px-4 justify-between gap-4 absolute w-full h-14 top-0 bg-transparent":
               true,
             "bg-[#f6f8fa]": preview.type === "code",
           })}
         >
-          <PreviewDropdown />
+          <div className="flex items-center justify-center gap-4">
+            <PreviewDropdown />
 
-          {preview.type === "layout" && (
-            <EditToggle
-              state={preview.canEdit}
-              setState={handleToggleCanEdit}
-            />
-          )}
+            {preview.type === "layout" && (
+              <EditToggle
+                state={preview.canEdit}
+                setState={handleToggleCanEdit}
+              />
+            )}
+          </div>
+
+          <Button onClick={() => setTree(true)} variant="outline">
+            <TbBinaryTree />
+          </Button>
         </div>
         <div
           className={clsx({

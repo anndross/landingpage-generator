@@ -2,7 +2,6 @@
 import { SignInForm } from "@/modules/Auth/SignIn";
 import { SignUpForm } from "@/modules/Auth/SignUp";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import clsx from "clsx";
 import { useState } from "react";
 

@@ -153,7 +153,7 @@ export function ElementWrapper() {
         </div>
       </div>
       <Button className="w-full" type="submit">
-        Adicionar
+        Salvar
       </Button>
     </form>
   );

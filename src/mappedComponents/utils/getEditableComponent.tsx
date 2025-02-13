@@ -1,9 +1,13 @@
 import { ReactNode } from "react";
 import { Text as EditableText } from "@/mappedComponents/editableComponents/Text";
 import { Wrapper as EditableWrapper } from "@/mappedComponents/editableComponents/Wrapper";
-import { PreviewElement, TextProps, WrapperProps } from "../context";
+import {
+  PreviewElement,
+  TextProps,
+  WrapperProps,
+} from "@/modules/Editor/Preview/context";
 
-export function getElement(
+export function getEditableComponent(
   type: PreviewElement["type"],
   canEdit: boolean,
   props: PreviewElement

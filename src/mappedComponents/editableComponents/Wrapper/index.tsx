@@ -1,38 +1,95 @@
 import { Sortable } from "@/components/Sortable";
-import PreviewContext, {
-  PreviewElement,
-  WrapperProps,
-} from "@/modules/Editor/Preview/context";
-import { useContext, useEffect, useState } from "react";
-import { ReactSortable } from "react-sortablejs";
+// import { getEditableComponent } from "@/mappedComponents/utils/getEditableComponent";
+// import { getEditableComponent } from "@/mappedComponents/utils/getEditableComponent";
+import { usePreview, WrapperProps } from "@/modules/Editor/Preview/context";
+// import { useEffect, useState } from "react";
 
-export function Wrapper({
-  id: wrapperId,
-  children,
-}: {
-  id: string;
-  children: PreviewElement[];
-}) {
-  const [state, setState] = useState<PreviewElement[]>([]);
-  // const { setPreviewElements } = useContext(PreviewContext);
+export function Wrapper({ children, indexPath }: WrapperProps) {
+  const { setPreviewElements } = usePreview();
+
+  // function findPathByIndex(
+  //   root: PreviewElement[],
+  //   targetId: string,
+  //   path: number[] = []
+  // ): null | number[] {
+  //   if (!root) return null;
+  //   console.log("findPathByIndex", root, targetId, path);
+  //   // if (root.id === targetId) return path;
+
+  //   // Verifica se o nó é um wrapper e possui children
+  //   for (let i = 0; i < root.length; i++) {
+  //     if (root[i].type === "wrapper" && Array.isArray(root[i].children)) {
+  //       const result = findPathByIndex(root[i].children, targetId, [
+  //         ...path,
+  //         i,
+  //       ]);
+  //       if (result) return result;
+  //     }
+  //   }
+
+  //   return null;
+  // }
+  function setChildrenByPath(root: any, path: number[], newChildren: any) {
+    let current = root;
+
+    console.log(
+      "setChildrenByPath - line 35:",
+      current,
+      root,
+      path,
+      newChildren
+    );
+
+    for (let i = 0; i < path.length; i++) {
+      if (
+        !current ||
+        current?.type !== "wrapper" ||
+        !Array.isArray(current.children)
+      ) {
+        console.log(
+          "setChildrenByPath - line 44:",
+          current,
+          root,
+          path,
+          newChildren
+        );
+        console.error("Caminho inválido: nó intermediário não é um wrapper");
+        return;
+      }
+      current = current.children[path[i]];
+    }
+
+    // Verifica se o nó final é um wrapper antes de definir children
+    if (current?.type === "wrapper") {
+      current.children = newChildren;
+    } else {
+      throw new Error("Nó alvo não é um wrapper e não pode ter children");
+    }
+  }
 
   return (
-    <div>
-      <Sortable setState={setState} state={state} tag="div">
-        {state.map((item, i) => {
-          if (item.type === "wrapper") {
-            const newItem = item as WrapperProps;
-            return (
-              <Wrapper
-                key={newItem.id}
-                id={newItem.id}
-                children={newItem.children}
-              />
-            );
-          }
-          return <div key={item.id}>Texto</div>;
-        })}
-      </Sortable>
-    </div>
+    <Sortable
+      state={children}
+      setState={(newState) => {
+        const id = `clone-${crypto.randomUUID()}`;
+
+        const mappedNewState = newState.map((item, index) => ({
+          ...item,
+          id: item.id.toString()?.startsWith("clone-") ? item.id : id,
+          indexPath: [...(indexPath || []), index],
+        }));
+
+        setPreviewElements((prev) => {
+          const prevClone = { type: "wrapper", ...prev };
+
+          setChildrenByPath(prevClone, indexPath, mappedNewState);
+
+          console.log("prevClone", prevClone, mappedNewState);
+
+          return { children: prevClone.children };
+        });
+      }}
+      tag="div"
+    />
   );
 }
