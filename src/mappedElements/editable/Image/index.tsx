@@ -1,4 +1,4 @@
-import { ImageProps } from "@/modules/Editor/Preview/context";
+import { ImageProps } from "@/types/components/image";
 
 export const Image = ({}: ImageProps) => {
   return (

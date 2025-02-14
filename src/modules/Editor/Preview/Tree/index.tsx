@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { PreviewElement, usePreview } from "../context";
 import { IoCloseOutline } from "react-icons/io5";
 import clsx from "clsx";
+import { PreviewElement, useEditor } from "../../EditorContext";
 
 const mappedContent: Partial<{ [key in PreviewElement["type"]]: string }> = {
   text: "Texto",
@@ -9,7 +9,7 @@ const mappedContent: Partial<{ [key in PreviewElement["type"]]: string }> = {
 };
 
 export function Tree() {
-  const { setSubEditor, tree, setTree, previewElements } = usePreview();
+  const { setSubEditor, tree, setTree, previewElements } = useEditor();
 
   const openSubEditor = (element: PreviewElement) => {
     setSubEditor((prev) => ({
@@ -64,7 +64,7 @@ interface ItemProps {
 }
 
 const Item = ({ data }: ItemProps) => {
-  const { setSubEditor } = usePreview();
+  const { setSubEditor } = useEditor();
 
   const openSubEditor = (element: PreviewElement) => {
     setSubEditor((prev) => ({

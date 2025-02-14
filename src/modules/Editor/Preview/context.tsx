@@ -1,30 +1,7 @@
-import { AvailableTags } from "@/types/components/text";
+import { ImageProps } from "@/types/components/image";
+import { TextProps } from "@/types/components/text";
+import { WrapperProps } from "@/types/components/wrapper";
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
-import { ItemInterface } from "react-sortablejs";
-
-export interface BaseProps extends ItemInterface {
-  id: string;
-  type: "text" | "image" | "wrapper";
-  indexPath: number[]; // Referência ao elemento pai
-}
-export type ImageProps = BaseProps & {
-  images: {
-    url: string;
-    alt: string;
-    title: string;
-    width: string;
-    height: string;
-  }[];
-};
-
-export type TextProps = BaseProps & {
-  value: string;
-  as: AvailableTags;
-};
-
-export type WrapperProps = BaseProps & {
-  children: PreviewElement[];
-};
 
 export type PreviewElement = ImageProps | TextProps | WrapperProps;
 

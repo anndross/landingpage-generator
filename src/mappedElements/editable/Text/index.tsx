@@ -29,15 +29,17 @@ export function Text({ id, value, as: AS }: TextProps) {
       });
 
       if (previewElements) {
-        const newPreviewElements = [...previewElements];
+        const newPreviewElements = [...previewElements.children];
 
-        const indexOfElementOnPreviewData = previewElements?.findIndex(
+        const indexOfElementOnPreviewData = previewElements.children?.findIndex(
           (data) => data.id === id
         );
         newPreviewElements[indexOfElementOnPreviewData].value =
           evt.currentTarget.innerHTML;
 
-        setPreviewElements(newPreviewElements);
+        console.log("newPreviewElements", newPreviewElements);
+
+        setPreviewElements({ children: newPreviewElements });
       }
     },
     [previewElements]

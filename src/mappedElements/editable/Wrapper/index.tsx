@@ -1,11 +1,12 @@
 import { Sortable } from "@/components/Sortable";
+import { useEditor } from "@/modules/Editor/EditorContext";
 // import { getEditableComponent } from "@/mappedComponents/utils/getEditableComponent";
 // import { getEditableComponent } from "@/mappedComponents/utils/getEditableComponent";
-import { usePreview, WrapperProps } from "@/modules/Editor/Preview/context";
+import { WrapperProps } from "@/types/components/wrapper";
 // import { useEffect, useState } from "react";
 
 export function Wrapper({ children, indexPath }: WrapperProps) {
-  const { setPreviewElements } = usePreview();
+  const { setPreviewElements } = useEditor();
 
   // function findPathByIndex(
   //   root: PreviewElement[],

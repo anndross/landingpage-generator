@@ -1,7 +1,7 @@
 import { Options, PreviewElement } from "@/modules/Editor/Preview/context";
 
-import richTextJson from "@/mappedComponents/vtexIo/rich-text.json";
-import imageJson from "@/mappedComponents/vtexIo/image.json";
+import richTextJson from "@/mappedElements/vtexIo/rich-text.json";
+import imageJson from "@/mappedElements/vtexIo/image.json";
 
 export function codeConverter(
   type: Options["code"] | false,

@@ -1,22 +1,25 @@
 import clsx from "clsx";
-import { PreviewElement, usePreview } from "../context";
-import { ElementText } from "../../LateralBar/Creator/ElementText";
-import { ElementWrapper } from "../../LateralBar/Creator/ElementWrapper";
+import { PreviewElement } from "../context";
+import { ElementWrapper } from "./ElementWrapper";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
+import { TextProps } from "@/types/components/text";
+import { WrapperProps } from "@/types/components/wrapper";
+import { useEditor } from "../../EditorContext";
+import { ElementText } from "./ElementText";
 
 export function SubEditor() {
   const {
     subEditor: { open, element },
     setSubEditor,
-  } = usePreview();
+  } = useEditor();
 
   const mappedElements: Partial<{
     [key in PreviewElement["type"]]: ReactNode;
   }> = {
-    text: <ElementText />,
-    wrapper: <ElementWrapper />,
+    text: <ElementText data={element as TextProps} />,
+    wrapper: <ElementWrapper data={element as WrapperProps} />,
   };
 
   return (

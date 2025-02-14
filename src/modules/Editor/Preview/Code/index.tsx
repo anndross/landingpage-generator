@@ -1,10 +1,9 @@
 import { Highlight, themes } from "prism-react-renderer";
-import { useContext } from "react";
-import PreviewContext from "../context";
 import { codeConverter } from "./services/codeConverter";
+import { useEditor } from "../../EditorContext";
 
 export function PreviewCode() {
-  const { preview, previewElements } = useContext(PreviewContext);
+  const { preview, previewElements } = useEditor();
 
   const previewType = preview.type === "code" && preview.option;
 
@@ -13,7 +12,7 @@ export function PreviewCode() {
     "VTEX IO": "json",
   };
 
-  const code = codeConverter(previewType, previewElements);
+  const code = codeConverter(previewType, previewElements.children);
 
   return (
     <Highlight

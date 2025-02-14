@@ -8,11 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useContext } from "react";
-import PreviewContext from "../context";
+import { useEditor } from "../../EditorContext";
 
 export function PreviewDropdown({}) {
-  const { setPreview } = useContext(PreviewContext);
+  const { setPreview } = useEditor();
 
   return (
     <DropdownMenu>

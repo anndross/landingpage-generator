@@ -11,9 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { TagSelect } from "../../../Creator/ElementText";
+import { TagSelect } from "../../../../Preview/SubEditor/ElementText";
 import { handleToUpdate } from "./Action";
-import { TextProps } from ".";
+import { TextProps } from "@/types/components/text";
 
 export function ModalEditor({ tag, value, id }: TextProps) {
   return (

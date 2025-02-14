@@ -1,11 +1,10 @@
 "use client";
-import PreviewContext, { PreviewElement } from "../context";
 import { Sortable } from "@/components/Sortable";
 // import { getEditableComponent } from "@/mappedComponents/utils/getEditableComponent";
-import { useContext } from "react";
+import { PreviewElement, useEditor } from "../../EditorContext";
 
 export const Preview = ({}: { data: [] }) => {
-  const { previewElements, setPreviewElements } = useContext(PreviewContext);
+  const { previewElements, setPreviewElements } = useEditor();
   console.log("previewElements", previewElements);
 
   return (

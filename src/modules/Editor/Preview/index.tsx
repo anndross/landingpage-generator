@@ -1,35 +1,21 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import { PreviewCode } from "./Code";
 import clsx from "clsx";
-import PreviewContext, { PreviewContextI } from "./context";
 import { PreviewDropdown } from "./components/PreviewDropdown";
 import { EditToggle } from "./components/EditToggle";
 import { Button } from "@/components/ui/button";
 import { TbBinaryTree } from "react-icons/tb";
 import { Tree } from "./Tree";
 import { SubEditor } from "./SubEditor";
+import { useEditor } from "../EditorContext";
 
 interface PreviewProps {
   children: ReactNode;
 }
 
 export function Preview({ children }: PreviewProps) {
-  const [previewElements, setPreviewElements] = useState<
-    PreviewContextI["previewElements"]
-  >({ children: [] });
-
-  const [preview, setPreview] = useState<PreviewContextI["preview"]>({
-    type: "layout",
-    option: "desktop",
-    canEdit: true,
-  });
-
-  const [subEditor, setSubEditor] = useState<PreviewContextI["subEditor"]>({
-    open: false,
-    element: null,
-  });
-  const [tree, setTree] = useState<boolean>(false);
+  const { preview, setPreview, setTree } = useEditor();
 
   function handleToggleCanEdit(state: boolean) {
     setPreview((prev) => ({
@@ -39,18 +25,7 @@ export function Preview({ children }: PreviewProps) {
   }
 
   return (
-    <PreviewContext.Provider
-      value={{
-        tree,
-        setTree,
-        subEditor,
-        setSubEditor,
-        previewElements,
-        setPreviewElements,
-        preview,
-        setPreview,
-      }}
-    >
+    <>
       <Tree />
       <SubEditor />
 
@@ -94,6 +69,6 @@ export function Preview({ children }: PreviewProps) {
           {children}
         </div>
       </div>
-    </PreviewContext.Provider>
+    </>
   );
 }

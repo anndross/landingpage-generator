@@ -1,0 +1,22 @@
+[
+  {
+    "label": "N",
+    "value": "normal"
+  },
+  {
+    "label": "I",
+    "value": "italic"
+  },
+  {
+    "label": "B",
+    "value": "bold"
+  },
+  {
+    "label": "U",
+    "value": "underline"
+  },
+  {
+    "label": "S",
+    "value": "strikethrough"
+  }
+]

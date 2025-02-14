@@ -1,5 +1,6 @@
 "use client";
-import { getEditableComponent } from "@/mappedComponents/utils/getEditableComponent";
+import { getEditableComponent } from "@/mappedElements/utils/getEditableComponent";
+import { useEditor } from "@/modules/Editor/EditorContext";
 import PreviewContext, {
   PreviewElement,
 } from "@/modules/Editor/Preview/context";
@@ -19,7 +20,7 @@ interface SortableProps {
 export function Sortable({ tag, state, setState }: SortableProps) {
   const {
     preview: { canEdit },
-  } = useContext(PreviewContext);
+  } = useEditor();
 
   // console.log({ previewElements });
   return (
@@ -39,7 +40,7 @@ export function Sortable({ tag, state, setState }: SortableProps) {
         swapThreshold={0.65}
         fallbackOnBody
         ghostClass="ghost"
-        list={state || []}
+        list={state}
         setList={(newState) => {
           setState(newState);
           // const mappedNewState = newState.map((item) => ({
