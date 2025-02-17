@@ -2,6 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { BiAlignLeft, BiAlignMiddle, BiAlignRight } from "react-icons/bi";
 import {
+  RxCornerBottomLeft,
+  RxCornerBottomRight,
+  RxCornerTopLeft,
+  RxCornerTopRight,
+} from "react-icons/rx";
+import {
   MdOutlineVerticalAlignBottom,
   MdOutlineVerticalAlignCenter,
   MdOutlineVerticalAlignTop,
@@ -21,6 +27,16 @@ import {
   CgBorderRight,
   CgBorderTop,
 } from "react-icons/cg";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { CiUser } from "react-icons/ci";
+import { InputWithIcon } from "@/components/ui/input-with-icon";
 
 interface ElementWrapperProps {
   data: WrapperProps | null;
@@ -29,9 +45,9 @@ interface ElementWrapperProps {
 export function ElementWrapper({ data }: ElementWrapperProps) {
   return (
     <form className="flex flex-col gap-6 pb-2">
-      <Size />
-      <Border />
-
+      <Size data={data} />
+      <Border data={data} />
+      <Appearance data={data} />
       <div>
         <span className="text-sm text-zinc-600 font-medium">Direção</span>
         <div className="w-full flex justify-start mt-2 gap-14">
@@ -159,34 +175,83 @@ export function ElementWrapper({ data }: ElementWrapperProps) {
   );
 }
 
-function Size() {
+function Size({ data }: ElementWrapperProps) {
+  const { useEditElement } = useEditor();
+
   return (
     <div>
       <span className="text-sm text-zinc-600 font-medium">Layout</span>
       <div className="flex gap-2 ">
         <div>
-          <Input type="number" id="width-input" placeholder="Largura" />
+          <Input
+            type="number"
+            id="width-input"
+            value={data?.settings.width.replace(/\D/g, "")}
+            onChange={(evt) => {
+              useEditElement({
+                ...data,
+                settings: { ...data?.settings, width: evt.target.value + "px" },
+              } as WrapperProps);
+            }}
+            placeholder="Largura"
+          />
         </div>
         <div>
-          <Input type="number" id="height-input" placeholder="Altura" />
+          <Input
+            type="number"
+            id="height-input"
+            value={data?.settings.height.replace(/\D/g, "")}
+            onChange={(evt) => {
+              useEditElement({
+                ...data,
+                settings: {
+                  ...data?.settings,
+                  height: evt.target.value + "px",
+                },
+              } as WrapperProps);
+            }}
+            placeholder="Altura"
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function Border() {
-  const [colorPicker, setColorPicker] = useState("#000");
+function Border({ data }: ElementWrapperProps) {
+  const { useEditElement } = useEditor();
 
   return (
     <div className="">
       <span className="text-sm text-zinc-600 font-medium">Borda</span>
       <div className="flex flex-col  gap-2">
         <div>
-          <ColorPicker color={colorPicker} setColor={setColorPicker} />
+          <ColorPicker
+            color={data?.style.borderColor || "#000"}
+            setColor={(value) =>
+              useEditElement({
+                ...data,
+                style: { ...data?.style, borderColor: value },
+              } as WrapperProps)
+            }
+          />
         </div>
         <div>
-          <Input type="number" id="width-input" placeholder="Largura" />
+          <Input
+            value={data?.style.borderWidth.replace(/\D/g, "")}
+            onChange={(evt) =>
+              useEditElement({
+                ...data,
+                style: {
+                  ...data?.style,
+                  borderWidth: evt.target.value + "px",
+                },
+              } as WrapperProps)
+            }
+            type="number"
+            id="width-input"
+            placeholder="Largura"
+          />
         </div>
         <ToggleGroup
           variant="outline"
@@ -231,57 +296,40 @@ function Border() {
   );
 }
 
-function Appearance() {
-  const [colorPicker, setColorPicker] = useState("#000");
+function Appearance({ data }: ElementWrapperProps) {
+  const { useEditElement } = useEditor();
 
   return (
     <div className="">
-      <span className="text-sm text-zinc-600 font-medium">Borda</span>
-      <div className="flex flex-col  gap-2">
-        <div>
-          <ColorPicker color={colorPicker} setColor={setColorPicker} />
+      <span className="text-sm text-zinc-600 font-medium">Aparência</span>
+      <div className="flex flex-col gap-2">
+        <ColorPicker
+          color={data?.style.backgroundColor || "#fff"}
+          setColor={(color) =>
+            useEditElement({
+              ...data,
+              style: { ...data?.style, backgroundColor: color },
+            } as WrapperProps)
+          }
+        />
+        <div className="flex gap-2">
+          <Input max={1} min={0} type="number" placeholder="Opacidade" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <RxCornerTopLeft />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuGroup className="grid grid-cols-2 gap-1 p-1">
+                <InputWithIcon icon={RxCornerTopLeft} />
+                <InputWithIcon icon={RxCornerTopRight} />
+                <InputWithIcon icon={RxCornerBottomLeft} />
+                <InputWithIcon icon={RxCornerBottomRight} />
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <div>
-          <Input type="number" id="width-input" placeholder="Largura" />
-        </div>
-        <ToggleGroup
-          variant="outline"
-          type="multiple"
-          className="w-full justify-start"
-        >
-          <ToggleGroupItem
-            className="w-full aspect-square h-auto"
-            value="border-top"
-            aria-label="Borda superior"
-            title="Borda superior"
-          >
-            <CgBorderTop />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            className="w-full aspect-square h-auto"
-            value="border-right"
-            aria-label="Borda direita"
-            title="Borda direita"
-          >
-            <CgBorderRight />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            className="w-full aspect-square h-auto"
-            value="border-bottom"
-            aria-label="Borda inferior"
-            title="Borda inferior"
-          >
-            <CgBorderBottom />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            className="w-full aspect-square h-auto"
-            value="border-left"
-            aria-label="Borda esquerda"
-            title="Borda esquerda"
-          >
-            <CgBorderLeft />
-          </ToggleGroupItem>
-        </ToggleGroup>
       </div>
     </div>
   );

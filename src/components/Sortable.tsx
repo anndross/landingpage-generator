@@ -18,13 +18,12 @@ export function Sortable({ tag, state, setState, style }: SortableProps) {
   } = useEditor();
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full" style={style}>
       <ReactSortable
         tag={tag}
         className={clsx({
-          "w-full h-full bg-white p-5 flex flex-col": true,
+          "w-full h-full p-5 flex flex-col": true,
         })}
-        style={style}
         group={{
           name: "shared",
           pull: true,

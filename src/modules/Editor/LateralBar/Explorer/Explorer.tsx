@@ -37,13 +37,15 @@ export function Explorer({}: ElementsProps) {
       style: {
         backgroundColor: "#fff",
         borderRadius: "0",
-        border: "1px solid #000",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "#000",
         boxShadow: "none",
         opacity: "1",
       },
       settings: {
-        width: "100%",
-        height: "100%",
+        width: "900px",
+        height: "300px",
         padding: "0",
         margin: "0",
       },

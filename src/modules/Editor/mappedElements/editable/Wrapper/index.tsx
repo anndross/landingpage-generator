@@ -1,13 +1,18 @@
 import { Sortable } from "@/components/Sortable";
 import { useEditor } from "@/modules/Editor/EditorContext";
 import { WrapperProps } from "@/types/components/wrapper";
+import { useEffect } from "react";
 
 interface EditableWrapperProps {
   data: WrapperProps;
 }
 
 export function Wrapper({ data }: EditableWrapperProps) {
-  const { useEditElement } = useEditor();
+  const { useEditElement, previewElements } = useEditor();
+
+  useEffect(() => {
+    console.log("data mudou", data);
+  }, [data]);
 
   return (
     <Sortable
@@ -22,7 +27,7 @@ export function Wrapper({ data }: EditableWrapperProps) {
           indexPath: [...(data.indexPath || []), index],
         }));
 
-        useEditElement({ ...data, children: mappedNewState });
+        useEditElement({ ...data, children: mappedNewState } as WrapperProps);
       }}
       tag="div"
     />

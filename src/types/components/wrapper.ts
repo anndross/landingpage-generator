@@ -4,7 +4,9 @@ import { BaseProps } from "./base";
 export type WrapperProps = BaseProps & {
   children: PreviewElement[];
   style: {
-    border: string;
+    borderWidth: string;
+    borderStyle: string;
+    borderColor: string;
     backgroundColor: string;
     borderRadius: string;
     boxShadow: string;

@@ -6,8 +6,10 @@ import { PreviewElement, useEditor } from "../../EditorContext";
 export const Preview = ({}: { data: [] }) => {
   const { previewElements, setPreviewElements } = useEditor();
 
+  console.log("previewElementspreviewElementspreviewElements", previewElements);
   return (
     <Sortable
+      style={{ width: "100%", height: "100%" }}
       state={previewElements.children}
       setState={(newState) => {
         const id = `clone-${crypto.randomUUID()}`;
