@@ -1,22 +1,22 @@
 [
   {
-    "label": "N",
-    "value": "normal"
-  },
-  {
     "label": "I",
-    "value": "italic"
+    "value": "italic",
+    "type": "font-style"
   },
   {
     "label": "B",
-    "value": "bold"
+    "value": "bold",
+    "type": "font-weight"
   },
   {
     "label": "U",
-    "value": "underline"
+    "value": "underline",
+    "type": "text-decoration"
   },
   {
     "label": "S",
-    "value": "strikethrough"
+    "value": "line-through",
+    "type": "text-decoration"
   }
 ]

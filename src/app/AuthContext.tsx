@@ -14,6 +14,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { useCookies } from "next-client-cookies";
 
 const AuthContext = createContext<{
   signInByGoogle: () => any;
@@ -42,6 +43,8 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
+  const cookies = useCookies();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -95,10 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logOut = () => {
-    const cookieStore = window.cookieStore;
-    cookieStore.delete("auth_token");
-
-    console.log(cookieStore);
+    cookies.remove("auth_token");
 
     return signOut(auth);
   };
@@ -108,9 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const token = await user?.getIdToken();
       console.log(`token`, token);
 
-      const cookieStore = window.cookieStore;
-
-      if (token?.length) cookieStore.set("auth_token", token);
+      if (token?.length) cookies.set("auth_token", token);
     }
 
     getToken();

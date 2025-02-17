@@ -10,6 +10,7 @@ export type AvailableTags =
   | "h5"
   | "h6"
   | "p"
+  | "a"
   | "span";
 
 type FontFamily = (typeof fontFamilyJSON)[number]["value"];
@@ -17,10 +18,30 @@ type FontFamily = (typeof fontFamilyJSON)[number]["value"];
 type FontSize = (typeof fontSizeJSON)[number]["value"];
 
 export type TextProps = BaseProps & {
-  value: string;
-  as: AvailableTags;
-  style: "normal" | "italic" | "bold" | "underline" | "strikethrough";
-  size: FontSize;
-  family: FontFamily;
-  color: string;
+  settings: {
+    value: string;
+    as: AvailableTags;
+    link?: string;
+  };
+  style: {
+    fontStyle: "normal" | "italic" | "bold" | "underline" | "strikethrough";
+    fontSize: FontSize;
+    fontFamily: FontFamily;
+    textDecoration: string;
+    fontWeight:
+      | "100"
+      | "200"
+      | "300"
+      | "400"
+      | "500"
+      | "600"
+      | "700"
+      | "800"
+      | "900"
+      | "lighter"
+      | "normal"
+      | "bold"
+      | "bolder";
+    color: string;
+  };
 };

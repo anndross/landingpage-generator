@@ -1,7 +1,7 @@
 "use client";
 import { ChangeEventHandler, ReactNode } from "react";
 
-export interface RadioWithIconProps {
+export interface CheckboxWithIconProps {
   children: ReactNode;
   title: string;
   ariaLabel: string;
@@ -19,7 +19,7 @@ export interface RadioWithIconProps {
   onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-export function RadioWithIcon({
+export function CheckboxWithIcon({
   children,
   title,
   ariaLabel,
@@ -29,7 +29,7 @@ export function RadioWithIcon({
   onChange = () => {},
   value,
   required,
-}: RadioWithIconProps) {
+}: CheckboxWithIconProps) {
   return (
     <div>
       <label
@@ -45,7 +45,7 @@ export function RadioWithIcon({
         onChange={(event) => {
           onChange(event);
         }}
-        type="radio"
+        type="checkbox"
         value={value || id}
         className="hidden"
         id={id}

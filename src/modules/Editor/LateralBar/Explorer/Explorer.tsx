@@ -1,11 +1,11 @@
 "use client";
 import { ReactSortable } from "react-sortablejs";
 import { ReactNode, useState } from "react";
-import { PreviewElement } from "@/modules/Editor/Preview/context";
 import { Text } from "./Elements/Text";
 import { Wrapper } from "./Elements/Wrapper";
 import { TextProps } from "@/types/components/text";
 import { WrapperProps } from "@/types/components/wrapper";
+import { PreviewElement } from "@/modules/Editor/EditorContext";
 
 export interface ElementsProps {
   data: PreviewElement[];
@@ -16,18 +16,37 @@ export function Explorer({}: ElementsProps) {
     {
       id: "texto",
       type: "text",
-      as: "p",
-      color: "#000",
-      size: "14",
-      style: "normal",
-      family: "Arial",
-      value: "Texto",
+      settings: {
+        as: "p",
+        value: "Texto",
+        link: "",
+      },
+      style: {
+        color: "#000",
+        fontSize: "14px",
+        fontStyle: "normal",
+        fontFamily: "Arial",
+        fontWeight: "500",
+      },
     } as TextProps,
     {
       id: "wrapper",
       type: "wrapper",
       indexPath: [],
       children: [],
+      style: {
+        backgroundColor: "#fff",
+        borderRadius: "0",
+        border: "1px solid #000",
+        boxShadow: "none",
+        opacity: "1",
+      },
+      settings: {
+        width: "100%",
+        height: "100%",
+        padding: "0",
+        margin: "0",
+      },
     } as WrapperProps,
   ]);
 

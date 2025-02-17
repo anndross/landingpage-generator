@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import { PreviewElement } from "../context";
 import { ElementWrapper } from "./ElementWrapper";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
 import { TextProps } from "@/types/components/text";
 import { WrapperProps } from "@/types/components/wrapper";
-import { useEditor } from "../../EditorContext";
+import { PreviewElement, useEditor } from "../../EditorContext";
 import { ElementText } from "./ElementText";
 
 export function SubEditor() {

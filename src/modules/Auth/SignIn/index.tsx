@@ -77,7 +77,6 @@ export function SignInForm() {
         type="button"
         onClick={() => {
           onLoginByGoogle();
-          console.log("testeee");
           router.push("/editor");
         }}
       >

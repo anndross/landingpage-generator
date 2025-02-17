@@ -1,7 +1,6 @@
-import { Options, PreviewElement } from "@/modules/Editor/Preview/context";
-
-import richTextJson from "@/mappedElements/vtexIo/rich-text.json";
-import imageJson from "@/mappedElements/vtexIo/image.json";
+import richTextJson from "@/modules/Editor/mappedElements/vtexIo/rich-text.json";
+import imageJson from "@/modules/Editor/mappedElements/vtexIo/image.json";
+import { Options, PreviewElement } from "@/modules/Editor/EditorContext";
 
 export function codeConverter(
   type: Options["code"] | false,
@@ -26,7 +25,7 @@ export function vtexIoConverter(elements: PreviewElement[]) {
       ),
     };
 
-    richText[`rich-text#${el.id}`]["props"]["text"] = el.value || "";
+    richText[`rich-text#${el.id}`]["props"]["text"] = el.settings.value || "";
 
     return richText;
   }

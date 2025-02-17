@@ -8,21 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
-import { handleToAdd } from "./Action";
-import { SketchPicker } from "react-color";
+import { useEffect, useState } from "react";
 import fontFamily from "@/data/text/font-family.json";
 import fontSize from "@/data/text/font-size.json";
 import tags from "@/data/text/tags.json";
 import fontStyle from "@/data/text/font-style.json";
 import { RadioWithIcon } from "@/components/ui/radio-with-icon";
 import clsx from "clsx";
-import { TextProps } from "@/types/components/text";
-import {
-  EditorContextI,
-  PreviewElement,
-  useEditor,
-} from "@/modules/Editor/EditorContext";
+import { AvailableTags, TextProps } from "@/types/components/text";
+import { useEditor } from "@/modules/Editor/EditorContext";
+import { CheckboxWithIcon } from "@/components/ui/checkbox-with-icon";
+import { ColorPicker } from "../../components/ColorPicker";
 
 interface ElementTextProps {
   data: TextProps | null;
@@ -30,15 +26,18 @@ interface ElementTextProps {
 
 export function ElementText({ data }: ElementTextProps) {
   return (
-    <form action={handleToAdd} className="flex flex-col gap-2">
+    <form className="flex flex-col gap-2">
       <div className="text- flex flex-col gap-4">
         <InputContent data={data} />
         <TagSelect data={data} />
+        {data?.settings?.as === ("a" as AvailableTags) && (
+          <InputLink data={data} />
+        )}
         <FontFamilySelect data={data} />
         <FontSizeSelect data={data} />
         <FontStyleSelect data={data} />
-        <ColorPicker data={data} />
       </div>
+      <ColorPickerText data={data} />
 
       <Button className="w-full" type="submit">
         Salvar
@@ -48,51 +47,21 @@ export function ElementText({ data }: ElementTextProps) {
 }
 
 export function InputContent({ data }: ElementTextProps) {
-  const { setPreviewElements, setSubEditor } = useEditor();
+  const { useEditElement } = useEditor();
 
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Texto</label>
       <Input
-        value={data?.value}
+        value={data?.settings.value}
         onChange={(evt) => {
-          setPreviewElements((prev) => {
-            const prevClone = { ...prev };
-
-            function setDataByPath(path: number[], newData: TextProps) {
-              console.log("tagSelect setDataByPath 73", path, newData);
-
-              let current: EditorContextI["previewElements"] | PreviewElement =
-                prevClone;
-
-              for (let i = 0; i < path.length - 1; i++) {
-                current = current?.children[path[i]];
-              }
-
-              // Obtém o índice final do caminho
-              const lastIndex = path[path.length - 1];
-
-              if (current?.children && lastIndex !== undefined) {
-                current.children[lastIndex] = newData; // Aqui alteramos diretamente a referência correta
-              }
-
-              console.log("tagSelect setDataByPath 81", path, newData, current);
-
-              setSubEditor((prev) => ({
-                ...prev,
-                element: newData,
-              }));
-            }
-
-            setDataByPath(data?.indexPath || [], {
-              ...data,
+          useEditElement({
+            ...data,
+            settings: {
+              ...data?.settings,
               value: evt.target.value,
-            } as TextProps);
-
-            console.log("tagSelect prevClone", prevClone);
-
-            return prevClone;
-          });
+            },
+          } as TextProps);
         }}
         required
         name="value"
@@ -104,7 +73,7 @@ export function InputContent({ data }: ElementTextProps) {
 }
 
 export function TagSelect({ data }: ElementTextProps) {
-  const { setPreviewElements, setSubEditor } = useEditor();
+  const { useEditElement } = useEditor();
 
   return (
     <div>
@@ -113,55 +82,18 @@ export function TagSelect({ data }: ElementTextProps) {
         {tags.map((el) => {
           return (
             <RadioWithIcon
-              checked={data?.as === el.value}
+              checked={data?.settings.as === el.value}
               onChange={() => {
-                setPreviewElements((prev) => {
-                  const prevClone = { ...prev };
-
-                  function setDataByPath(path: number[], newData: TextProps) {
-                    console.log("tagSelect setDataByPath 73", path, newData);
-
-                    let current:
-                      | EditorContextI["previewElements"]
-                      | PreviewElement = prevClone;
-
-                    for (let i = 0; i < path.length - 1; i++) {
-                      current = current?.children[path[i]];
-                    }
-
-                    // Obtém o índice final do caminho
-                    const lastIndex = path[path.length - 1];
-
-                    if (current?.children && lastIndex !== undefined) {
-                      current.children[lastIndex] = newData; // Aqui alteramos diretamente a referência correta
-                    }
-
-                    console.log(
-                      "tagSelect setDataByPath 81",
-                      path,
-                      newData,
-                      current
-                    );
-
-                    setSubEditor((prev) => ({
-                      ...prev,
-                      element: newData,
-                    }));
-                  }
-
-                  setDataByPath(data?.indexPath || [], {
-                    ...data,
+                useEditElement({
+                  ...data,
+                  settings: {
+                    ...data?.settings,
                     as: el.value,
-                  } as TextProps);
-
-                  console.log("tagSelect prevClone", prevClone);
-
-                  return prevClone;
-                });
+                  },
+                } as TextProps);
               }}
               ariaLabel={`Tag ${el.label}`}
               id={el.value}
-              size="2"
               name={"tags"}
               title={el.label}
               key={el.value}
@@ -175,12 +107,49 @@ export function TagSelect({ data }: ElementTextProps) {
   );
 }
 
+export function InputLink({ data }: ElementTextProps) {
+  const { useEditElement } = useEditor();
+
+  return (
+    <div>
+      <label className="text-sm text-zinc-700 font-medium">Link</label>
+      <Input
+        value={data?.settings?.link || ""}
+        onChange={(evt) => {
+          useEditElement({
+            ...data,
+            settings: {
+              ...data?.settings,
+              link: evt.target.value,
+            },
+          } as TextProps);
+        }}
+        required
+        name="value"
+        className="w-full"
+        placeholder="http://exemplo.com"
+      />
+    </div>
+  );
+}
+
 export function FontFamilySelect({ data }: ElementTextProps) {
+  const { useEditElement } = useEditor();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Fonte</label>
 
-      <Select required name="font">
+      <Select
+        onValueChange={(value) =>
+          useEditElement({
+            ...data,
+            style: { ...data?.style, fontFamily: value },
+          } as TextProps)
+        }
+        required
+        name="font-family"
+      >
         <SelectTrigger className="w-full">
           <SelectValue placeholder={"Escolha sua fonte"} />
         </SelectTrigger>
@@ -197,12 +166,23 @@ export function FontFamilySelect({ data }: ElementTextProps) {
 }
 
 export function FontSizeSelect({ data }: ElementTextProps) {
+  const { useEditElement } = useEditor();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">
         Tamanho da fonte
       </label>
-      <Select required name="font">
+      <Select
+        onValueChange={(value) =>
+          useEditElement({
+            ...data,
+            style: { ...data?.style, fontSize: value },
+          } as TextProps)
+        }
+        required
+        name="font-size"
+      >
         <SelectTrigger className="w-full">
           <SelectValue placeholder={"Escolha o tamanho"} />
         </SelectTrigger>
@@ -219,6 +199,8 @@ export function FontSizeSelect({ data }: ElementTextProps) {
 }
 
 export function FontStyleSelect({ data }: ElementTextProps) {
+  const { useEditElement } = useEditor();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">
@@ -226,11 +208,78 @@ export function FontStyleSelect({ data }: ElementTextProps) {
       </label>
       <div className="flex gap-2 flex-wrap">
         {fontStyle.map((el) => {
+          const mappedOptions: { [key: string]: boolean } = {
+            "font-style": !!data?.style?.fontStyle?.includes(el.value),
+            "font-weight": !!data?.style?.fontWeight?.includes(el.value),
+            "text-decoration": !!data?.style?.textDecoration?.includes(
+              el.value
+            ),
+          };
+
+          const removeCheckedValue = (value: string) => {
+            return value.replace(el.value, "").trim();
+          };
+
+          const addCheckedValue = (value: string) => {
+            return value.trim().concat(` ${el.value}`);
+          };
+
+          const mappedStylesWhenChecked: {
+            [key: string]: { [key: string]: string };
+          } = {
+            "font-style": {
+              fontStyle: removeCheckedValue(data?.style.fontStyle || ""),
+            },
+            "font-weight": {
+              fontWeight: removeCheckedValue(data?.style.fontWeight || ""),
+            },
+            "text-decoration": {
+              textDecoration: removeCheckedValue(
+                data?.style.textDecoration || ""
+              ),
+            },
+          };
+
+          const mappedStyles: {
+            [key: string]: { [key: string]: string };
+          } = {
+            "font-style": {
+              fontStyle: el.value,
+            },
+            "font-weight": {
+              fontWeight: el.value,
+            },
+            "text-decoration": {
+              textDecoration: addCheckedValue(data?.style.textDecoration || ""),
+            },
+          };
+
+          const isChecked = mappedOptions[el.type as string];
+
           return (
-            <RadioWithIcon
+            <CheckboxWithIcon
               ariaLabel={`Estilo ${el.value}`}
+              checked={isChecked}
+              onChange={() => {
+                if (isChecked) {
+                  useEditElement({
+                    ...data,
+                    style: {
+                      ...data?.style,
+                      ...mappedStylesWhenChecked[el.type],
+                    },
+                  } as TextProps);
+                } else {
+                  useEditElement({
+                    ...data,
+                    style: {
+                      ...data?.style,
+                      ...mappedStyles[el.type],
+                    },
+                  } as TextProps);
+                }
+              }}
               id={el.value}
-              size="2"
               name={"font-style"}
               title={`Estilo ${el.value}`}
               key={el.value}
@@ -246,7 +295,7 @@ export function FontStyleSelect({ data }: ElementTextProps) {
               >
                 {el.label}
               </p>
-            </RadioWithIcon>
+            </CheckboxWithIcon>
           );
         })}
       </div>
@@ -254,32 +303,16 @@ export function FontStyleSelect({ data }: ElementTextProps) {
   );
 }
 
-export function ColorPicker({ data }: ElementTextProps) {
-  const [colorPicker, setColorPicker] = useState("#000");
-  const [openColorPicker, setOpenColorPicker] = useState(false);
+export function ColorPickerText({ data }: ElementTextProps) {
+  const { useEditElement } = useEditor();
+  const [colorPicker, setColorPicker] = useState(data?.style.color || "#000");
 
-  const handleChangeComplete = (color: { hex: string }) => {
-    setColorPicker(color.hex);
-  };
+  useEffect(() => {
+    useEditElement({
+      ...data,
+      style: { ...data?.style, color: colorPicker },
+    } as TextProps);
+  }, [colorPicker]);
 
-  return (
-    <div>
-      <div>
-        <label className="text-sm text-zinc-700 font-medium">Cor</label>
-
-        <Input
-          type="button"
-          className="cursor-pointer"
-          onClick={() => setOpenColorPicker((prev) => !prev)}
-          value={colorPicker}
-        />
-      </div>
-      {openColorPicker && (
-        <SketchPicker
-          onChangeComplete={handleChangeComplete}
-          color={colorPicker}
-        />
-      )}
-    </div>
-  );
+  return <ColorPicker color={colorPicker} setColor={setColorPicker} />;
 }

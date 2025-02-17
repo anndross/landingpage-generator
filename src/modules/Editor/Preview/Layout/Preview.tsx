@@ -5,7 +5,6 @@ import { PreviewElement, useEditor } from "../../EditorContext";
 
 export const Preview = ({}: { data: [] }) => {
   const { previewElements, setPreviewElements } = useEditor();
-  console.log("previewElements", previewElements);
 
   return (
     <Sortable
@@ -25,20 +24,3 @@ export const Preview = ({}: { data: [] }) => {
     />
   );
 };
-
-// useEffect(() => {
-//   async function createPreview() {
-//     await fetch("/api/preview/create", {
-//       method: "POST",
-//       body: JSON.stringify({
-//         items: state,
-//       }),
-//     });
-
-//     setPreviewElements(state);
-//   }
-
-//   if (state.length) createPreview();
-//   // eslint-disable-next-line react-hooks/exhaustive-deps
-// }, [state, previewElements]);
-// console.log("layout State", state);

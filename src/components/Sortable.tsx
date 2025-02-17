@@ -1,36 +1,30 @@
 "use client";
-import { getEditableComponent } from "@/mappedElements/utils/getEditableComponent";
-import { useEditor } from "@/modules/Editor/EditorContext";
-import PreviewContext, {
-  PreviewElement,
-} from "@/modules/Editor/Preview/context";
+import { getEditableElement } from "@/modules/Editor/mappedElements/utils/getEditableElement";
+import { PreviewElement, useEditor } from "@/modules/Editor/EditorContext";
 import clsx from "clsx";
-import { useContext } from "react";
-// import  { PreviewContextI } from "@/modules/Editor/Preview/context";
-// import { useContext } from "react";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
+import { CSSProperties } from "react";
 
 interface SortableProps {
   state: PreviewElement[];
   setState: (newState: ItemInterface[]) => void;
-  // children: ReactNode[] | undefined;
   tag: "main" | "div";
+  style?: CSSProperties;
 }
 
-export function Sortable({ tag, state, setState }: SortableProps) {
+export function Sortable({ tag, state, setState, style }: SortableProps) {
   const {
     preview: { canEdit },
   } = useEditor();
 
-  // console.log({ previewElements });
   return (
     <div className="w-full h-full">
       <ReactSortable
         tag={tag}
         className={clsx({
           "w-full h-full bg-white p-5 flex flex-col": true,
-          "border border-zinc-400": tag !== "main",
         })}
+        style={style}
         group={{
           name: "shared",
           pull: true,
@@ -43,18 +37,10 @@ export function Sortable({ tag, state, setState }: SortableProps) {
         list={state}
         setList={(newState) => {
           setState(newState);
-          // const mappedNewState = newState.map((item) => ({
-          //   ...item,
-          //   id: item.id?.startsWith("clone-")
-          //     ? item.id
-          //     : `clone-${crypto.randomUUID()}`,
-          // }));
-
-          // setState({ children: mappedNewState });
         }}
       >
         {state.map((item) => {
-          const element = getEditableComponent(item.type, canEdit, item);
+          const element = getEditableElement(canEdit, item);
 
           return element;
         })}
@@ -62,9 +48,3 @@ export function Sortable({ tag, state, setState }: SortableProps) {
     </div>
   );
 }
-
-// const [id, setId] = useState("");
-
-// useEffect(() => {
-//   setId(`new-${crypto.randomUUID()}`);
-// }, []);

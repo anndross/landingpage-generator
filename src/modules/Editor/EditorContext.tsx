@@ -48,6 +48,7 @@ export interface EditorContextI {
   setPreviewElements: Dispatch<
     SetStateAction<EditorContextI["previewElements"]>
   >;
+  useEditElement: (data: PreviewElement) => void;
 }
 
 const EditorContext = createContext<EditorContextI>({
@@ -62,12 +63,13 @@ const EditorContext = createContext<EditorContextI>({
   },
   setSubEditor: () => {},
   setPreviewElements: () => {},
+  setPreview: () => {},
   preview: {
     type: "layout",
     option: "desktop",
     canEdit: true,
   },
-  setPreview: () => {},
+  useEditElement: () => {},
 });
 
 export function useEditor() {
@@ -95,6 +97,37 @@ export function EditorProvider({ children }: EditorProviderProps) {
   });
   const [tree, setTree] = useState<boolean>(false);
 
+  const useEditElement = (data: PreviewElement) => {
+    setPreviewElements((prev) => {
+      const prevClone = { ...prev };
+
+      const setDataByPath = (path: number[], newData: PreviewElement) => {
+        let current: EditorContextI["previewElements"] | PreviewElement =
+          prevClone;
+
+        for (let i = 0; i < path.length - 1; i++) {
+          current = current?.children[path[i]];
+        }
+
+        // Obtém o índice final do caminho
+        const lastIndex = path[path.length - 1];
+
+        if (current?.children && lastIndex !== undefined) {
+          current.children[lastIndex] = newData; // Aqui alteramos diretamente a referência correta
+        }
+
+        setSubEditor((prev) => ({
+          ...prev,
+          element: newData,
+        }));
+      };
+
+      setDataByPath(data?.indexPath || [], data as PreviewElement);
+
+      return prevClone;
+    });
+  };
+
   return (
     <EditorContext.Provider
       value={{
@@ -106,6 +139,7 @@ export function EditorProvider({ children }: EditorProviderProps) {
         setPreviewElements,
         preview,
         setPreview,
+        useEditElement,
       }}
     >
       {children}

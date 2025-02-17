@@ -9,6 +9,8 @@ import { TbBinaryTree } from "react-icons/tb";
 import { Tree } from "./Tree";
 import { SubEditor } from "./SubEditor";
 import { useEditor } from "../EditorContext";
+import { SaveButton } from "./components/SaveButton";
+import { ClearPreview } from "./components/ClearPreview";
 
 interface PreviewProps {
   children: ReactNode;
@@ -48,9 +50,13 @@ export function Preview({ children }: PreviewProps) {
             )}
           </div>
 
-          <Button onClick={() => setTree(true)} variant="outline">
-            <TbBinaryTree />
-          </Button>
+          <div className="flex items-center gap-4">
+            <ClearPreview />
+            <SaveButton />
+            <Button onClick={() => setTree(true)} variant="outline">
+              <TbBinaryTree />
+            </Button>
+          </div>
         </div>
         <div
           className={clsx({
