@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "../../../components/ui/input";
-import { useAuth } from "@/app/AuthContext";
+import { useAuth } from "@/modules/Auth/AuthContext";
 import { FcGoogle } from "react-icons/fc";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";

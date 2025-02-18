@@ -1,0 +1,22 @@
+[
+  {
+    "label": "I",
+    "value": "italic",
+    "type": "fontStyle"
+  },
+  {
+    "label": "B",
+    "value": "bold",
+    "type": "fontWeight"
+  },
+  {
+    "label": "U",
+    "value": "underline",
+    "type": "textDecoration"
+  },
+  {
+    "label": "S",
+    "value": "line-through",
+    "type": "textDecoration"
+  }
+]

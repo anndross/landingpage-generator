@@ -12,11 +12,10 @@ export function Tree() {
   const { setSubEditor, tree, setTree, previewElements } = useEditor();
 
   const openSubEditor = (element: PreviewElement) => {
-    setSubEditor((prev) => ({
-      ...prev,
+    setSubEditor({
       open: true,
       element: element,
-    }));
+    });
   };
   return (
     <div
@@ -67,11 +66,10 @@ const Item = ({ data }: ItemProps) => {
   const { setSubEditor } = useEditor();
 
   const openSubEditor = (element: PreviewElement) => {
-    setSubEditor((prev) => ({
-      ...prev,
+    setSubEditor({
       open: true,
       element: element,
-    }));
+    });
   };
 
   return (

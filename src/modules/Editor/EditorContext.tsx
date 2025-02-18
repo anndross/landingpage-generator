@@ -1,16 +1,8 @@
 "use client";
+import { create } from "zustand";
 import { ImageProps } from "@/types/components/image";
 import { TextProps } from "@/types/components/text";
 import { WrapperProps } from "@/types/components/wrapper";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
-
 export type PreviewElement = ImageProps | TextProps | WrapperProps;
 
 export type Options = {
@@ -37,69 +29,46 @@ export interface EditorContextI {
     children: PreviewElement[];
   };
   tree: boolean;
-  setTree: Dispatch<SetStateAction<EditorContextI["tree"]>>;
+  setTree: (tree: boolean) => void;
   subEditor: {
     open: boolean;
     element: PreviewElement | null;
   };
-  setSubEditor: Dispatch<SetStateAction<EditorContextI["subEditor"]>>;
+  setSubEditor: (subEditor: Partial<EditorContextI["subEditor"]>) => void;
   preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
-  setPreview: Dispatch<SetStateAction<EditorContextI["preview"]>>;
-  setPreviewElements: Dispatch<
-    SetStateAction<EditorContextI["previewElements"]>
-  >;
-  useEditElement: (data: PreviewElement) => void;
+  setPreview: (preview: Partial<EditorContextI["preview"]>) => void;
+  setPreviewElements: (
+    previewElements: Partial<EditorContextI["previewElements"]>
+  ) => void;
+  useEditElement: (data: Partial<PreviewElement>) => void;
 }
 
-const EditorContext = createContext<EditorContextI>({
+export const useEditor = create<EditorContextI>((set) => ({
   previewElements: {
     children: [],
   },
+  setPreviewElements: (previewElements) =>
+    set(() => ({
+      previewElements: previewElements as EditorContextI["previewElements"],
+    })),
   tree: false,
-  setTree: () => {},
+  setTree: (tree) => set(() => ({ tree: tree })),
   subEditor: {
     open: false,
     element: null,
   },
-  setSubEditor: () => {},
-  setPreviewElements: () => {},
-  setPreview: () => {},
+  setSubEditor: (subEditor) =>
+    set(() => ({ subEditor: subEditor as EditorContextI["subEditor"] })),
   preview: {
     type: "layout",
     option: "desktop",
     canEdit: true,
   },
-  useEditElement: () => {},
-});
-
-export function useEditor() {
-  return useContext(EditorContext);
-}
-
-interface EditorProviderProps {
-  children: ReactNode | ReactNode[];
-}
-
-export function EditorProvider({ children }: EditorProviderProps) {
-  const [previewElements, setPreviewElements] = useState<
-    EditorContextI["previewElements"]
-  >({ children: [] });
-
-  const [preview, setPreview] = useState<EditorContextI["preview"]>({
-    type: "layout",
-    option: "desktop",
-    canEdit: true,
-  });
-
-  const [subEditor, setSubEditor] = useState<EditorContextI["subEditor"]>({
-    open: false,
-    element: null,
-  });
-  const [tree, setTree] = useState<boolean>(false);
-
-  const useEditElement = (data: PreviewElement) => {
-    setPreviewElements((prev) => {
-      const prevClone = { ...prev };
+  setPreview: (preview) =>
+    set((state) => ({ preview: { ...state.preview, preview } })),
+  useEditElement: (data) =>
+    set((state) => {
+      const prevClone = { ...state.previewElements };
 
       const setDataByPath = (path: number[], newData: PreviewElement) => {
         let current: EditorContextI["previewElements"] | PreviewElement =
@@ -116,35 +85,16 @@ export function EditorProvider({ children }: EditorProviderProps) {
           current.children[lastIndex] = newData; // Aqui alteramos diretamente a referência correta
         }
 
-        setSubEditor((prev) => ({
-          ...prev,
-          element: newData,
-        }));
+        const updateSubEditor = () => {
+          const newSubEditor = { ...state.subEditor, element: newData };
+
+          state.setSubEditor(newSubEditor);
+        };
+        updateSubEditor();
       };
 
       setDataByPath(data?.indexPath || [], data as PreviewElement);
 
-      return prevClone;
-    });
-  };
-
-  return (
-    <EditorContext.Provider
-      value={{
-        tree,
-        setTree,
-        subEditor,
-        setSubEditor,
-        previewElements,
-        setPreviewElements,
-        preview,
-        setPreview,
-        useEditElement,
-      }}
-    >
-      {children}
-    </EditorContext.Provider>
-  );
-}
-
-export default EditorContext;
+      return { previewElements: prevClone };
+    }),
+}));

@@ -1,6 +1,5 @@
 "use client";
-
-import { useAuth } from "@/app/AuthContext";
+import { useAuth } from "@/modules/Auth/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

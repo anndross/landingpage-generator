@@ -1,5 +1,5 @@
 "use client";
-import { getEditableElement } from "@/modules/Editor/mappedElements/utils/getEditableElement";
+import { getElement } from "@/modules/Editor/Preview/Layout/mappedElements/utils/getElement";
 import { PreviewElement, useEditor } from "@/modules/Editor/EditorContext";
 import clsx from "clsx";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
@@ -18,12 +18,13 @@ export function Sortable({ tag, state, setState, style }: SortableProps) {
   } = useEditor();
 
   return (
-    <div className="w-full h-full" style={style}>
+    <div className="w-full h-full">
       <ReactSortable
         tag={tag}
         className={clsx({
-          "w-full h-full p-5 flex flex-col": true,
+          "w-full h-full p-5 flex flex-col": tag === "main",
         })}
+        style={style}
         group={{
           name: "shared",
           pull: true,
@@ -39,7 +40,7 @@ export function Sortable({ tag, state, setState, style }: SortableProps) {
         }}
       >
         {state.map((item) => {
-          const element = getEditableElement(canEdit, item);
+          const element = getElement(canEdit, item);
 
           return element;
         })}

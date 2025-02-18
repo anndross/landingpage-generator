@@ -17,5 +17,8 @@ export type WrapperProps = BaseProps & {
     height: string;
     padding: string;
     margin: string;
+    flexDirection: "column" | "row";
+    justifyContent: "flex-start" | "flex-end" | "center" | "space-between";
+    alignItems: "flex-start" | "flex-end" | "center";
   };
 };

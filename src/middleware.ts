@@ -6,13 +6,19 @@ export async function middleware(request: NextRequest) {
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token");
 
-  if (!token) {
+  const url = request.nextUrl.clone().pathname;
+
+  if (!token && url !== "/login") {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (token && url === "/login") {
+    return NextResponse.redirect(new URL("/editor", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: "/editor",
+  matcher: ["/editor", "/login"],
 };

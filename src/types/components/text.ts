@@ -1,6 +1,6 @@
 import { BaseProps } from "./base";
-import fontFamilyJSON from "@/data/text/font-family.json";
-import fontSizeJSON from "@/data/text/font-size.json";
+import fontFamilyJSON from "@/modules/Editor/data/config/Text/font-family.json";
+import fontSizeJSON from "@/modules/Editor/data/config/Text/font-size.json";
 
 export type AvailableTags =
   | "h1"
@@ -24,7 +24,7 @@ export type TextProps = BaseProps & {
     link?: string;
   };
   style: {
-    fontStyle: "normal" | "italic" | "bold" | "underline" | "strikethrough";
+    fontStyle: "italic" | "bold" | "underline" | "line-through";
     fontSize: FontSize;
     fontFamily: FontFamily;
     textDecoration: string;

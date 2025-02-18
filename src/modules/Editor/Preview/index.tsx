@@ -7,7 +7,6 @@ import { EditToggle } from "./components/EditToggle";
 import { Button } from "@/components/ui/button";
 import { TbBinaryTree } from "react-icons/tb";
 import { Tree } from "./Tree";
-import { SubEditor } from "./SubEditor";
 import { useEditor } from "../EditorContext";
 import { SaveButton } from "./components/SaveButton";
 import { ClearPreview } from "./components/ClearPreview";
@@ -20,16 +19,14 @@ export function Preview({ children }: PreviewProps) {
   const { preview, setPreview, setTree } = useEditor();
 
   function handleToggleCanEdit(state: boolean) {
-    setPreview((prev) => ({
-      ...prev,
+    setPreview({
       canEdit: state,
-    }));
+    });
   }
 
   return (
     <>
       <Tree />
-      <SubEditor />
 
       <div className="relative flex flex-col justify-between gap-2 h-full w-[calc(100%-256px)] pt-14">
         <div

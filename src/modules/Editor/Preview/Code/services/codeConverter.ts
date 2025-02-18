@@ -1,5 +1,5 @@
-import richTextJson from "@/modules/Editor/mappedElements/vtexIo/rich-text.json";
-import imageJson from "@/modules/Editor/mappedElements/vtexIo/image.json";
+import richTextJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/rich-text.json";
+import imageJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/image.json";
 import { Options, PreviewElement } from "@/modules/Editor/EditorContext";
 
 export function codeConverter(
