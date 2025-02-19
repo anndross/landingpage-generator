@@ -1,23 +1,19 @@
 import { Sortable } from "@/components/Sortable";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { WrapperProps } from "@/types/components/wrapper";
+import { ContainerProps } from "@/types/components/container";
 import { useEffect } from "react";
 
-interface EditableWrapperProps {
-  data: WrapperProps;
+interface EditableContainerProps {
+  data: ContainerProps;
 }
 
-export function Wrapper({ data }: EditableWrapperProps) {
+export function Container({ data }: EditableContainerProps) {
   const { useEditElement } = useEditor();
-
-  useEffect(() => {
-    console.log("data mudou", data);
-  }, [data]);
 
   return (
     <Sortable
       state={data.children}
-      style={{ ...data.style, ...data.settings }}
+      style={{ display: "flex", ...data.style, ...data.settings }}
       setState={(newState) => {
         const id = `clone-${crypto.randomUUID()}`;
 
@@ -27,7 +23,7 @@ export function Wrapper({ data }: EditableWrapperProps) {
           indexPath: [...(data.indexPath || []), index],
         }));
 
-        useEditElement({ ...data, children: mappedNewState } as WrapperProps);
+        useEditElement({ ...data, children: mappedNewState } as ContainerProps);
       }}
       tag="div"
     />

@@ -9,24 +9,28 @@ export function TextLink() {
   } = useEditor();
 
   return (
-    <div>
-      <label className="text-sm text-zinc-700 font-medium">Link</label>
-      <Input
-        value={element?.settings?.link || ""}
-        onChange={(evt) => {
-          useEditElement({
-            ...element,
-            settings: {
-              ...element?.settings,
-              link: evt.target.value,
-            },
-          } as TextProps);
-        }}
-        required
-        name="value"
-        className="w-full"
-        placeholder="http://exemplo.com"
-      />
-    </div>
+    <>
+      {element?.settings.as === "a" && (
+        <div>
+          <label className="text-sm text-zinc-700 font-medium">Link</label>
+          <Input
+            value={element?.settings?.link || ""}
+            onChange={(evt) => {
+              useEditElement({
+                ...element,
+                settings: {
+                  ...element?.settings,
+                  link: evt.target.value,
+                },
+              } as TextProps);
+            }}
+            required
+            name="value"
+            className="w-full"
+            placeholder="http://exemplo.com"
+          />
+        </div>
+      )}
+    </>
   );
 }

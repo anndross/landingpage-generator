@@ -2,8 +2,9 @@
 import { create } from "zustand";
 import { ImageProps } from "@/types/components/image";
 import { TextProps } from "@/types/components/text";
-import { WrapperProps } from "@/types/components/wrapper";
-export type PreviewElement = ImageProps | TextProps | WrapperProps;
+import { ContainerProps } from "@/types/components/container";
+
+export type PreviewElement = ImageProps | TextProps | ContainerProps;
 
 export type Options = {
   layout: "desktop" | "mobile";
@@ -65,7 +66,9 @@ export const useEditor = create<EditorContextI>((set) => ({
     canEdit: true,
   },
   setPreview: (preview) =>
-    set((state) => ({ preview: { ...state.preview, preview } })),
+    set((state) => ({
+      preview: { ...state.preview, ...(preview as EditorContextI["preview"]) },
+    })),
   useEditElement: (data) =>
     set((state) => {
       const prevClone = { ...state.previewElements };

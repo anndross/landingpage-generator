@@ -2,6 +2,6 @@ import { ItemInterface } from "react-sortablejs";
 
 export interface BaseProps extends ItemInterface {
   id: string;
-  type: "text" | "image" | "wrapper";
-  indexPath: number[]; // Referência ao elemento pai
+  type: "text" | "image" | "container";
+  indexPath: number[]; // Referência a árvore
 }

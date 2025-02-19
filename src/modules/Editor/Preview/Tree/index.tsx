@@ -5,7 +5,7 @@ import { PreviewElement, useEditor } from "../../EditorContext";
 
 const mappedContent: Partial<{ [key in PreviewElement["type"]]: string }> = {
   text: "Texto",
-  wrapper: "Container",
+  container: "Container",
 };
 
 export function Tree() {
@@ -33,7 +33,7 @@ export function Tree() {
       </div>
       <div className="p-4">
         {previewElements.children.map((child) => {
-          if (child.type === "wrapper") {
+          if (child.type === "container") {
             return (
               <div key={child.id}>
                 <strong onClick={() => openSubEditor(child)}>
@@ -75,7 +75,7 @@ const Item = ({ data }: ItemProps) => {
   return (
     <div className="px-3">
       {data.map((item) => {
-        if (item.type === "wrapper") {
+        if (item.type === "container") {
           return (
             <div key={item.id}>
               <strong onClick={() => openSubEditor(item)}>

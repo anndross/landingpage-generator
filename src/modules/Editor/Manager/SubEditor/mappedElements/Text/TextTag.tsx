@@ -1,7 +1,7 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import tags from "@/modules/Editor/data/config/Text/tags.json";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { WrapperProps } from "@/types/components/wrapper";
+import { TextProps } from "@/types/components/text";
 
 export function TextTag() {
   const {
@@ -14,16 +14,16 @@ export function TextTag() {
       <label className="text-sm text-zinc-700 font-medium">Tag</label>
       <ToggleGroup
         variant="outline"
-        value={element?.settings.flexDirection}
+        value={element?.settings.as}
         onValueChange={(value) => {
           if (value)
             useEditElement({
               ...element,
               settings: {
                 ...element?.settings,
-                flexDirection: value,
+                as: value,
               },
-            } as WrapperProps);
+            } as TextProps);
         }}
         type="single"
         className="w-full flex-wrap flex mt-2 gap-2 justify-between"

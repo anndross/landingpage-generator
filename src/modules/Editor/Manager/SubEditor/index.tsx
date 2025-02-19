@@ -1,11 +1,9 @@
 "use client";
 import clsx from "clsx";
-import { Wrapper } from "./mappedElements/Wrapper";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
-import { TextProps } from "@/types/components/text";
-import { WrapperProps } from "@/types/components/wrapper";
+import { Container } from "@/modules/Editor/Manager/SubEditor/mappedElements/Container";
 import { PreviewElement, useEditor } from "../../EditorContext";
 import { Text } from "./mappedElements/Text";
 
@@ -23,13 +21,21 @@ export function SubEditor() {
         <Text.Content />
         <Text.Tag />
         <Text.Link />
-        <Text.ColorPicker />
         <Text.FontFamily />
         <Text.FontSize />
         <Text.FontStyle />
+        <Text.ColorPicker />
       </Text.Root>
     ),
-    wrapper: <Wrapper />,
+    container: (
+      <Container.Root>
+        <Container.Size />
+        <Container.Border />
+        <Container.Appearance />
+        <Container.Spacing />
+        <Container.Position />
+      </Container.Root>
+    ),
   };
 
   return (

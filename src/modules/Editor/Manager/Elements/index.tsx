@@ -2,7 +2,7 @@
 import { ReactSortable } from "react-sortablejs";
 import { ReactNode, useState } from "react";
 import { Text } from "./mappedElements/Text";
-import { Wrapper } from "./mappedElements/Wrapper";
+import { Container } from "./mappedElements/Container";
 import { PreviewElement } from "@/modules/Editor/EditorContext";
 import dataElements from "@/modules/Editor/data/elements.json";
 
@@ -33,7 +33,7 @@ export function Elements() {
           [key in PreviewElement["type"]]: ReactNode;
         }> = {
           text: <Text key={item.id} />,
-          wrapper: <Wrapper key={item.id} />,
+          container: <Container key={item.id} />,
         };
 
         const element: ReactNode = elements?.[item.type];

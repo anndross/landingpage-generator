@@ -2,9 +2,8 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEditor } from "@/modules/Editor/EditorContext";
 import fontStyleData from "@/modules/Editor/data/config/Text/font-style.json";
 import clsx from "clsx";
-import { WrapperProps } from "@/types/components/wrapper";
-import { TextProps } from "@/types/components/text";
-import { useEffect, useState } from "react";
+import { ContainerProps } from "@/types/components/container";
+import { useState } from "react";
 
 export function TextFontStyle() {
   const {
@@ -12,84 +11,7 @@ export function TextFontStyle() {
     subEditor: { element },
   } = useEditor();
 
-  const {
-    style: { fontStyle, fontWeight, textDecoration },
-  } = element as TextProps;
-
-  //   const mappedOptions: { [key: string]: boolean } = {
-  //     "font-style": !!element?.style?.fontStyle?.includes(el.value),
-  //     "font-weight": !!element?.style?.fontWeight?.includes(el.value),
-  //     "text-decoration": !!element?.style?.textDecoration?.includes(el.value),
-  //   };
-
-  //   const removeCheckedValue = (value: string) => {
-  //     return value.replace(el.value, "").trim();
-  //   };
-
-  //   const addCheckedValue = (value: string) => {
-  //     return value.trim().concat(` ${el.value}`);
-  //   };
-
-  //   const mappedStylesWhenChecked: {
-  //     [key: string]: { [key: string]: string };
-  //   } = {
-  //     "font-style": {
-  //       fontStyle: removeCheckedValue(element?.style.fontStyle || ""),
-  //     },
-  //     "font-weight": {
-  //       fontWeight: removeCheckedValue(element?.style.fontWeight || ""),
-  //     },
-  //     "text-decoration": {
-  //       textDecoration: removeCheckedValue(element?.style.textDecoration || ""),
-  //     },
-  //   };
-
-  //   const mappedStyles: {
-  //     [key: string]: { [key: string]: string };
-  //   } = {
-  //     "font-style": {
-  //       fontStyle: el.value,
-  //     },
-  //     "font-weight": {
-  //       fontWeight: el.value,
-  //     },
-  //     "text-decoration": {
-  //       textDecoration: addCheckedValue(element?.style.textDecoration || ""),
-  //     },
-  //   };
-
-  //   const isChecked = mappedOptions[el.type as string];
-
-  //   const [values, setValues] = useState<string[]>([]);
-
-  //   useEffect(() => {
-  //     const mappedValues = {
-  //       fontWeight: "",
-  //       textDecoration: "",
-  //       fontStyle: "",
-  //     };
-
-  //     values.forEach((value) => {
-  //       const json = JSON.parse(value);
-
-  //       if (json.type !== "textDecoration") {
-  //         mappedValues[json.type as "fontWeight" | "fontStyle"] =
-  //           json.value || "";
-  //       } else {
-  //         mappedValues["textDecoration"] += json.value || "";
-  //       }
-
-  //       return;
-  //     });
-
-  //     useEditElement({
-  //       ...element,
-  //       style: {
-  //         ...element?.style,
-  //         ...mappedValues,
-  //       },
-  //     } as WrapperProps);
-  //   }, [values]);
+  const [value, setValue] = useState<string[]>([]);
 
   return (
     <div>
@@ -98,13 +20,40 @@ export function TextFontStyle() {
       </label>
       <ToggleGroup
         variant="outline"
-        value={[
-          fontStyle,
-          fontWeight,
-          ...(textDecoration?.split(" ").map((el) => el.trim()) || []),
-        ]}
+        value={value}
         onValueChange={(values) => {
-          const valuesMapped = values.map((value) => {});
+          const mappedValues = values.reduce(
+            (acc, e) => {
+              const mappedKeys: { [key: string]: string } = {
+                bold: "fontWeight",
+                italic: "fontStyle",
+                underline: "textDecoration",
+                "line-through": "textDecoration",
+              };
+
+              acc[mappedKeys[e]] += " " + e;
+
+              return acc;
+            },
+            {
+              fontWeight: "",
+              fontStyle: "",
+              textDecoration: "",
+            } as { [key: string]: string }
+          );
+
+          useEditElement({
+            ...element,
+            style: {
+              ...element?.style,
+              fontWeight: "",
+              fontStyle: "",
+              textDecoration: "",
+              ...mappedValues,
+            },
+          } as ContainerProps);
+
+          setValue(values);
         }}
         type="multiple"
         className="w-full flex mt-2 gap-2 justify-between"

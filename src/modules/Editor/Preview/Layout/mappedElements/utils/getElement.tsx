@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Text as EditableText } from "@/modules/Editor/Preview/Layout/mappedElements/Text";
-import { Wrapper as EditableWrapper } from "@/modules/Editor/Preview/Layout/mappedElements/Wrapper";
+import { Container as EditableContainer } from "@/modules/Editor/Preview/Layout/mappedElements/Container";
 import { TextProps } from "@/types/components/text";
-import { WrapperProps } from "@/types/components/wrapper";
+import { ContainerProps } from "@/types/components/container";
 import { PreviewElement } from "@/modules/Editor/EditorContext";
 
 export function getElement(canEdit: boolean, data: PreviewElement) {
@@ -10,7 +10,9 @@ export function getElement(canEdit: boolean, data: PreviewElement) {
     [key in PreviewElement["type"]]: ReactNode;
   }> = {
     text: <EditableText data={data as TextProps} key={data.id} />,
-    wrapper: <EditableWrapper data={data as WrapperProps} key={data.id} />,
+    container: (
+      <EditableContainer data={data as ContainerProps} key={data.id} />
+    ),
   };
 
   if (canEdit) return editableElements[data.type];

@@ -12,13 +12,13 @@
     }
   },
   {
-    "id": "wrapper",
-    "type": "wrapper",
+    "id": "container",
+    "type": "container",
     "indexPath": [],
     "children": [],
     "style": {
       "backgroundColor": "#fff",
-      "borderRadius": "0",
+      "borderRadius": "0px 0px 0px 0px",
       "borderWidth": "1px",
       "borderStyle": "solid",
       "borderColor": "#000",

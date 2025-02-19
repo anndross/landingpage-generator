@@ -1,7 +1,7 @@
 import { PreviewElement } from "@/modules/Editor/EditorContext";
 import { BaseProps } from "./base";
 
-export type WrapperProps = BaseProps & {
+export type ContainerProps = BaseProps & {
   children: PreviewElement[];
   style: {
     borderWidth: string;
