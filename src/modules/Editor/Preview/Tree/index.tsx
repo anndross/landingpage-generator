@@ -6,6 +6,7 @@ import { PreviewElement, useEditor } from "../../EditorContext";
 const mappedContent: Partial<{ [key in PreviewElement["type"]]: string }> = {
   text: "Texto",
   container: "Container",
+  image: "Imagem",
 };
 
 export function Tree() {
@@ -36,7 +37,10 @@ export function Tree() {
           if (child.type === "container") {
             return (
               <div key={child.id}>
-                <strong onClick={() => openSubEditor(child)}>
+                <strong
+                  className="cursor-pointer"
+                  onClick={() => openSubEditor(child)}
+                >
                   {mappedContent[child.type]}
                 </strong>
                 {!!child.children.length && <Item data={child.children} />}
@@ -45,7 +49,7 @@ export function Tree() {
           }
           return (
             <strong
-              className="block"
+              className="block cursor-pointer"
               key={child.id}
               onClick={() => openSubEditor(child)}
             >
@@ -78,7 +82,10 @@ const Item = ({ data }: ItemProps) => {
         if (item.type === "container") {
           return (
             <div key={item.id}>
-              <strong onClick={() => openSubEditor(item)}>
+              <strong
+                className="cursor-pointer"
+                onClick={() => openSubEditor(item)}
+              >
                 {mappedContent[item.type]}
               </strong>
               {!!item.children.length && <Item data={item.children} />}
@@ -88,7 +95,7 @@ const Item = ({ data }: ItemProps) => {
 
         return (
           <strong
-            className="block"
+            className="block cursor-pointer"
             key={item.id}
             onClick={() => openSubEditor(item)}
           >

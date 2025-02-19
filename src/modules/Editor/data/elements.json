@@ -12,6 +12,18 @@
     }
   },
   {
+    "id": "image",
+    "type": "image",
+    "settings": {
+      "src": "https://placehold.co/600x400/EEE/31343C",
+      "alt": "",
+      "title": "",
+      "width": "600px",
+      "height": "400px"
+    },
+    "style": {}
+  },
+  {
     "id": "container",
     "type": "container",
     "indexPath": [],

@@ -4,8 +4,9 @@ import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
 import { Container } from "@/modules/Editor/Manager/SubEditor/mappedElements/Container";
-import { PreviewElement, useEditor } from "../../EditorContext";
-import { Text } from "./mappedElements/Text";
+import { PreviewElement, useEditor } from "@/modules/Editor/EditorContext";
+import { Text } from "@/modules/Editor/Manager/SubEditor/mappedElements/Text";
+import { Image } from "@/modules/Editor/Manager/SubEditor/mappedElements/Image";
 
 export function SubEditor() {
   const {
@@ -35,6 +36,14 @@ export function SubEditor() {
         <Container.Spacing />
         <Container.Position />
       </Container.Root>
+    ),
+    image: (
+      <Image.Root>
+        <Image.Url />
+        <Image.Upload />
+        <Image.Size />
+        <Image.Seo />
+      </Image.Root>
     ),
   };
 

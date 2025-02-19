@@ -3,6 +3,8 @@ import imageJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/image
 import flexLayoutJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/flex-layout.row.json";
 
 import { Options, PreviewElement } from "@/modules/Editor/EditorContext";
+import { TextProps } from "@/types/components/text";
+import { ImageProps } from "@/types/components/image";
 
 export function codeConverter(
   type: Options["code"] | false,
@@ -20,7 +22,7 @@ export function codeConverter(
 }
 
 export function vtexIoConverter(elements: PreviewElement[]) {
-  function handleRichText(el: PreviewElement) {
+  function handleRichText(el: TextProps) {
     const richText = {
       [`rich-text#${el.id}`]: JSON.parse(
         JSON.stringify(richTextJson["rich-text"])
@@ -32,7 +34,7 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     return richText;
   }
 
-  function handleFlexLayout(element: PreviewElement) {
+  function handleFlexLayout(element: PreviewElement, result: object[] = []) {
     const flexLayout = {
       [`flex-layout.row#${element.id}`]: JSON.parse(
         JSON.stringify(flexLayoutJson["flex-layout.row"])
@@ -50,50 +52,60 @@ export function vtexIoConverter(elements: PreviewElement[]) {
         return mappedTypesName[el.type];
       }) || [];
 
-    const result = [flexLayout];
+    result.push(flexLayout);
 
     if (element?.children?.length) {
       for (const el of element?.children as PreviewElement[]) {
-        const mappedTypesElements = {
-          text: handleRichText,
-          container: handleFlexLayout,
-          image: handleImage,
+        const mappedTypesElements: {
+          [key in PreviewElement["type"]]: (
+            el: PreviewElement,
+            result?: object[]
+          ) => object;
+        } = {
+          text: (data) => handleRichText(data as TextProps),
+          container: (data, result?: object[]) =>
+            handleFlexLayout(data as PreviewElement, result),
+          image: (data) => handleImage(data as ImageProps),
         };
 
-        if (el?.children?.length) {
-          const handleInstance = mappedTypesElements[el.type];
+        const handleInstance = mappedTypesElements[el.type];
 
-          const data = handleInstance(el);
+        const data = handleInstance(el, result);
 
-          result.push(data);
-        }
+        result.push(data);
       }
     }
 
     const response = result.reduce((acc, currentValue) => {
-      acc = {
+      return {
         ...acc,
         ...currentValue,
       };
-
-      return acc;
     }, {});
 
     return response;
   }
 
-  function handleImage(el: PreviewElement) {
-    if (el) imageJson["image"]["props"]["src"] = "";
+  function handleImage(el: ImageProps) {
+    const image = {
+      [`image#${el.id}`]: JSON.parse(JSON.stringify(imageJson["image"])),
+    };
 
-    return imageJson;
+    image[`image#${el.id}`]["props"]["src"] = el.settings.src || "";
+    image[`image#${el.id}`]["props"]["width"] = el.settings.width || "";
+    image[`image#${el.id}`]["props"]["height"] = el.settings.height || "";
+    image[`image#${el.id}`]["props"]["title"] = el.settings.title || "";
+    image[`image#${el.id}`]["props"]["alt"] = el.settings.alt || "";
+
+    return image;
   }
 
   const handlers: {
     [key in PreviewElement["type"]]: (el: PreviewElement) => object;
   } = {
-    text: handleRichText,
-    container: handleFlexLayout,
-    image: handleImage,
+    text: (data) => handleRichText(data as TextProps),
+    container: (data) => handleFlexLayout(data as PreviewElement),
+    image: (data) => handleImage(data as ImageProps),
   };
 
   const mappedElements = elements.map((el) => {
@@ -109,9 +121,10 @@ export function vtexIoConverter(elements: PreviewElement[]) {
   };
 
   const page = [mappedPage, ...mappedElements].reduce((acc: any, item: any) => {
-    const [key, value] = Object.entries(item)[0];
-    acc[key] = value;
-    return acc;
+    return {
+      ...acc,
+      ...item,
+    };
   }, {});
 
   return page;

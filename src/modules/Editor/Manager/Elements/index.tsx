@@ -5,6 +5,8 @@ import { Text } from "./mappedElements/Text";
 import { Container } from "./mappedElements/Container";
 import { PreviewElement } from "@/modules/Editor/EditorContext";
 import dataElements from "@/modules/Editor/data/elements.json";
+import { Image } from "./mappedElements/Image";
+import { Button } from "./mappedElements/Button";
 
 export function Elements() {
   const [state, setState] = useState<PreviewElement[]>(
@@ -24,7 +26,7 @@ export function Elements() {
       sort={false}
       fallbackOnBody
       ghostClass="ghost"
-      className="w-full h-full overflow-y-auto grid grid-cols-2 gap-2"
+      className="w-full h-full overflow-y-auto grid grid-cols-2 place-content-start gap-2"
       list={state}
       setList={setState}
     >
@@ -34,6 +36,7 @@ export function Elements() {
         }> = {
           text: <Text key={item.id} />,
           container: <Container key={item.id} />,
+          image: <Image key={item.id} />,
         };
 
         const element: ReactNode = elements?.[item.type];

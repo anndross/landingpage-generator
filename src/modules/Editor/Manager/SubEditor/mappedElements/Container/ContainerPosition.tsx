@@ -13,8 +13,10 @@ import { TbBaselineDensityMedium } from "react-icons/tb";
 export function ContainerPosition() {
   const {
     useEditElement,
-    subEditor: { element },
+    subEditor: { element: Element },
   } = useEditor();
+
+  const element = Element as ContainerProps;
 
   return (
     <div className="flex flex-col gap-3">

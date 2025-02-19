@@ -1,11 +1,21 @@
+"use client";
+import { useEditor } from "@/modules/Editor/EditorContext";
 import { ImageProps } from "@/types/components/image";
 
-export const Image = ({}: ImageProps) => {
+interface EditableImageProps {
+  data: ImageProps;
+}
+
+export const Image = ({ data }: EditableImageProps) => {
   return (
-    <section
-      className="w-full h-72 bg-zinc-700"
-      onDrop={(event) => {}}
-      onDragOver={(event) => event.preventDefault()}
-    ></section>
+    <a href="#">
+      <img
+        src={data.settings.src}
+        alt={data.settings.alt}
+        title={data.settings.title}
+        width={data.settings.width}
+        height={data.settings.height}
+      />
+    </a>
   );
 };

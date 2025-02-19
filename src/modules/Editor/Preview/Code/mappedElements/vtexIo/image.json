@@ -1,7 +1,11 @@
 {
   "image": {
     "props": {
-      "src": ""
+      "src": "",
+      "height": "",
+      "width": "",
+      "alt": "",
+      "title": ""
     }
   }
 }

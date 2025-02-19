@@ -9,14 +9,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { ContainerProps } from "@/types/components/container";
+import { ImageProps } from "@/types/components/image";
 import { useEffect, useState } from "react";
 import { TbSettings } from "react-icons/tb";
 
 type UnitType = "px" | "rem" | "em" | "%";
 
-export function ContainerSize() {
-  const [widthUnitValue, setWidthUnitValue] = useState<UnitType>("%");
+export function ImageSize() {
+  const [widthUnitValue, setWidthUnitValue] = useState<UnitType>("px");
   const [heightUnitValue, setHeightUnitValue] = useState<UnitType>("px");
 
   const {
@@ -24,7 +24,7 @@ export function ContainerSize() {
     subEditor: { element: Element },
   } = useEditor();
 
-  const element = Element as ContainerProps;
+  const element = Element as ImageProps;
 
   useEffect(() => {
     if (element) {
@@ -35,7 +35,7 @@ export function ContainerSize() {
           width: element?.settings.width.replace(/\D/g, "") + widthUnitValue,
           height: element?.settings.height.replace(/\D/g, "") + heightUnitValue,
         },
-      } as ContainerProps);
+      } as ImageProps);
     }
   }, [widthUnitValue, heightUnitValue]);
 
@@ -56,7 +56,7 @@ export function ContainerSize() {
                   ...element?.settings,
                   width: evt.target.value + widthUnitValue,
                 },
-              } as ContainerProps);
+              } as ImageProps);
             }}
             placeholder="Largura"
           />
@@ -131,7 +131,7 @@ export function ContainerSize() {
                   ...element?.settings,
                   height: evt.target.value + heightUnitValue,
                 },
-              } as ContainerProps);
+              } as ImageProps);
             }}
             placeholder="Altura"
           />

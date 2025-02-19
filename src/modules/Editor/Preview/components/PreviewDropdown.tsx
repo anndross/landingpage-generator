@@ -27,7 +27,6 @@ export function PreviewDropdown({}) {
               setPreview({
                 type: "layout",
                 option: "desktop",
-                canEdit: false,
               })
             }
           >
@@ -42,7 +41,6 @@ export function PreviewDropdown({}) {
               setPreview({
                 type: "code",
                 option: "VTEX IO",
-                canEdit: false,
               })
             }
           >

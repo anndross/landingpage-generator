@@ -20,8 +20,10 @@ import {
 export function ContainerAppearance() {
   const {
     useEditElement,
-    subEditor: { element },
+    subEditor: { element: Element },
   } = useEditor();
+
+  const element = Element as ContainerProps;
 
   return (
     <div className="">
@@ -94,7 +96,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${evt.target.value || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
                 },
-              });
+              } as ContainerProps);
             }}
             icon={RxCornerTopLeft}
           />
@@ -107,7 +109,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${radiusTopLeft || 0}px ${evt.target.value || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
                 },
-              });
+              } as ContainerProps);
             }}
             icon={RxCornerTopRight}
           />
@@ -120,7 +122,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${evt.target.value || 0}px ${radiusBottomLeft || 0}px`,
                 },
-              })
+              } as ContainerProps)
             }
             icon={RxCornerBottomLeft}
           />
@@ -133,7 +135,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${evt.target.value || 0}px`,
                 },
-              })
+              } as ContainerProps)
             }
             icon={RxCornerBottomRight}
           />
