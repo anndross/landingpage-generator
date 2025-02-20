@@ -3,11 +3,13 @@ import { useEditor } from "@/modules/Editor/EditorContext";
 import { TextProps } from "@/types/components/text";
 import { useEffect, useState } from "react";
 
-export function TextColorPicker() {
+export function Color() {
   const {
     useEditElement,
-    subEditor: { element },
+    subEditor: { element: Element },
   } = useEditor();
+
+  const element = Element as any;
 
   const [colorPicker, setColorPicker] = useState(
     element?.style.color || "#000"

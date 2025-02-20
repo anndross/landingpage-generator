@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { InputWithIcon } from "@/components/ui/input-with-icon";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { ContainerProps } from "@/types/components/container";
 import {
   LuPanelBottomDashed,
   LuPanelLeftDashed,
@@ -18,13 +17,13 @@ import {
 } from "react-icons/lu";
 import { RxMargin, RxPadding } from "react-icons/rx";
 
-export function ContainerSpacing() {
+export function Spacing() {
   const {
     useEditElement,
     subEditor: { element: Element },
   } = useEditor();
 
-  const element = Element as ContainerProps;
+  const element = Element as any;
 
   const MarginTopIcon = () => (
     <LuSquareDashedBottom className="rotate-180 h-6 w-6" />
@@ -39,7 +38,7 @@ export function ContainerSpacing() {
   );
 
   const [marginTop, marginRight, marginBottom, marginLeft] =
-    (element?.settings.margin?.split(" ") as string[]) || [];
+    (element?.style.margin?.split(" ") as string[]) || [];
 
   const marginTopNumber = (marginTop || "0").replace(/\D/g, "");
   const marginRightNumber = (marginRight || "0").replace(/\D/g, "");
@@ -59,15 +58,15 @@ export function ContainerSpacing() {
 
     useEditElement({
       ...element,
-      settings: {
-        ...element?.settings,
+      style: {
+        ...element?.style,
         margin: margin[type],
       },
-    } as ContainerProps);
+    } as any);
   };
 
   const [paddingTop, paddingRight, paddingBottom, paddingLeft] =
-    (element?.settings.padding?.split(" ") as string[]) || [];
+    (element?.style.padding?.split(" ") as string[]) || [];
 
   const paddingTopNumber = (paddingTop || "0").replace(/\D/g, "");
   const paddingRightNumber = (paddingRight || "0").replace(/\D/g, "");
@@ -87,11 +86,11 @@ export function ContainerSpacing() {
 
     useEditElement({
       ...element,
-      settings: {
-        ...element?.settings,
+      style: {
+        ...element?.style,
         padding: padding[type],
       },
-    } as ContainerProps);
+    } as any);
   };
 
   return (

@@ -1,10 +1,12 @@
 import richTextJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/rich-text.json";
 import imageJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/image.json";
 import flexLayoutJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/flex-layout.row.json";
+import linkJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/link.json";
 
 import { Options, PreviewElement } from "@/modules/Editor/EditorContext";
 import { TextProps } from "@/types/components/text";
 import { ImageProps } from "@/types/components/image";
+import { LinkProps } from "@/types/components/link";
 
 export function codeConverter(
   type: Options["code"] | false,
@@ -47,6 +49,7 @@ export function vtexIoConverter(elements: PreviewElement[]) {
           text: `rich-text#${el.id}`,
           container: `flex-layout.row#${el.id}`,
           image: `image#${el.id}`,
+          link: `link#${el.id}`,
         };
 
         return mappedTypesName[el.type];
@@ -66,6 +69,7 @@ export function vtexIoConverter(elements: PreviewElement[]) {
           container: (data, result?: object[]) =>
             handleFlexLayout(data as PreviewElement, result),
           image: (data) => handleImage(data as ImageProps),
+          link: (data) => handleLink(data as LinkProps),
         };
 
         const handleInstance = mappedTypesElements[el.type];
@@ -92,8 +96,8 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     };
 
     image[`image#${el.id}`]["props"]["src"] = el.settings.src || "";
-    image[`image#${el.id}`]["props"]["width"] = el.settings.width || "";
-    image[`image#${el.id}`]["props"]["height"] = el.settings.height || "";
+    image[`image#${el.id}`]["props"]["width"] = el.style.width || "";
+    image[`image#${el.id}`]["props"]["height"] = el.style.height || "";
     image[`image#${el.id}`]["props"]["title"] = el.settings.title || "";
     image[`image#${el.id}`]["props"]["alt"] = el.settings.alt || "";
 
@@ -106,7 +110,19 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     text: (data) => handleRichText(data as TextProps),
     container: (data) => handleFlexLayout(data as PreviewElement),
     image: (data) => handleImage(data as ImageProps),
+    link: (data) => handleLink(data as LinkProps),
   };
+
+  function handleLink(el: LinkProps) {
+    const link = {
+      [`link#${el.id}`]: JSON.parse(JSON.stringify(linkJson["link"])),
+    };
+
+    link[`link#${el.id}`]["props"]["href"] = el.settings.href || "";
+    link[`link#${el.id}`]["props"]["label"] = el.settings.value || "";
+
+    return link;
+  }
 
   const mappedElements = elements.map((el) => {
     const handlerFn = handlers[el.type];

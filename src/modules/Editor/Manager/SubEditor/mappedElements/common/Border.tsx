@@ -2,7 +2,6 @@ import { ColorPicker } from "@/components/ColorPicker";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { ContainerProps } from "@/types/components/container";
 import {
   CgBorderBottom,
   CgBorderLeft,
@@ -10,11 +9,13 @@ import {
   CgBorderTop,
 } from "react-icons/cg";
 
-export function ContainerBorder() {
+export function Border() {
   const {
     useEditElement,
-    subEditor: { element },
+    subEditor: { element: Element },
   } = useEditor();
+
+  const element = Element as any;
 
   return (
     <div className="">
@@ -27,7 +28,7 @@ export function ContainerBorder() {
               useEditElement({
                 ...element,
                 style: { ...element?.style, borderColor: value },
-              } as ContainerProps)
+              } as any)
             }
           />
         </div>
@@ -41,7 +42,7 @@ export function ContainerBorder() {
                   ...element?.style,
                   borderWidth: evt.target.value + "px",
                 },
-              } as ContainerProps)
+              } as any)
             }
             type="number"
             id="width-input"

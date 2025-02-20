@@ -2,7 +2,10 @@
   {
     "id": "texto",
     "type": "text",
-    "settings": { "as": "p", "value": "Texto", "link": "" },
+    "settings": {
+      "as": "p",
+      "value": "Texto"
+    },
     "style": {
       "color": "#000",
       "fontSize": "14px",
@@ -12,23 +15,19 @@
     }
   },
   {
-    "id": "image",
-    "type": "image",
-    "settings": {
-      "src": "https://placehold.co/600x400/EEE/31343C",
-      "alt": "",
-      "title": "",
-      "width": "600px",
-      "height": "400px"
-    },
-    "style": {}
-  },
-  {
     "id": "container",
     "type": "container",
     "indexPath": [],
     "children": [],
+    "settings": {},
     "style": {
+      "width": "100%",
+      "height": "100px",
+      "padding": "0",
+      "margin": "0",
+      "flexDirection": "column",
+      "justifyContent": "flex-start",
+      "alignItems": "flex-start",
       "backgroundColor": "#fff",
       "borderRadius": "0px 0px 0px 0px",
       "borderWidth": "1px",
@@ -36,15 +35,52 @@
       "borderColor": "#000",
       "boxShadow": "none",
       "opacity": "1"
-    },
+    }
+  },
+  {
+    "id": "image",
+    "type": "image",
     "settings": {
-      "width": "100%",
-      "height": "100px",
-      "padding": "0",
-      "margin": "0",
-      "flexDirection": "column",
-      "justifyContent": "flex-start",
-      "alignItems": "flex-start"
+      "src": "https://placehold.co/600x400/EEE/31343C",
+      "alt": "",
+      "title": ""
+    },
+    "style": {
+      "borderRadius": "0px 0px 0px 0px",
+      "borderWidth": "0px",
+      "borderStyle": "solid",
+      "borderColor": "#000",
+      "boxShadow": "none",
+      "opacity": "1",
+      "width": "600px",
+      "height": "400px"
+    }
+  },
+  {
+    "id": "link",
+    "type": "link",
+    "settings": {
+      "value": "Link",
+      "title": "Link",
+      "aria-label": "Link",
+      "href": "#"
+    },
+    "style": {
+      "backgroundColor": "#000",
+      "borderRadius": "0px 0px 0px 0px",
+      "borderWidth": "1px",
+      "borderStyle": "solid",
+      "borderColor": "#000",
+      "boxShadow": "none",
+      "opacity": "1",
+      "color": "#fff",
+      "fontSize": "14px",
+      "fontStyle": "normal",
+      "fontFamily": "Arial",
+      "fontWeight": "500",
+      "width": "100px",
+      "height": "40px",
+      "textDecoration": "none"
     }
   }
 ]

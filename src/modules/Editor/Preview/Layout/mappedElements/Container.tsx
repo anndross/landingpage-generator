@@ -1,7 +1,6 @@
 import { Sortable } from "@/components/Sortable";
 import { useEditor } from "@/modules/Editor/EditorContext";
 import { ContainerProps } from "@/types/components/container";
-import { useEffect } from "react";
 
 interface EditableContainerProps {
   data: ContainerProps;
@@ -13,7 +12,7 @@ export function Container({ data }: EditableContainerProps) {
   return (
     <Sortable
       state={data.children}
-      style={{ display: "flex", ...data.style, ...data.settings }}
+      style={{ display: "flex", ...data.style }}
       setState={(newState) => {
         const id = `clone-${crypto.randomUUID()}`;
 

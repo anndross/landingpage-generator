@@ -5,10 +5,10 @@ export type ImageProps = BaseProps & {
     src: string;
     alt: string;
     title: string;
-    width: string;
-    height: string;
   };
   style: {
+    width: string;
+    height: string;
     borderRadius: string;
     boxShadow: string;
     opacity: string;

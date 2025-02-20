@@ -6,8 +6,10 @@ import { TextProps } from "@/types/components/text";
 export function TextTag() {
   const {
     useEditElement,
-    subEditor: { element },
+    subEditor: { element: Element },
   } = useEditor();
+
+  const element = Element as TextProps;
 
   return (
     <div>

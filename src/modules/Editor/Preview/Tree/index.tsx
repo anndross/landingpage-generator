@@ -7,6 +7,7 @@ const mappedContent: Partial<{ [key in PreviewElement["type"]]: string }> = {
   text: "Texto",
   container: "Container",
   image: "Imagem",
+  link: "Link",
 };
 
 export function Tree() {

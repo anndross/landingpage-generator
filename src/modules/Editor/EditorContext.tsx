@@ -3,8 +3,13 @@ import { create } from "zustand";
 import { ImageProps } from "@/types/components/image";
 import { TextProps } from "@/types/components/text";
 import { ContainerProps } from "@/types/components/container";
+import { LinkProps } from "@/types/components/link";
 
-export type PreviewElement = ImageProps | TextProps | ContainerProps;
+export type PreviewElement =
+  | ImageProps
+  | TextProps
+  | ContainerProps
+  | LinkProps;
 
 export type Options = {
   layout: "desktop" | "mobile";

@@ -13,8 +13,9 @@ export const Image = ({ data }: EditableImageProps) => {
         src={data.settings.src}
         alt={data.settings.alt}
         title={data.settings.title}
-        width={data.settings.width}
-        height={data.settings.height}
+        width={data.style.width}
+        height={data.style.height}
+        style={{ ...data.style }}
       />
     </a>
   );

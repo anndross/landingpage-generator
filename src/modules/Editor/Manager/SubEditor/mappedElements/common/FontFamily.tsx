@@ -9,7 +9,7 @@ import { useEditor } from "@/modules/Editor/EditorContext";
 import { TextProps } from "@/types/components/text";
 import fontFamily from "@/modules/Editor/data/config/Text/font-family.json";
 
-export function TextFontFamily() {
+export function FontFamily() {
   const {
     useEditElement,
     subEditor: { element },

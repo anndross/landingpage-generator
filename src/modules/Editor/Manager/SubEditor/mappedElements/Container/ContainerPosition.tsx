@@ -24,13 +24,12 @@ export function ContainerPosition() {
         <span className="text-sm text-zinc-600 font-medium">Direção</span>
         <ToggleGroup
           variant="outline"
-          value={element?.settings.flexDirection}
+          value={element?.style.flexDirection}
           onValueChange={(value) => {
-            if (value) console.log("dire", value);
             useEditElement({
               ...element,
-              settings: {
-                ...element?.settings,
+              style: {
+                ...element?.style,
                 flexDirection: value,
               },
             } as ContainerProps);
@@ -65,13 +64,13 @@ export function ContainerPosition() {
           variant="outline"
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
-          value={element?.settings.justifyContent}
+          value={element?.style.justifyContent}
           onValueChange={(value) => {
             if (value)
               useEditElement({
                 ...element,
-                settings: {
-                  ...element?.settings,
+                style: {
+                  ...element?.style,
                   justifyContent: value,
                 },
               } as ContainerProps);
@@ -121,13 +120,13 @@ export function ContainerPosition() {
           variant="outline"
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
-          value={element?.settings.alignItems}
+          value={element?.style.alignItems}
           onValueChange={(value) => {
             if (value)
               useEditElement({
                 ...element,
-                settings: {
-                  ...element?.settings,
+                style: {
+                  ...element?.style,
                   alignItems: value,
                 },
               } as ContainerProps);

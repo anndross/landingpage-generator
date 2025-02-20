@@ -2,10 +2,12 @@ import { ReactNode } from "react";
 import { Text as EditableText } from "@/modules/Editor/Preview/Layout/mappedElements/Text";
 import { Container as EditableContainer } from "@/modules/Editor/Preview/Layout/mappedElements/Container";
 import { Image as EditableImage } from "@/modules/Editor/Preview/Layout/mappedElements/Image";
+import { Link as EditableLink } from "@/modules/Editor/Preview/Layout/mappedElements/Link";
 import { TextProps } from "@/types/components/text";
 import { ContainerProps } from "@/types/components/container";
 import { PreviewElement } from "@/modules/Editor/EditorContext";
 import { ImageProps } from "@/types/components/image";
+import { LinkProps } from "@/types/components/link";
 
 export function getElement(canEdit: boolean, data: PreviewElement) {
   const editableElements: Partial<{
@@ -16,6 +18,7 @@ export function getElement(canEdit: boolean, data: PreviewElement) {
       <EditableContainer data={data as ContainerProps} key={data.id} />
     ),
     image: <EditableImage data={data as ImageProps} key={data.id} />,
+    link: <EditableLink data={data as LinkProps} key={data.id} />,
   };
 
   if (canEdit) return editableElements[data.type];

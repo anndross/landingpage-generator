@@ -7,6 +7,7 @@ import { Container } from "@/modules/Editor/Manager/SubEditor/mappedElements/Con
 import { PreviewElement, useEditor } from "@/modules/Editor/EditorContext";
 import { Text } from "@/modules/Editor/Manager/SubEditor/mappedElements/Text";
 import { Image } from "@/modules/Editor/Manager/SubEditor/mappedElements/Image";
+import { Link } from "./mappedElements/Link";
 
 export function SubEditor() {
   const {
@@ -21,11 +22,11 @@ export function SubEditor() {
       <Text.Root>
         <Text.Content />
         <Text.Tag />
-        <Text.Link />
         <Text.FontFamily />
         <Text.FontSize />
         <Text.FontStyle />
-        <Text.ColorPicker />
+        <Text.Color />
+        <Text.Spacing />
       </Text.Root>
     ),
     container: (
@@ -43,7 +44,22 @@ export function SubEditor() {
         <Image.Upload />
         <Image.Size />
         <Image.Seo />
+        <Image.Border />
+        <Image.Spacing />
       </Image.Root>
+    ),
+    link: (
+      <Link.Root>
+        <Link.Href />
+        <Link.Content />
+        <Link.FontFamily />
+        <Link.FontSize />
+        <Link.FontStyle />
+        <Link.Color />
+        <Link.Border />
+        <Link.Appearance />
+        <Link.Spacing />
+      </Link.Root>
     ),
   };
 

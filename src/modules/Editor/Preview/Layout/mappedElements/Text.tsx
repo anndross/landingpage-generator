@@ -49,7 +49,6 @@ export function Text({
   return (
     <AS
       {...props}
-      className="font-roboto"
       style={{ ...data.style }}
       {...(AS === "a" && !canEdit
         ? ({ href: data?.settings?.link || "" } as any)

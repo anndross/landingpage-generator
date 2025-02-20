@@ -9,7 +9,7 @@ import { useEditor } from "@/modules/Editor/EditorContext";
 import { TextProps } from "@/types/components/text";
 import fontSize from "@/modules/Editor/data/config/Text/font-size.json";
 
-export function TextFontSize() {
+export function FontSize() {
   const {
     useEditElement,
     subEditor: { element },

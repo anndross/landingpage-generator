@@ -9,7 +9,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { InputWithIcon } from "@/components/ui/input-with-icon";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { ContainerProps } from "@/types/components/container";
 import {
   RxCornerBottomLeft,
   RxCornerBottomRight,
@@ -17,13 +16,13 @@ import {
   RxCornerTopRight,
 } from "react-icons/rx";
 
-export function ContainerAppearance() {
+export function Appearance() {
   const {
     useEditElement,
     subEditor: { element: Element },
   } = useEditor();
 
-  const element = Element as ContainerProps;
+  const element = Element as any;
 
   return (
     <div className="">
@@ -35,7 +34,7 @@ export function ContainerAppearance() {
             useEditElement({
               ...element,
               style: { ...element?.style, backgroundColor: color },
-            } as ContainerProps)
+            } as any)
           }
         />
         <div className="flex gap-2">
@@ -47,28 +46,28 @@ export function ContainerAppearance() {
               useEditElement({
                 ...element,
                 style: { ...element?.style, opacity: evt.target.value },
-              } as ContainerProps)
+              } as any)
             }
             type="number"
             placeholder="Opacidade"
           />
-          <ContainerAppearanceRadius />
+          <AppearanceRadius />
         </div>
       </div>
     </div>
   );
 }
 
-function ContainerAppearanceRadius() {
+function AppearanceRadius() {
   const {
     useEditElement,
     subEditor: { element },
   } = useEditor();
 
   const [radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft] =
-    (element as ContainerProps)?.style.borderRadius
+    (element as any)?.style.borderRadius
       ?.split(" ")
-      ?.map((radius) => radius.replace(/\D/g, "").trim()) || [];
+      ?.map((radius: string) => radius.replace(/\D/g, "").trim()) || [];
 
   console.log(
     "Radius",
@@ -96,7 +95,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${evt.target.value || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
                 },
-              } as ContainerProps);
+              } as any);
             }}
             icon={RxCornerTopLeft}
           />
@@ -109,7 +108,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${radiusTopLeft || 0}px ${evt.target.value || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
                 },
-              } as ContainerProps);
+              } as any);
             }}
             icon={RxCornerTopRight}
           />
@@ -122,7 +121,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${evt.target.value || 0}px ${radiusBottomLeft || 0}px`,
                 },
-              } as ContainerProps)
+              } as any)
             }
             icon={RxCornerBottomLeft}
           />
@@ -135,7 +134,7 @@ function ContainerAppearanceRadius() {
                   ...element?.style,
                   borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${evt.target.value || 0}px`,
                 },
-              } as ContainerProps)
+              } as any)
             }
             icon={RxCornerBottomRight}
           />

@@ -2,10 +2,9 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEditor } from "@/modules/Editor/EditorContext";
 import fontStyleData from "@/modules/Editor/data/config/Text/font-style.json";
 import clsx from "clsx";
-import { ContainerProps } from "@/types/components/container";
 import { useState } from "react";
 
-export function TextFontStyle() {
+export function FontStyle() {
   const {
     useEditElement,
     subEditor: { element },
@@ -51,7 +50,7 @@ export function TextFontStyle() {
               textDecoration: "",
               ...mappedValues,
             },
-          } as ContainerProps);
+          } as any);
 
           setValue(values);
         }}

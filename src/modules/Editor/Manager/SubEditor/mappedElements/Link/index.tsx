@@ -1,19 +1,23 @@
+import { Appearance } from "../common/Appearance";
+import { Border } from "../common/Border";
 import { Color } from "../common/Color";
 import { Content } from "../common/Content";
 import { FontFamily } from "../common/FontFamily";
 import { FontSize } from "../common/FontSize";
 import { FontStyle } from "../common/FontStyle";
 import { Spacing } from "../common/Spacing";
-import { TextRoot } from "./TextRoot";
-import { TextTag } from "./TextTag";
+import { LinkHref } from "./LinkHref";
+import { LinkRoot } from "./LinkRoot";
 
-export const Text = {
-  Root: TextRoot,
-  Tag: TextTag,
+export const Link = {
+  Root: LinkRoot,
+  Href: LinkHref,
   Content,
-  Color,
   FontFamily,
   FontSize,
   FontStyle,
+  Border,
+  Appearance,
+  Color,
   Spacing,
 };

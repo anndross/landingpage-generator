@@ -1,31 +1,33 @@
 import { Input } from "@/components/ui/input";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { TextProps } from "@/types/components/text";
+import { LinkProps } from "@/types/components/link";
 
-export function TextContent() {
+export function LinkHref() {
   const {
     useEditElement,
-    subEditor: { element },
+    subEditor: { element: Element },
   } = useEditor();
+
+  const element = Element as LinkProps;
 
   return (
     <div>
-      <label className="text-sm text-zinc-700 font-medium">Texto</label>
+      <label className="text-sm text-zinc-700 font-medium">URL</label>
       <Input
-        value={element?.settings.value}
+        value={element?.settings?.href || ""}
         onChange={(evt) => {
           useEditElement({
             ...element,
             settings: {
               ...element?.settings,
-              value: evt.target.value,
+              link: evt.target.value,
             },
-          } as TextProps);
+          } as LinkProps);
         }}
         required
         name="value"
         className="w-full"
-        placeholder="Digite o conteúdo"
+        placeholder="http://exemplo.com"
       />
     </div>
   );

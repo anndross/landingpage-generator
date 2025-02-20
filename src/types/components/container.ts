@@ -11,8 +11,6 @@ export type ContainerProps = BaseProps & {
     borderRadius: string;
     boxShadow: string;
     opacity: string;
-  };
-  settings: {
     width: string;
     height: string;
     padding: string;
@@ -21,4 +19,5 @@ export type ContainerProps = BaseProps & {
     justifyContent: "flex-start" | "flex-end" | "center" | "space-between";
     alignItems: "flex-start" | "flex-end" | "center";
   };
+  settings: {};
 };

@@ -9,33 +9,34 @@ import {
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEditor } from "@/modules/Editor/EditorContext";
-import { ImageProps } from "@/types/components/image";
 import { useEffect, useState } from "react";
 import { TbSettings } from "react-icons/tb";
 
 type UnitType = "px" | "rem" | "em" | "%";
 
-export function ImageSize() {
-  const [widthUnitValue, setWidthUnitValue] = useState<UnitType>("px");
-  const [heightUnitValue, setHeightUnitValue] = useState<UnitType>("px");
-
+export function Size() {
   const {
     useEditElement,
     subEditor: { element: Element },
   } = useEditor();
 
-  const element = Element as ImageProps;
+  const element = Element as any;
+
+  const [widthUnitValue, setWidthUnitValue] = useState<UnitType>(
+    element.type === "container" ? "%" : "px"
+  );
+  const [heightUnitValue, setHeightUnitValue] = useState<UnitType>("px");
 
   useEffect(() => {
     if (element) {
       useEditElement({
         ...element,
-        settings: {
-          ...element?.settings,
-          width: element?.settings.width.replace(/\D/g, "") + widthUnitValue,
-          height: element?.settings.height.replace(/\D/g, "") + heightUnitValue,
+        style: {
+          ...element?.style,
+          width: element?.style.width.replace(/\D/g, "") + widthUnitValue,
+          height: element?.style.height.replace(/\D/g, "") + heightUnitValue,
         },
-      } as ImageProps);
+      } as any);
     }
   }, [widthUnitValue, heightUnitValue]);
 
@@ -48,15 +49,15 @@ export function ImageSize() {
             type="number"
             id="width-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={element?.settings.width.replace(/\D/g, "")}
+            value={element?.style.width.replace(/\D/g, "")}
             onChange={(evt) => {
               useEditElement({
                 ...element,
-                settings: {
-                  ...element?.settings,
+                style: {
+                  ...element?.style,
                   width: evt.target.value + widthUnitValue,
                 },
-              } as ImageProps);
+              } as any);
             }}
             placeholder="Largura"
           />
@@ -123,15 +124,15 @@ export function ImageSize() {
             type="number"
             id="height-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={element?.settings.height.replace(/\D/g, "")}
+            value={element?.style.height.replace(/\D/g, "")}
             onChange={(evt) => {
               useEditElement({
                 ...element,
-                settings: {
-                  ...element?.settings,
+                style: {
+                  ...element?.style,
                   height: evt.target.value + heightUnitValue,
                 },
-              } as ImageProps);
+              } as any);
             }}
             placeholder="Altura"
           />

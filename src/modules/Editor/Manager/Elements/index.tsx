@@ -6,7 +6,7 @@ import { Container } from "./mappedElements/Container";
 import { PreviewElement } from "@/modules/Editor/EditorContext";
 import dataElements from "@/modules/Editor/data/elements.json";
 import { Image } from "./mappedElements/Image";
-import { Button } from "./mappedElements/Button";
+import { Link } from "./mappedElements/Link";
 
 export function Elements() {
   const [state, setState] = useState<PreviewElement[]>(
@@ -37,6 +37,7 @@ export function Elements() {
           text: <Text key={item.id} />,
           container: <Container key={item.id} />,
           image: <Image key={item.id} />,
+          link: <Link key={item.id} />,
         };
 
         const element: ReactNode = elements?.[item.type];

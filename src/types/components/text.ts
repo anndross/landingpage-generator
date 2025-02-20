@@ -13,9 +13,26 @@ export type AvailableTags =
   | "a"
   | "span";
 
-type FontFamily = (typeof fontFamilyJSON)[number]["value"];
+export type FontFamily = (typeof fontFamilyJSON)[number]["value"];
 
-type FontSize = (typeof fontSizeJSON)[number]["value"];
+export type FontSize = (typeof fontSizeJSON)[number]["value"];
+
+export type FontWeight =
+  | "100"
+  | "200"
+  | "300"
+  | "400"
+  | "500"
+  | "600"
+  | "700"
+  | "800"
+  | "900"
+  | "lighter"
+  | "normal"
+  | "bold"
+  | "bolder";
+
+export type FontStyle = "italic" | "bold" | "underline" | "line-through";
 
 export type TextProps = BaseProps & {
   settings: {
@@ -24,24 +41,11 @@ export type TextProps = BaseProps & {
     link?: string;
   };
   style: {
-    fontStyle: "italic" | "bold" | "underline" | "line-through";
+    fontStyle: FontStyle;
     fontSize: FontSize;
     fontFamily: FontFamily;
     textDecoration: string;
-    fontWeight:
-      | "100"
-      | "200"
-      | "300"
-      | "400"
-      | "500"
-      | "600"
-      | "700"
-      | "800"
-      | "900"
-      | "lighter"
-      | "normal"
-      | "bold"
-      | "bolder";
+    fontWeight: FontWeight;
     color: string;
   };
 };
