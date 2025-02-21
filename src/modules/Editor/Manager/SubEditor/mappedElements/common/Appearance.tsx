@@ -69,14 +69,6 @@ function AppearanceRadius() {
       ?.split(" ")
       ?.map((radius: string) => radius.replace(/\D/g, "").trim()) || [];
 
-  console.log(
-    "Radius",
-    radiusBottomLeft,
-    radiusBottomRight,
-    radiusTopLeft,
-    radiusTopRight
-  );
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

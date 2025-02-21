@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { PreviewCode } from "./Code";
 import clsx from "clsx";
 import { PreviewDropdown } from "./components/PreviewDropdown";
@@ -7,16 +7,25 @@ import { EditToggle } from "./components/EditToggle";
 import { Button } from "@/components/ui/button";
 import { TbBinaryTree } from "react-icons/tb";
 import { Tree } from "./Tree";
-import { useEditor } from "../EditorContext";
+import { EditorContextI, useEditor } from "../EditorContext";
 import { SaveButton } from "./components/SaveButton";
 import { ClearPreview } from "./components/ClearPreview";
 
 interface PreviewProps {
+  layout: EditorContextI["previewElements"];
   children: ReactNode;
 }
 
-export function Preview({ children }: PreviewProps) {
-  const { preview, setPreview, setTree } = useEditor();
+export function Preview({ layout, children }: PreviewProps) {
+  const { preview, setPreview, setTree, setPreviewElements } = useEditor();
+
+  useEffect(() => {
+    if (layout) {
+      console.log("Previeww", layout);
+
+      setPreviewElements(layout);
+    }
+  }, [layout]);
 
   function handleToggleCanEdit(state: boolean) {
     setPreview({

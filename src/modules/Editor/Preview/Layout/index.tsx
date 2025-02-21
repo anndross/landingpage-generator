@@ -2,13 +2,5 @@
 import { Preview } from "./Preview";
 
 export async function Layout() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-  const data = await fetch(`${baseUrl}/api/preview/get`, {
-    next: {
-      tags: ["get-preview"],
-    },
-  }).then((res) => res.json());
-
-  return <Preview data={data[0]?.items || []} />;
+  return <Preview data={[]} />;
 }

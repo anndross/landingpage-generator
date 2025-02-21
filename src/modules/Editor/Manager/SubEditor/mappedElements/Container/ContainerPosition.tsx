@@ -77,7 +77,6 @@ export function ContainerPosition() {
           }}
         >
           <ToggleGroupItem
-            onChange={(evt) => console.log(evt)}
             className="w-full aspect-square h-auto"
             value="flex-start"
             aria-label="flex start"

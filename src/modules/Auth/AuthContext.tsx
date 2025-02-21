@@ -2,7 +2,7 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { auth } from "@/config/firebase";
+import { auth, db } from "@/config/firebase";
 import {
   onAuthStateChanged,
   signInWithPopup,
@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
+import { doc, setDoc } from "firebase/firestore";
 
 const AuthContext = createContext<{
   signInByGoogle: () => any;
@@ -53,12 +54,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => unsubscribe();
   }, []);
 
+  const addUserToCollection = async (user: UserCredential["user"]) => {
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      name: user.displayName,
+      layouts: [],
+    });
+  };
+
   const signUp = async (email: string, password: string) => {
     let result = null;
     let error = null;
 
     try {
-      result = await createUserWithEmailAndPassword(auth, email, password);
+      result = await createUserWithEmailAndPassword(auth, email, password).then(
+        (data) => {
+          addUserToCollection(data.user);
+        }
+      );
     } catch (e) {
       error = e;
     }
@@ -76,7 +89,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       error = e;
     }
 
-    console.log({ result, error });
     return { result, error };
   };
 
@@ -87,8 +99,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const provider = new GoogleAuthProvider();
 
-      result = await signInWithPopup(auth, provider).then(() => {
-        router.push("/editor");
+      result = await signInWithPopup(auth, provider).then((data) => {
+        addUserToCollection(data.user);
+        router.push("/layouts");
       });
     } catch (e) {
       error = e;
@@ -106,7 +119,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     async function getToken() {
       const token = await user?.getIdToken();
-      console.log(`token`, token);
 
       if (token?.length) cookies.set("auth_token", token);
     }
