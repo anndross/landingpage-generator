@@ -10,14 +10,23 @@ export function PreviewCode() {
   const mappedLanguages = {
     default: "json",
     "VTEX IO": "json",
+    CSS: "css",
   };
 
-  const code = codeConverter(previewType, previewElements.children);
+  const { code, style } = codeConverter(
+    previewType,
+    previewElements.children
+  ) || {
+    code: null,
+    style: null,
+  };
 
   return (
     <Highlight
-      code={JSON.stringify(code, null, 2)}
-      language={mappedLanguages[previewType || "default"]}
+      code={preview.style ? style || "" : JSON.stringify(code, null, 2)}
+      language={
+        preview.style ? "css" : mappedLanguages[previewType || "default"]
+      }
       theme={themes.github}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (

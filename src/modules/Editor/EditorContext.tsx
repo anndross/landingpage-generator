@@ -28,10 +28,12 @@ export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
   type: T;
   option: PreviewOption<T>;
   canEdit: boolean;
+  style: boolean;
 }
 
 export interface EditorContextI {
   previewElements: {
+    name: string;
     children: PreviewElement[];
   };
   tree: boolean;
@@ -51,11 +53,15 @@ export interface EditorContextI {
 
 export const useEditor = create<EditorContextI>((set) => ({
   previewElements: {
+    name: "",
     children: [],
   },
   setPreviewElements: (previewElements) =>
-    set(() => ({
-      previewElements: previewElements as EditorContextI["previewElements"],
+    set((state) => ({
+      previewElements: {
+        ...state.previewElements,
+        ...(previewElements as EditorContextI["previewElements"]),
+      },
     })),
   tree: false,
   setTree: (tree) => set(() => ({ tree: tree })),
@@ -69,6 +75,7 @@ export const useEditor = create<EditorContextI>((set) => ({
     type: "layout",
     option: "desktop",
     canEdit: true,
+    style: false,
   },
   setPreview: (preview) =>
     set((state) => ({

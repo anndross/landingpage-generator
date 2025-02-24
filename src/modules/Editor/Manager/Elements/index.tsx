@@ -26,7 +26,7 @@ export function Elements() {
       sort={false}
       fallbackOnBody
       ghostClass="ghost"
-      className="w-full h-full overflow-y-auto grid grid-cols-2 place-content-start gap-2"
+      className="w-full h-full grid grid-cols-2 place-content-start gap-2"
       list={state}
       setList={setState}
     >

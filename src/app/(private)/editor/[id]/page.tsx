@@ -3,15 +3,17 @@ import { Header } from "@/components/Header";
 import { cookies } from "next/headers";
 
 export default async function Editor({ params }: { params: { id: string } }) {
+  const { id } = await params;
+
   const token = (await cookies()).get("auth_token")?.value;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  const response = await fetch(`${baseUrl}/api/preview/get?id=${params?.id}`, {
+  const response = await fetch(`${baseUrl}/api/private/preview/get?id=${id}`, {
     method: "GET",
     headers: new Headers({
       Authorization: `Bearer ${token}`,
-      accept: "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     }),
   });
@@ -25,11 +27,22 @@ export default async function Editor({ params }: { params: { id: string } }) {
   } else {
     const layout = await response.json();
 
-    console.log("layout12312", layout);
+    console.log("layouttt", {
+      children: layout?.data?.children,
+      name: layout?.data?.name,
+      id: id,
+    });
+
     return (
-      <div className="w-full min-h-screen">
+      <div className="w-full max-h-screen h-screen overflow-hidden">
         <Header />
-        <EditorModule layout={layout?.data} />
+        <EditorModule
+          layout={{
+            children: layout?.data?.children,
+            name: layout?.data?.name,
+            id: id,
+          }}
+        />
       </div>
     );
   }

@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { PreviewCode } from "./Code";
 import clsx from "clsx";
 import { PreviewDropdown } from "./components/PreviewDropdown";
@@ -7,31 +7,69 @@ import { EditToggle } from "./components/EditToggle";
 import { Button } from "@/components/ui/button";
 import { TbBinaryTree } from "react-icons/tb";
 import { Tree } from "./Tree";
-import { EditorContextI, useEditor } from "../EditorContext";
-import { SaveButton } from "./components/SaveButton";
+import { PreviewElement, useEditor } from "../EditorContext";
 import { ClearPreview } from "./components/ClearPreview";
+import { Layout } from "./Layout";
+import { useCookies } from "next-client-cookies";
+import { StyleButton } from "./components/StyleButton";
 
 interface PreviewProps {
-  layout: EditorContextI["previewElements"];
-  children: ReactNode;
+  layout: {
+    children: PreviewElement[];
+    name: string;
+    id: string;
+  };
 }
 
-export function Preview({ layout, children }: PreviewProps) {
-  const { preview, setPreview, setTree, setPreviewElements } = useEditor();
+export function Preview({ layout }: PreviewProps) {
+  const { preview, setPreview, setTree, previewElements, setPreviewElements } =
+    useEditor();
+
+  const cookies = useCookies();
+
+  const isMountingRef = useRef(false);
+
+  useEffect(() => {
+    if (isMountingRef?.current) isMountingRef.current = true;
+  }, []);
 
   useEffect(() => {
     if (layout) {
-      console.log("Previeww", layout);
-
       setPreviewElements(layout);
     }
   }, [layout]);
+
+  useEffect(() => {
+    const updatePreviewElementsOnDB = async () => {
+      await fetch("/api/private/preview/update", {
+        method: "PUT",
+        body: JSON.stringify({
+          children: previewElements?.children,
+          name: previewElements?.name,
+          id: layout?.id,
+        }),
+        headers: {
+          Authorization: "Bearer " + cookies.get("auth_token"),
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+    };
+
+    if (!isMountingRef.current) {
+      updatePreviewElementsOnDB();
+    } else {
+      isMountingRef.current = false;
+    }
+  }, [previewElements]);
 
   function handleToggleCanEdit(state: boolean) {
     setPreview({
       canEdit: state,
     });
   }
+
+  console.log("previewElementsss", previewElements);
 
   return (
     <>
@@ -54,11 +92,14 @@ export function Preview({ layout, children }: PreviewProps) {
                 setState={handleToggleCanEdit}
               />
             )}
+
+            {preview.type === "code" && <StyleButton />}
           </div>
+
+          <span className="text-zinc-600 text-xl">{previewElements.name}</span>
 
           <div className="flex items-center gap-4">
             <ClearPreview />
-            <SaveButton />
             <Button onClick={() => setTree(true)} variant="outline">
               <TbBinaryTree />
             </Button>
@@ -66,7 +107,7 @@ export function Preview({ layout, children }: PreviewProps) {
         </div>
         <div
           className={clsx({
-            "w-full h-full p-4 bg-[#f6f8fa]": true,
+            "w-full h-full p-4 bg-[#f6f8fa] scroll-auto overflow-auto": true,
             hidden: preview.type !== "code",
           })}
         >
@@ -74,11 +115,11 @@ export function Preview({ layout, children }: PreviewProps) {
         </div>
         <div
           className={clsx({
-            "w-full h-full": true,
+            "w-full h-full scroll-auto overflow-auto": true,
             hidden: preview.type !== "layout",
           })}
         >
-          {children}
+          <Layout />
         </div>
       </div>
     </>

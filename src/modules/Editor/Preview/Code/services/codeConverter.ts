@@ -7,6 +7,7 @@ import { Options, PreviewElement } from "@/modules/Editor/EditorContext";
 import { TextProps } from "@/types/components/text";
 import { ImageProps } from "@/types/components/image";
 import { LinkProps } from "@/types/components/link";
+import { mapStyles } from "./utils/mapStyles";
 
 export function codeConverter(
   type: Options["code"] | false,
@@ -24,6 +25,13 @@ export function codeConverter(
 }
 
 export function vtexIoConverter(elements: PreviewElement[]) {
+  let richTextStyle =
+    "/* ==================== RICH TEXT ==================== */\n";
+  let flexLayoutStyle =
+    "/* ==================== FLEX LAYOUT ==================== */\n";
+  let imageStyle = "/* ==================== IMAGE ==================== */\n";
+  let linkStyle = "/* ==================== LINK ==================== */\n";
+
   function handleRichText(el: TextProps) {
     const richText = {
       [`rich-text#${el.id}`]: JSON.parse(
@@ -32,6 +40,23 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     };
 
     richText[`rich-text#${el.id}`]["props"]["text"] = el.settings.value || "";
+    richText[`rich-text#${el.id}`]["props"]["blockClass"] = el.id;
+
+    const mappedTags: { [key: string]: string } = {
+      h1: "heading",
+      h2: "heading",
+      h3: "heading",
+      h4: "heading",
+      h5: "heading",
+      h6: "heading",
+      p: "paragraph",
+      span: "paragraph",
+    };
+
+    richTextStyle += `
+      .vtex-rich-text-0-x-${mappedTags[el?.settings?.as || "p"]}--${el.id} ${JSON.stringify(mapStyles(el.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
+    `.trim();
+    richTextStyle += "\n\n";
 
     return richText;
   }
@@ -54,6 +79,13 @@ export function vtexIoConverter(elements: PreviewElement[]) {
 
         return mappedTypesName[el.type];
       }) || [];
+    flexLayout[`flex-layout.row#${element.id}`]["props"]["blockClass"] =
+      element.id;
+
+    flexLayoutStyle += `
+      .vtex-flex-layout-0-x-flexRow--${element.id} ${JSON.stringify(mapStyles(element.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
+    `.trim();
+    flexLayoutStyle += "\n\n";
 
     result.push(flexLayout);
 
@@ -90,18 +122,43 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     return response;
   }
 
-  function handleImage(el: ImageProps) {
+  function handleImage(element: ImageProps) {
     const image = {
-      [`image#${el.id}`]: JSON.parse(JSON.stringify(imageJson["image"])),
+      [`image#${element.id}`]: JSON.parse(JSON.stringify(imageJson["image"])),
     };
 
-    image[`image#${el.id}`]["props"]["src"] = el.settings.src || "";
-    image[`image#${el.id}`]["props"]["width"] = el.style.width || "";
-    image[`image#${el.id}`]["props"]["height"] = el.style.height || "";
-    image[`image#${el.id}`]["props"]["title"] = el.settings.title || "";
-    image[`image#${el.id}`]["props"]["alt"] = el.settings.alt || "";
+    image[`image#${element.id}`]["props"]["src"] = element.settings.src || "";
+    image[`image#${element.id}`]["props"]["width"] = element.style.width || "";
+    image[`image#${element.id}`]["props"]["height"] =
+      element.style.height || "";
+    image[`image#${element.id}`]["props"]["title"] =
+      element.settings.title || "";
+    image[`image#${element.id}`]["props"]["alt"] = element.settings.alt || "";
+    image[`image#${element.id}`]["props"]["blockClass"] = element.id;
+
+    imageStyle += `
+      .vtex-store-components-3-x-imageElement--${element.id} ${JSON.stringify(mapStyles(element.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
+    `.trim();
+    imageStyle += "\n\n";
 
     return image;
+  }
+
+  function handleLink(element: LinkProps) {
+    const link = {
+      [`link#${element.id}`]: JSON.parse(JSON.stringify(linkJson["link"])),
+    };
+
+    link[`link#${element.id}`]["props"]["href"] = element.settings.href || "";
+    link[`link#${element.id}`]["props"]["label"] = element.settings.value || "";
+    link[`link#${element.id}`]["props"]["blockClass"] = element.id;
+
+    linkStyle += `
+      .vtex-store-link-0-x-link--${element.id} ${JSON.stringify(mapStyles(element.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
+    `.trim();
+    linkStyle += "\n\n";
+
+    return link;
   }
 
   const handlers: {
@@ -112,17 +169,6 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     image: (data) => handleImage(data as ImageProps),
     link: (data) => handleLink(data as LinkProps),
   };
-
-  function handleLink(el: LinkProps) {
-    const link = {
-      [`link#${el.id}`]: JSON.parse(JSON.stringify(linkJson["link"])),
-    };
-
-    link[`link#${el.id}`]["props"]["href"] = el.settings.href || "";
-    link[`link#${el.id}`]["props"]["label"] = el.settings.value || "";
-
-    return link;
-  }
 
   const mappedElements = elements.map((el) => {
     const handlerFn = handlers[el.type];
@@ -143,5 +189,8 @@ export function vtexIoConverter(elements: PreviewElement[]) {
     };
   }, {});
 
-  return page;
+  return {
+    code: page,
+    style: `${richTextStyle}\n${flexLayoutStyle}\n${imageStyle}\n${linkStyle}`,
+  };
 }

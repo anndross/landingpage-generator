@@ -2,7 +2,8 @@
   "link": {
     "props": {
       "href": "",
-      "label": ""
+      "label": "",
+      "blockClass": ""
     }
   }
 }

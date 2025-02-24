@@ -25,6 +25,7 @@ export function PreviewDropdown({}) {
           <DropdownMenuItem
             onClick={() =>
               setPreview({
+                style: false,
                 type: "layout",
                 option: "desktop",
               })
@@ -39,6 +40,7 @@ export function PreviewDropdown({}) {
           <DropdownMenuItem
             onClick={() =>
               setPreview({
+                style: false,
                 type: "code",
                 option: "VTEX IO",
               })

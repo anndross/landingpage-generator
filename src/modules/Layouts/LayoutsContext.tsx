@@ -1,8 +1,10 @@
 import { create } from "zustand";
+import { PreviewElement } from "../Editor/EditorContext";
 
 export type Layout = {
   id: string;
   name: string;
+  children: PreviewElement[];
 };
 
 export interface LayoutsContextI {
