@@ -6,7 +6,7 @@ export default async function Editor({ params }: { params: { id: string } }) {
   const { id } = await params;
 
   return (
-    <div className="w-full max-h-screen h-screen overflow-hidden">
+    <div className="w-full max-h-screen h-screen">
       <Header />
       <EditorModule id={id} />
     </div>

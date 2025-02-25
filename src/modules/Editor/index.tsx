@@ -33,8 +33,6 @@ export async function Editor({ id }: EditorProps) {
       return <div>Carregando layout...</div>;
     }
 
-    console.log("layoutlayout", layout, id);
-
     return (
       <main className="w-full h-full flex items-center justify-left">
         <LateralBar />

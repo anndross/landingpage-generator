@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
 import { doc, setDoc } from "firebase/firestore";
+import { AlertHandle } from "@/components/AlertHandle";
 
 const AuthContext = createContext<{
   signInByGoogle: () => any;
@@ -128,7 +129,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, signInByGoogle, signInByCredential, logOut, signUp }}
+      value={{
+        user,
+        signInByGoogle,
+        signInByCredential,
+        logOut,
+        signUp,
+      }}
     >
       {children}
     </AuthContext.Provider>

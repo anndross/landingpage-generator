@@ -1,6 +1,7 @@
 import richTextJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/rich-text.json";
 import imageJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/image.json";
-import flexLayoutJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/flex-layout.row.json";
+import flexLayoutRowJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/flex-layout.row.json";
+import flexLayoutColJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/flex-layout.col.json";
 import linkJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/link.json";
 
 import { Options, PreviewElement } from "@/modules/Editor/context";
@@ -62,13 +63,19 @@ export function vtexIoConverter(elements: PreviewElement[]) {
   }
 
   function handleFlexLayout(element: PreviewElement, result: object[] = []) {
-    const flexLayout = {
-      [`flex-layout.row#${element.id}`]: JSON.parse(
-        JSON.stringify(flexLayoutJson["flex-layout.row"])
+    const flexLayoutCol = {
+      [`flex-layout.col#${element.id}`]: JSON.parse(
+        JSON.stringify(flexLayoutColJson["flex-layout.col"])
       ),
     };
 
-    flexLayout[`flex-layout.row#${element.id}`]["children"] =
+    const flexLayoutRow = {
+      [`flex-layout.row#${element.id}`]: JSON.parse(
+        JSON.stringify(flexLayoutRowJson["flex-layout.row"])
+      ),
+    };
+
+    flexLayoutCol[`flex-layout.col#${element.id}`]["children"] =
       element?.children.map((el: PreviewElement) => {
         const mappedTypesName = {
           text: `rich-text#${el.id}`,
@@ -79,15 +86,29 @@ export function vtexIoConverter(elements: PreviewElement[]) {
 
         return mappedTypesName[el.type];
       }) || [];
-    flexLayout[`flex-layout.row#${element.id}`]["props"]["blockClass"] =
+    flexLayoutRow[`flex-layout.row#${element.id}`]["children"] = [
+      `flex-layout.col#${element.id}`,
+    ];
+
+    flexLayoutCol[`flex-layout.col#${element.id}`]["props"]["blockClass"] =
+      element.id;
+    flexLayoutRow[`flex-layout.row#${element.id}`]["props"]["blockClass"] =
       element.id;
 
     flexLayoutStyle += `
-      .vtex-flex-layout-0-x-flexRow--${element.id} ${JSON.stringify(mapStyles(element.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
+      .vtex-flex-layout-0-x-flexCol--${element.id} ${JSON.stringify(mapStyles(element.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
     `.trim();
     flexLayoutStyle += "\n\n";
 
-    result.push(flexLayout);
+    flexLayoutStyle += `
+.vtex-flex-layout-0-x-flexColChild--${element.id} {
+  width: fit-content !important;
+  height: fit-content !important;
+}
+    `.trim();
+    flexLayoutStyle += "\n\n";
+
+    result.push(flexLayoutRow, flexLayoutCol);
 
     if (element?.children?.length) {
       for (const el of element?.children as PreviewElement[]) {

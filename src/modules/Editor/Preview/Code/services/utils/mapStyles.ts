@@ -26,7 +26,5 @@ export function mapStyles(cssData: object) {
     newCssData.push([mappedCSSData[key], value]);
   }
 
-  console.log("cssData", cssData, Object.fromEntries(newCssData));
-
   return Object.fromEntries(newCssData);
 }

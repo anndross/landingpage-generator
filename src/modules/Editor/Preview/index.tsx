@@ -69,8 +69,6 @@ export function Preview({ layout }: PreviewProps) {
     });
   }
 
-  console.log("previewElementsss", previewElements);
-
   return (
     <>
       <Tree />
@@ -107,7 +105,7 @@ export function Preview({ layout }: PreviewProps) {
         </div>
         <div
           className={clsx({
-            "w-full h-full p-4 bg-[#f6f8fa] scroll-auto overflow-auto": true,
+            "w-full h-full p-4 bg-[#f6f8fa]": true,
             hidden: preview.type !== "code",
           })}
         >
@@ -115,7 +113,7 @@ export function Preview({ layout }: PreviewProps) {
         </div>
         <div
           className={clsx({
-            "w-full h-full scroll-auto overflow-auto": true,
+            "w-full h-full": true,
             hidden: preview.type !== "layout",
           })}
         >
