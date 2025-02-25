@@ -1,6 +1,6 @@
 import { BaseProps } from "./base";
-import fontFamilyJSON from "@/modules/Editor/data/config/Text/font-family.json";
-import fontSizeJSON from "@/modules/Editor/data/config/Text/font-size.json";
+import fontFamilyJSON from "@/shared/editor/data/config/Text/font-family.json";
+import fontSizeJSON from "@/shared/editor/data/config/Text/font-size.json";
 
 export type AvailableTags =
   | "h1"

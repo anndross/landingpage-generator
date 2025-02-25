@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { InputWithIcon } from "@/components/ui/input-with-icon";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import {
   RxCornerBottomLeft,
   RxCornerBottomRight,

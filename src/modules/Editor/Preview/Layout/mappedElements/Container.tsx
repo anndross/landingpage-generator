@@ -1,5 +1,5 @@
 import { Sortable } from "@/components/Sortable";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { ContainerProps } from "@/types/components/container";
 
 interface EditableContainerProps {

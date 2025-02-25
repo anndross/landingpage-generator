@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
 import clsx from "clsx";
-import { PreviewElement, useEditor } from "../../EditorContext";
+import { PreviewElement, useEditor } from "../../context";
 
 const mappedContent: Partial<{ [key in PreviewElement["type"]]: string }> = {
   text: "Texto",

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { useEffect, useState } from "react";
 import { TbSettings } from "react-icons/tb";
 

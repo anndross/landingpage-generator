@@ -1,23 +1,24 @@
 "use server";
 
+import { PreviewElement } from "@/modules/Editor/context";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
-export const handleDeleteLayout = async (formData: FormData) => {
+export async function editAction(
+  name: string,
+  id: string,
+  children: PreviewElement[]
+) {
   const token = (await cookies()).get("auth_token")?.value;
-
-  const id = formData.get("id") || "";
-  const name = formData.get("name") || "";
-  const realName = formData.get("real-name") || "";
-
-  if (realName !== name) throw new Error("O nome não coincide com o original.");
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  await fetch(`${baseUrl}/api/private/preview/delete`, {
-    method: "DELETE",
+  await fetch(`${baseUrl}/api/private/preview/update`, {
+    method: "PUT",
     body: JSON.stringify({
+      name: name,
       id: id,
+      children: children,
     }),
     headers: new Headers({
       Authorization: `Bearer ${token}`,
@@ -27,4 +28,4 @@ export const handleDeleteLayout = async (formData: FormData) => {
   });
 
   revalidateTag("get-layouts");
-};
+}

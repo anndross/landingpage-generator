@@ -33,6 +33,7 @@ export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
 
 export interface EditorContextI {
   previewElements: {
+    id: string;
     name: string;
     children: PreviewElement[];
   };
@@ -53,6 +54,7 @@ export interface EditorContextI {
 
 export const useEditor = create<EditorContextI>((set) => ({
   previewElements: {
+    id: "",
     name: "",
     children: [],
   },

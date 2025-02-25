@@ -1,6 +1,6 @@
 import { Highlight, themes } from "prism-react-renderer";
 import { codeConverter } from "./services/codeConverter";
-import { useEditor } from "../../EditorContext";
+import { useEditor } from "../../context";
 
 export function PreviewCode() {
   const { preview, previewElements } = useEditor();

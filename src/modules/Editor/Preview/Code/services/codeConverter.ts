@@ -3,7 +3,7 @@ import imageJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/image
 import flexLayoutJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/flex-layout.row.json";
 import linkJson from "@/modules/Editor/Preview/Code/mappedElements/vtexIo/link.json";
 
-import { Options, PreviewElement } from "@/modules/Editor/EditorContext";
+import { Options, PreviewElement } from "@/modules/Editor/context";
 import { TextProps } from "@/types/components/text";
 import { ImageProps } from "@/types/components/image";
 import { LinkProps } from "@/types/components/link";

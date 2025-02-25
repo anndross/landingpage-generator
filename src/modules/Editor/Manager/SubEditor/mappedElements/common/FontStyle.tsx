@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/EditorContext";
-import fontStyleData from "@/modules/Editor/data/config/Text/font-style.json";
+import { useEditor } from "@/modules/Editor/context";
+import fontStyleData from "@/shared/editor/data/config/Text/font-style.json";
 import clsx from "clsx";
 import { useState } from "react";
 

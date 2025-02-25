@@ -1,5 +1,5 @@
 "use client";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { ImageProps } from "@/types/components/image";
 
 interface EditableImageProps {

@@ -7,7 +7,7 @@ import { EditToggle } from "./components/EditToggle";
 import { Button } from "@/components/ui/button";
 import { TbBinaryTree } from "react-icons/tb";
 import { Tree } from "./Tree";
-import { PreviewElement, useEditor } from "../EditorContext";
+import { PreviewElement, useEditor } from "../context";
 import { ClearPreview } from "./components/ClearPreview";
 import { Layout } from "./Layout";
 import { useCookies } from "next-client-cookies";
@@ -22,22 +22,22 @@ interface PreviewProps {
 }
 
 export function Preview({ layout }: PreviewProps) {
+  const cookies = useCookies();
+
   const { preview, setPreview, setTree, previewElements, setPreviewElements } =
     useEditor();
 
-  const cookies = useCookies();
-
-  const isMountingRef = useRef(false);
+  const isMountingRef = useRef(true);
 
   useEffect(() => {
-    if (isMountingRef?.current) isMountingRef.current = true;
-  }, []);
+    // Resetar o estado completamente antes de atualizar
+    setPreviewElements({ children: [], name: layout.name, id: layout.id });
 
-  useEffect(() => {
-    if (layout) {
-      setPreviewElements(layout);
-    }
-  }, [layout]);
+    // Aguarda um pequeno delay para garantir que o reset foi aplicado
+    setTimeout(() => {
+      setPreviewElements({ ...layout, children: layout.children });
+    }, 10);
+  }, [layout.id]);
 
   useEffect(() => {
     const updatePreviewElementsOnDB = async () => {

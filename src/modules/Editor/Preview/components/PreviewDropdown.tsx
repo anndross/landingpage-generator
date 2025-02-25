@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEditor } from "../../EditorContext";
+import { useEditor } from "../../context";
 
 export function PreviewDropdown({}) {
   const { setPreview } = useEditor();

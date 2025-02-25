@@ -1,19 +1,19 @@
 "use client";
-import { PreviewElement } from "@/modules/Editor/EditorContext";
-import { Preview } from "./Preview";
-import { useLayouts } from "../LayoutsContext";
+import { useEditor } from "@/modules/Editor/context";
+import { Item } from "./Item";
+import { Layout, useLayouts } from "@/modules/Layouts/LayoutsContext";
 
 interface ListProps {
-  data: PreviewElement[];
+  data: Layout[];
 }
 
-export function List({ data }: ListProps) {
+export function List() {
   const { layouts } = useLayouts();
 
   return (
     <div className="p-16 w-full h-full grid grid-cols-4 gap-10 justify-items-center">
       {layouts?.map((layout: any) => {
-        return <Preview key={layout.id} layout={layout} />;
+        return <Item key={layout.id} layout={layout} />;
       })}
     </div>
   );

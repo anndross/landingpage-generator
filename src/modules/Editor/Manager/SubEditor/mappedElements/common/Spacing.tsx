@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { InputWithIcon } from "@/components/ui/input-with-icon";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import {
   LuPanelBottomDashed,
   LuPanelLeftDashed,

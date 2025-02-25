@@ -5,9 +5,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { TextProps } from "@/types/components/text";
-import fontSize from "@/modules/Editor/data/config/Text/font-size.json";
+import fontSize from "@/shared/editor/data/config/Text/font-size.json";
 
 export function FontSize() {
   const {

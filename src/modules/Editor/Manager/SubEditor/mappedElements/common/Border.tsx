@@ -1,7 +1,7 @@
 import { ColorPicker } from "@/components/ColorPicker";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import {
   CgBorderBottom,
   CgBorderLeft,

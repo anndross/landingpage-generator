@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { AiOutlineClear } from "react-icons/ai";
-import { useEditor } from "../../EditorContext";
+import { useEditor } from "../../context";
 
 export function ClearPreview() {
   const { setPreviewElements } = useEditor();

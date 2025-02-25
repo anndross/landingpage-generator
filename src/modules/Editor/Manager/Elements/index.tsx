@@ -3,8 +3,8 @@ import { ReactSortable } from "react-sortablejs";
 import { ReactNode, useState } from "react";
 import { Text } from "./mappedElements/Text";
 import { Container } from "./mappedElements/Container";
-import { PreviewElement } from "@/modules/Editor/EditorContext";
-import dataElements from "@/modules/Editor/data/elements.json";
+import { PreviewElement } from "@/modules/Editor/context";
+import dataElements from "@/shared/editor/data/elements.json";
 import { Image } from "./mappedElements/Image";
 import { Link } from "./mappedElements/Link";
 

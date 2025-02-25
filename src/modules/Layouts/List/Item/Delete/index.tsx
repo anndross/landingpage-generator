@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,46 +10,58 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { createAction } from "./Action";
 import { Input } from "@/components/ui/input";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { deleteAction } from "@/modules/Layouts/List/Item/Delete/Action";
+import { ItemProps } from "@/modules/Layouts/List/Item";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 
-type CreateLayoutFormData = {
+type DeleteLayoutFormData = {
   name: string;
 };
 
-export function Create() {
+export function Delete({ layout: { name, id } }: ItemProps) {
   const [open, setOpen] = useState(false);
 
-  const createLayoutFormSchema = z.object({
-    name: z.string().nonempty("O nome é obrigatório"),
+  const deleteLayoutFormSchema = z.object({
+    name: z
+      .string()
+      .nonempty("O nome é obrigatório")
+      .regex(new RegExp(name), "O nome não coincide com o original"),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateLayoutFormData>({
-    resolver: zodResolver(createLayoutFormSchema),
+  } = useForm<DeleteLayoutFormData>({
+    resolver: zodResolver(deleteLayoutFormSchema),
   });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-full">Novo</Button>
+        <Button className="p-0 h-8 w-8 aspect-square" variant="outline">
+          <RiDeleteBin6Line color="#000" size={14} />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Criar layout</DialogTitle>
-          <DialogDescription>Diga o nome do seu layout</DialogDescription>
+          <DialogTitle>Tem certeza que deseja deletar?</DialogTitle>
+          <DialogDescription>
+            Digite o nome do layout para confirmar: {name}
+          </DialogDescription>
         </DialogHeader>
         <form
           onSubmit={handleSubmit((data) => {
-            if (data.name.length) createAction(data.name);
+            if (data.name !== name) {
+              return;
+            }
 
+            deleteAction(id);
             setOpen(false);
           })}
         >
@@ -59,7 +72,7 @@ export function Create() {
               </label>
               <Input
                 {...register("name", { required: true })}
-                placeholder="Digite o nome do layout"
+                placeholder={name}
                 className="col-span-3"
               />
             </div>
@@ -70,7 +83,9 @@ export function Create() {
             )}
           </div>
           <DialogFooter>
-            <Button type="submit">Criar</Button>
+            <Button type="submit" variant="destructive">
+              Deletar
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

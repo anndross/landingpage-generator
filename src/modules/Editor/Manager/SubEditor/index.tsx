@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
 import { Container } from "@/modules/Editor/Manager/SubEditor/mappedElements/Container";
-import { PreviewElement, useEditor } from "@/modules/Editor/EditorContext";
+import { PreviewElement, useEditor } from "@/modules/Editor/context";
 import { Text } from "@/modules/Editor/Manager/SubEditor/mappedElements/Text";
 import { Image } from "@/modules/Editor/Manager/SubEditor/mappedElements/Image";
 import { Link } from "./mappedElements/Link";

@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { TextProps } from "@/types/components/text";
 
 export function Content() {

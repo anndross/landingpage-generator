@@ -1,6 +1,6 @@
 import { TextProps } from "@/types/components/text";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 
 interface EditableTextProps {
   data: TextProps;

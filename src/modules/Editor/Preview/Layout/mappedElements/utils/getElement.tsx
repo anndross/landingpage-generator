@@ -5,7 +5,7 @@ import { Image as EditableImage } from "@/modules/Editor/Preview/Layout/mappedEl
 import { Link as EditableLink } from "@/modules/Editor/Preview/Layout/mappedElements/Link";
 import { TextProps } from "@/types/components/text";
 import { ContainerProps } from "@/types/components/container";
-import { PreviewElement } from "@/modules/Editor/EditorContext";
+import { PreviewElement } from "@/modules/Editor/context";
 import { ImageProps } from "@/types/components/image";
 import { LinkProps } from "@/types/components/link";
 

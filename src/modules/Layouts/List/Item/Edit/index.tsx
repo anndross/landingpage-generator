@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,21 +8,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { createAction } from "./Action";
+import { TbEdit } from "react-icons/tb";
+import { editAction } from "@/modules/Layouts/List/Item/Edit/Action";
 import { Input } from "@/components/ui/input";
+import { ItemProps } from "@/modules/Layouts/List/Item";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
-type CreateLayoutFormData = {
+type EditLayoutFormData = {
   name: string;
 };
 
-export function Create() {
+export function Edit({ layout: { name, id, children } }: ItemProps) {
   const [open, setOpen] = useState(false);
 
-  const createLayoutFormSchema = z.object({
+  const editLayoutFormSchema = z.object({
     name: z.string().nonempty("O nome é obrigatório"),
   });
 
@@ -31,34 +32,37 @@ export function Create() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateLayoutFormData>({
-    resolver: zodResolver(createLayoutFormSchema),
+  } = useForm<EditLayoutFormData>({
+    resolver: zodResolver(editLayoutFormSchema),
   });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-full">Novo</Button>
+        <Button className="p-0 h-8 w-8 aspect-square" variant="outline">
+          <TbEdit color="#000" size={14} />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Criar layout</DialogTitle>
-          <DialogDescription>Diga o nome do seu layout</DialogDescription>
+          <DialogTitle>Editar nome</DialogTitle>
+          <DialogDescription>Edite o nome do seu layout</DialogDescription>
         </DialogHeader>
         <form
           onSubmit={handleSubmit((data) => {
-            if (data.name.length) createAction(data.name);
+            if (data.name.length) editAction(data.name, id, children);
 
             setOpen(false);
           })}
         >
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <label htmlFor="name" className="text-right">
-                Nome
+              <label htmlFor="name" className="text-right whitespace-nowrap">
+                Novo Nome
               </label>
               <Input
                 {...register("name", { required: true })}
+                defaultValue={name}
                 placeholder="Digite o nome do layout"
                 className="col-span-3"
               />
@@ -70,7 +74,7 @@ export function Create() {
             )}
           </div>
           <DialogFooter>
-            <Button type="submit">Criar</Button>
+            <Button type="submit">Salvar</Button>
           </DialogFooter>
         </form>
       </DialogContent>

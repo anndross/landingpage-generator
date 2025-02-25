@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { PreviewElement } from "../Editor/EditorContext";
+import { PreviewElement } from "../Editor/context";
 
 export type Layout = {
   id: string;

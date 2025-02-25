@@ -1,5 +1,5 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { ContainerProps } from "@/types/components/container";
 import { BiAlignLeft, BiAlignMiddle, BiAlignRight } from "react-icons/bi";
 import { LuBetweenVerticalStart } from "react-icons/lu";

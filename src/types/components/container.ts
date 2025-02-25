@@ -1,4 +1,4 @@
-import { PreviewElement } from "@/modules/Editor/EditorContext";
+import { PreviewElement } from "@/modules/Editor/context";
 import { BaseProps } from "./base";
 
 export type ContainerProps = BaseProps & {

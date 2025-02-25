@@ -1,5 +1,5 @@
 import { ColorPicker } from "@/components/ColorPicker";
-import { useEditor } from "@/modules/Editor/EditorContext";
+import { useEditor } from "@/modules/Editor/context";
 import { TextProps } from "@/types/components/text";
 import { useEffect, useState } from "react";
 

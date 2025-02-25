@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { PreviewElement } from "../modules/Editor/EditorContext";
+import { PreviewElement } from "../modules/Editor/context";
 import { SketchPicker } from "react-color";
 import { Dispatch, SetStateAction, useState } from "react";
 

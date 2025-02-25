@@ -13,12 +13,12 @@ export async function middleware(request: NextRequest) {
   }
 
   if (token && url === "/login") {
-    return NextResponse.redirect(new URL("/editor", request.url));
+    return NextResponse.redirect(new URL("/layouts", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/editor", "/login"],
+  matcher: ["/editor/:path*", "/login", "/layouts"],
 };

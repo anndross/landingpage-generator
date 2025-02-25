@@ -26,7 +26,7 @@ export async function Layouts() {
         <Search data={layouts || []} />
         <Create />
       </div>
-      <List data={layouts || []} />
+      <List />
     </div>
   );
 }

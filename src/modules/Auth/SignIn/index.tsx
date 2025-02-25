@@ -20,7 +20,7 @@ export function SignInForm() {
 
     signInByCredential(email, password);
 
-    router.push("/editor");
+    router.push("/layouts");
   };
 
   const onLoginByGoogle = async () => {
@@ -77,7 +77,7 @@ export function SignInForm() {
         type="button"
         onClick={() => {
           onLoginByGoogle();
-          router.push("/editor");
+          router.push("/layouts");
         }}
       >
         Entrar com Google <FcGoogle />

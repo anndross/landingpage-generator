@@ -1,6 +1,6 @@
 "use client";
 import { Sortable } from "@/components/Sortable";
-import { PreviewElement, useEditor } from "../../EditorContext";
+import { PreviewElement, useEditor } from "../../context";
 
 export function Layout() {
   const { previewElements, setPreviewElements } = useEditor();
@@ -18,7 +18,10 @@ export function Layout() {
           indexPath: [index],
         }));
 
-        setPreviewElements({ children: mappedNewState as PreviewElement[] });
+        setPreviewElements({
+          ...previewElements,
+          children: mappedNewState as PreviewElement[],
+        });
       }}
       tag="main"
     />
