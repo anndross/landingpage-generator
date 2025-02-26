@@ -4,10 +4,11 @@ import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
 import { Container } from "@/modules/Editor/Manager/SubEditor/mappedElements/Container";
-import { PreviewElement, useEditor } from "@/modules/Editor/context";
+import { useEditor } from "@/modules/Editor/context";
 import { Text } from "@/modules/Editor/Manager/SubEditor/mappedElements/Text";
 import { Image } from "@/modules/Editor/Manager/SubEditor/mappedElements/Image";
 import { Link } from "./mappedElements/Link";
+import { Element } from "@/types/element";
 
 export function SubEditor() {
   const {
@@ -16,7 +17,7 @@ export function SubEditor() {
   } = useEditor();
 
   const mappedElements: Partial<{
-    [key in PreviewElement["type"]]: ReactNode;
+    [key in Element["type"] | "layout"]: ReactNode;
   }> = {
     text: (
       <Text.Root>
@@ -30,6 +31,15 @@ export function SubEditor() {
       </Text.Root>
     ),
     container: (
+      <Container.Root>
+        <Container.Size />
+        <Container.Border />
+        <Container.Appearance />
+        <Container.Spacing />
+        <Container.Position />
+      </Container.Root>
+    ),
+    layout: (
       <Container.Root>
         <Container.Size />
         <Container.Border />

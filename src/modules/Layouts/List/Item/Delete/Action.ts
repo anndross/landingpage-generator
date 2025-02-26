@@ -8,11 +8,8 @@ export async function deleteAction(id: string) {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  await fetch(`${baseUrl}/api/private/preview/delete`, {
+  await fetch(`${baseUrl}/api/private/preview/delete/${id}`, {
     method: "DELETE",
-    body: JSON.stringify({
-      id: id,
-    }),
     headers: new Headers({
       Authorization: `Bearer ${token}`,
       Accept: "application/json",

@@ -1,4 +1,4 @@
-import { messages } from "@/app/api/helpers/exceptions";
+import { messages } from "@/helpers/exceptions";
 import { db, firebase } from "@/config/firebase-admin";
 
 export async function POST(req: Request) {
@@ -6,32 +6,20 @@ export async function POST(req: Request) {
     const { name } = await req.json();
     const token = req.headers.get("Authorization")?.split("Bearer ")[1];
 
-    if (!token) {
-      return new Response(messages.no_token, { status: 401 });
-    }
-
-    const decodedToken = await firebase.auth().verifyIdToken(token);
-
-    if (decodedToken.exp < Date.now() / 1000) {
-      return new Response(messages.exp_token, { status: 401 });
-    }
-
-    const userId = decodedToken.uid;
+    const { uid } = await firebase.auth().verifyIdToken(token || "");
 
     // Cria o novo layout
     const createdElement = await db
       .collection("layouts")
-      .add({ name, children: [] });
+      .add({ name, children: [], ownerId: uid, type: "layout" });
 
     // Pega os dados do usuário
-    const userData = (
-      await db.collection("users").doc(decodedToken.uid).get()
-    ).data();
+    const userData = (await db.collection("users").doc(uid).get()).data();
 
     // Atualiza o array de layouts do usuário com o id do novo layout
     await db
       .collection("users")
-      .doc(userId)
+      .doc(uid)
       .update({ layouts: [...(userData?.layouts || []), createdElement.id] });
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });

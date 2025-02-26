@@ -1,10 +1,10 @@
+import { Element } from "@/types/element";
 import { create } from "zustand";
-import { PreviewElement } from "../Editor/context";
 
 export type Layout = {
   id: string;
   name: string;
-  children: PreviewElement[];
+  children: Element[];
 };
 
 export interface LayoutsContextI {

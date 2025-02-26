@@ -1,7 +1,7 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import tags from "@/shared/editor/data/config/Text/tags.json";
 import { useEditor } from "@/modules/Editor/context";
-import { TextProps } from "@/types/components/text";
+import { TextProps } from "@/types/text";
 
 export function TextTag() {
   const {

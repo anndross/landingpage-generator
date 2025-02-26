@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { useEditor } from "@/modules/Editor/context";
-import { LinkProps } from "@/types/components/link";
+import { LinkProps } from "@/types/link";
 
 export function LinkHref() {
   const {

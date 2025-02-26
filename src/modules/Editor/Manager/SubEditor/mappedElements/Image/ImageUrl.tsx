@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { useEditor } from "@/modules/Editor/context";
-import { ImageProps } from "@/types/components/image";
+import { ImageProps } from "@/types/image";
 
 export function ImageUrl() {
   const {

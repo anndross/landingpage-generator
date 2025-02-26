@@ -1,15 +1,10 @@
 "use client";
 import { create } from "zustand";
-import { ImageProps } from "@/types/components/image";
-import { TextProps } from "@/types/components/text";
-import { ContainerProps } from "@/types/components/container";
-import { LinkProps } from "@/types/components/link";
-
-export type PreviewElement =
-  | ImageProps
-  | TextProps
-  | ContainerProps
-  | LinkProps;
+import { BaseProps } from "@/types/base";
+import layoutJSON from "@/shared/editor/data/layout.json";
+import { Element } from "@/types/element";
+import { Preview } from "@/types/preview";
+import { updateCurrentPreviewOnDB } from "@/shared/editor/services/update";
 
 export type Options = {
   layout: "desktop" | "mobile";
@@ -31,17 +26,17 @@ export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
   style: boolean;
 }
 
+export type EditableElement = Element & {
+  type: BaseProps["type"] | "layout";
+};
+
 export interface EditorContextI {
-  previewElements: {
-    id: string;
-    name: string;
-    children: PreviewElement[];
-  };
+  previewElements: Preview;
   tree: boolean;
   setTree: (tree: boolean) => void;
   subEditor: {
     open: boolean;
-    element: PreviewElement | null;
+    element: Element | EditorContextI["previewElements"] | null;
   };
   setSubEditor: (subEditor: Partial<EditorContextI["subEditor"]>) => void;
   preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
@@ -49,15 +44,11 @@ export interface EditorContextI {
   setPreviewElements: (
     previewElements: Partial<EditorContextI["previewElements"]>
   ) => void;
-  useEditElement: (data: Partial<PreviewElement>) => void;
+  useEditElement: (data: EditableElement) => void;
 }
 
 export const useEditor = create<EditorContextI>((set) => ({
-  previewElements: {
-    id: "",
-    name: "",
-    children: [],
-  },
+  previewElements: layoutJSON as Preview,
   setPreviewElements: (previewElements) =>
     set((state) => ({
       previewElements: {
@@ -84,12 +75,20 @@ export const useEditor = create<EditorContextI>((set) => ({
       preview: { ...state.preview, ...(preview as EditorContextI["preview"]) },
     })),
   useEditElement: (data) =>
-    set((state) => {
+    set((state: any) => {
+      if (data.type.includes("layout")) {
+        return {
+          previewElements: {
+            ...state.previewElements,
+            ...data,
+          },
+        };
+      }
+
       const prevClone = { ...state.previewElements };
 
-      const setDataByPath = (path: number[], newData: PreviewElement) => {
-        let current: EditorContextI["previewElements"] | PreviewElement =
-          prevClone;
+      const setDataByPath = (path: number[], newData: Element) => {
+        let current: EditorContextI["previewElements"] | Element = prevClone;
 
         for (let i = 0; i < path.length - 1; i++) {
           current = current?.children[path[i]];
@@ -110,7 +109,7 @@ export const useEditor = create<EditorContextI>((set) => ({
         updateSubEditor();
       };
 
-      setDataByPath(data?.indexPath || [], data as PreviewElement);
+      setDataByPath(data?.indexPath || [], data as Element);
 
       return { previewElements: prevClone };
     }),

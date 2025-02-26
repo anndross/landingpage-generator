@@ -36,8 +36,8 @@ export function UserDropdown() {
           <Button
             variant="outline"
             type="button"
-            onClick={() => {
-              logOut();
+            onClick={async () => {
+              await logOut();
               router.push("/login");
             }}
           >

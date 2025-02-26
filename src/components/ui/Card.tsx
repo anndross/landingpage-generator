@@ -7,7 +7,7 @@ interface CardProps {
 
 export function Card({ name, icon: Icon }: CardProps) {
   return (
-    <div className="cursor-grab w-full h-auto max-w-56 aspect-square flex select-none justify-center flex-col items-center p-1 px-2 gap-1 border shadow-sm rounded-lg">
+    <div className="cursor-grab w-full h-auto max-w-28 aspect-square flex select-none justify-center flex-col items-center p-1 px-2 gap-1 border shadow-sm rounded-lg">
       <span className="text-zinc-600 cursor-grab text-sm uppercase font-medium">
         {name}
       </span>

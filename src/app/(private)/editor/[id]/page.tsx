@@ -1,9 +1,9 @@
 import { Editor as EditorModule } from "@/modules/Editor";
 import { Header } from "@/components/Header";
-import { cookies } from "next/headers";
+import { Params } from "@/types/routeContext";
 
-export default async function Editor({ params }: { params: { id: string } }) {
-  const { id } = await params;
+export default async function Editor(context: { params: Params }) {
+  const { id } = await context.params;
 
   return (
     <div className="w-full max-h-screen h-screen">

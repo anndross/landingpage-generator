@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
-import { LateralBar } from "./Manager";
-import { Preview } from "./Preview";
+import { Manager } from "./Manager";
+import { Preview, PreviewProps } from "./Preview";
+import { EditableElement } from "./context";
 
 interface EditorProps {
   id: string;
@@ -11,7 +12,7 @@ export async function Editor({ id }: EditorProps) {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  const response = await fetch(`${baseUrl}/api/private/preview/get?id=${id}`, {
+  const response = await fetch(`${baseUrl}/api/private/preview/get/${id}`, {
     method: "GET",
     headers: new Headers({
       Authorization: `Bearer ${token}`,
@@ -35,13 +36,14 @@ export async function Editor({ id }: EditorProps) {
 
     return (
       <main className="w-full h-full flex items-center justify-left">
-        <LateralBar />
+        <Manager />
         <Preview
-          layout={{
-            children: layout?.data?.children,
-            name: layout?.data?.name,
-            id: id,
-          }}
+          layout={
+            {
+              ...layout.data,
+              id: id,
+            } as PreviewProps["layout"]
+          }
         />
       </main>
     );

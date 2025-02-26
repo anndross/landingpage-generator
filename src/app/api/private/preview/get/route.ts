@@ -1,56 +1,43 @@
-import { messages } from "@/app/api/helpers/exceptions";
+import { messages } from "@/helpers/exceptions";
 import { db, firebase } from "@/config/firebase-admin";
 
 export async function GET(req: Request) {
   try {
     const token = req.headers.get("Authorization")?.split("Bearer ")[1];
 
-    if (!token) {
-      return Response.json(messages.no_token, {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    const { uid } = await firebase.auth().verifyIdToken(token || "");
 
-    const decodedToken = await firebase.auth().verifyIdToken(token);
+    const userData = (await db.collection("users").doc(uid).get()).data();
 
-    if (decodedToken.exp < Date.now() / 1000) {
-      return Response.json(messages.exp_token, {
-        status: 401,
-      });
-    }
+    const promises = userData?.layouts.map((id: string) => {
+      return db.collection("layouts").doc(id).get();
+    });
 
-    const { searchParams } = new URL(req.url);
+    const layouts = await Promise.all(promises).then((data) => {
+      return data.map((e, idx) => ({
+        name: e.data()?.name,
+        id: userData?.layouts[idx],
+        children: e.data()?.children,
+      }));
+    });
 
-    const id = searchParams.get("id");
-
-    if (!id) {
-      return Response.json(messages.missing_parameters(["id"]), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const data = (await db.collection("layouts").doc(id).get()).data();
-
-    if (!data) {
-      throw new Error("Layout não encontrado");
-    }
-
-    return Response.json(
-      { data },
+    return new Response(
+      JSON.stringify({
+        layouts: layouts,
+      }),
       {
         status: 200,
-        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (error) {
     return new Response(
       JSON.stringify({
         message: messages.internal_error,
-        error: (error as { message: string })?.message,
+        error: error,
       }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      {
+        status: 500,
+      }
     );
   }
 }

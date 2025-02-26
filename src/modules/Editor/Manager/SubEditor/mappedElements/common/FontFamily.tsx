@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEditor } from "@/modules/Editor/context";
-import { TextProps } from "@/types/components/text";
+import { TextProps } from "@/types/text";
 import fontFamily from "@/shared/editor/data/config/Text/font-family.json";
 
 export function FontFamily() {

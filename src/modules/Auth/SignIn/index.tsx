@@ -7,7 +7,7 @@ import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export function SignInForm() {
-  const { signInByCredential, user, logOut, signInByGoogle } = useAuth();
+  const { signInByCredential, signInByGoogle } = useAuth();
   const router = useRouter();
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {

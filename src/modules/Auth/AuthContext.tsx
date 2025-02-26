@@ -111,10 +111,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return { result, error };
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     cookies.remove("auth_token");
-
-    return signOut(auth);
+    await signOut(auth);
   };
 
   useEffect(() => {

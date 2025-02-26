@@ -8,7 +8,7 @@ export async function Layouts() {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  const response = await fetch(`${baseUrl}/api/private/preview/get-all`, {
+  const response = await fetch(`${baseUrl}/api/private/preview/get`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token?.value}`,

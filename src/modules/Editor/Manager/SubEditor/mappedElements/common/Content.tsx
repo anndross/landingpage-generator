@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { useEditor } from "@/modules/Editor/context";
-import { TextProps } from "@/types/components/text";
+import { TextProps } from "@/types/text";
 
 export function Content() {
   const {
