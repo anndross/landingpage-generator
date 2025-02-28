@@ -3,13 +3,12 @@ import { codeConverter } from "./services/codeConverter";
 import { useEditor } from "../../context";
 import { Button } from "@/components/ui/button";
 import { BsCopy } from "react-icons/bs";
-import { useState } from "react";
 
 export function PreviewCode() {
-  const { preview, previewElements } = useEditor();
-  const [showAlert, setShowAlert] = useState(false);
+  const { settings, layout } = useEditor();
 
-  const previewType = preview.type === "code" && preview.option;
+  const language =
+    settings.preview.current === "code" && settings.preview.code.language;
 
   const mappedLanguages = {
     default: "json",
@@ -17,17 +16,14 @@ export function PreviewCode() {
     CSS: "css",
   };
 
-  const { code, style } = codeConverter(
-    previewType,
-    previewElements.children
-  ) || {
+  const { code, style } = (language && codeConverter(language, layout)) || {
     code: null,
     style: null,
   };
 
-  const currentCode = preview.style
-    ? style || ""
-    : JSON.stringify(code, null, 2);
+  const styles = settings.preview.code.styles;
+
+  const currentCode = styles ? style || "" : JSON.stringify(code, null, 2);
 
   return (
     <div className="relative">
@@ -41,9 +37,7 @@ export function PreviewCode() {
 
       <Highlight
         code={currentCode}
-        language={
-          preview.style ? "css" : mappedLanguages[previewType || "default"]
-        }
+        language={styles ? "css" : mappedLanguages[language || "default"]}
         theme={themes.github}
       >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (

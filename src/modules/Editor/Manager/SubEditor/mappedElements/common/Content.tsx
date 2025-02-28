@@ -3,23 +3,24 @@ import { useEditor } from "@/modules/Editor/context";
 import { TextProps } from "@/types/text";
 
 export function Content() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as any;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Texto</label>
       <Input
-        value={element?.settings.value}
+        value={(currentElement as TextProps)?.settings.value}
         onChange={(evt) => {
-          useEditElement({
-            ...element,
+          setLayout({
+            ...currentElement,
             settings: {
-              ...element?.settings,
+              ...(currentElement as TextProps)?.settings,
               value: evt.target.value,
             },
           } as TextProps);

@@ -1,18 +1,13 @@
 "use client";
-import { useEditor } from "@/modules/Editor/context";
 import { Item } from "./Item";
-import { Layout, useLayouts } from "@/modules/Layouts/LayoutsContext";
-
-interface ListProps {
-  data: Layout[];
-}
+import { useLayouts } from "@/modules/Layouts/LayoutsContext";
 
 export function List() {
   const { layouts } = useLayouts();
 
   return (
-    <div className="p-16 w-full h-full grid grid-cols-4 gap-10 justify-items-center">
-      {layouts?.map((layout: any) => {
+    <div className="grid grid-cols-3 gap-8 py-10 ">
+      {layouts?.map((layout) => {
         return <Item key={layout.id} layout={layout} />;
       })}
     </div>

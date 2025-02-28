@@ -12,7 +12,7 @@ export interface ItemProps {
 export function Item({ layout }: ItemProps) {
   return (
     <div
-      className="w-80 h-56 flex flex-col rounded-lg cursor-pointer bg-white
+      className="w-full h-56 flex flex-col rounded-lg cursor-pointer bg-white
         shadow-md border border-zinc-100 items-center p-2 relative"
     >
       <div className="flex gap-2  z-10 absolute top-1 right-1">

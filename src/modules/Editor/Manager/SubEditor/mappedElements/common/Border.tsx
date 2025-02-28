@@ -10,36 +10,41 @@ import {
 } from "react-icons/cg";
 
 export function Border() {
+  const { setLayout, settings } = useEditor();
   const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
-  const element = Element as any;
-
+  console.log(
+    "currentElement",
+    currentElement,
+    currentElement?.style.borderWidth
+  );
   return (
     <div className="">
       <span className="text-sm text-zinc-600 font-medium">Borda</span>
       <div className="flex flex-col  gap-2">
         <div>
           <ColorPicker
-            color={element?.style.borderColor || "#000"}
+            color={currentElement?.style.borderColor || "#000"}
             setColor={(value) =>
-              useEditElement({
-                ...element,
-                style: { ...element?.style, borderColor: value },
+              setLayout({
+                ...currentElement,
+                style: { ...currentElement?.style, borderColor: value },
               } as any)
             }
           />
         </div>
         <div>
           <Input
-            value={element?.style.borderWidth.replace(/\D/g, "")}
+            value={currentElement?.style.borderWidth.replace(/\D/g, "")}
             onChange={(evt) =>
-              useEditElement({
-                ...element,
+              setLayout({
+                ...currentElement,
                 style: {
-                  ...element?.style,
+                  ...currentElement?.style,
                   borderWidth: evt.target.value + "px",
                 },
               } as any)

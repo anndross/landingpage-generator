@@ -6,7 +6,7 @@ export default async function Editor(context: { params: Params }) {
   const { id } = await context.params;
 
   return (
-    <div className="w-full max-h-screen h-screen">
+    <div className="w-full h-screen flex flex-col">
       <Header />
       <EditorModule id={id} />
     </div>

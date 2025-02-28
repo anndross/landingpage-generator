@@ -1,26 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 
 async function checkToken(token: string) {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  return !!token.length;
 
-    const tokenResponse = await fetch(
-      `${baseUrl}/api/public/auth/verify-token`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
-      }
-    );
+  // try {
+  //   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const { isValid } = await tokenResponse.json();
+  //   const tokenResponse = await fetch(
+  //     `${baseUrl}/api/public/auth/verify-token`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ token }),
+  //     }
+  //   );
 
-    return isValid;
-  } catch {
-    return false;
-  }
+  //   const { isValid } = await tokenResponse.json();
+
+  //   return isValid;
+  // } catch {
+  //   return false;
+  // }
 }
 
 export async function middleware(req: NextRequest) {

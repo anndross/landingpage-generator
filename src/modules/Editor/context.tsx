@@ -1,116 +1,588 @@
-"use client";
+// "use client";
+// import { BaseProps } from "@/types/base";
+// import layoutJSON from "@/shared/editor/data/layout.json";
+// import { Element } from "@/types/element";
 import { create } from "zustand";
-import { BaseProps } from "@/types/base";
-import layoutJSON from "@/shared/editor/data/layout.json";
-import { Element } from "@/types/element";
-import { Preview } from "@/types/preview";
+import { LinkProps } from "@/types/link";
+import { ContainerProps } from "@/types/container";
+import { TextProps } from "@/types/text";
+import { ImageProps } from "@/types/image";
+import { CSSProperties } from "react";
+import { debounce } from "@/helpers/debounce";
 import { updateCurrentPreviewOnDB } from "@/shared/editor/services/update";
+import { mapStyles } from "@/helpers/mapStyles";
+// import { updateCurrentPreviewOnDB } from "@/shared/editor/services/update";
+// import { debounce } from "@/helpers/debounce";
 
-export type Options = {
-  layout: "desktop" | "mobile";
-  code: "VTEX IO";
+// export type Options = {
+//   layout: "desktop" | "mobile";
+//   code: "VTEX IO";
+// };
+
+// export type PreviewType = "layout" | "code";
+
+// export type PreviewOption<T extends PreviewType> = T extends "layout"
+//   ? Options["layout"]
+//   : T extends "code"
+//     ? Options["code"]
+//     : never;
+
+// export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
+//   type: T;
+//   option: PreviewOption<T>;
+//   canEdit: boolean;
+//   style: boolean;
+// }
+
+// export type EditableElement = Element & {
+//   type: BaseProps["type"] | "layout";
+// };
+
+// export interface EditorContextI {
+//   previewElements: Preview;
+//   tree: boolean;
+//   setTree: (tree: boolean) => void;
+//   subEditor: {
+//     open: boolean;
+//     element: Element | EditorContextI["previewElements"] | null;
+//   };
+//   setSubEditor: (subEditor: Partial<EditorContextI["subEditor"]>) => void;
+//   preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
+//   setPreview: (preview: Partial<EditorContextI["preview"]>) => void;
+//   setPreviewElements: (
+//     previewElements: Partial<EditorContextI["previewElements"]>
+//   ) => void;
+//   useEditElement: (data: EditableElement) => void;
+// }
+
+// export const useEditor = create<EditorContextI>((set) => ({
+//   previewElements: layoutJSON as Preview,
+//   setPreviewElements: (previewElements) =>
+//     set((state) => ({
+//       previewElements: {
+//         ...state.previewElements,
+//         ...(previewElements as EditorContextI["previewElements"]),
+//       },
+//     })),
+//   tree: false,
+//   setTree: (tree) => set(() => ({ tree: tree })),
+//   subEditor: {
+//     open: false,
+//     element: null,
+//   },
+//   setSubEditor: (subEditor) =>
+//     set(() => ({ subEditor: subEditor as EditorContextI["subEditor"] })),
+//   preview: {
+//     type: "layout",
+//     option: "desktop",
+//     canEdit: true,
+//     style: false,
+//   },
+//   setPreview: (preview) =>
+//     set((state) => ({
+//       preview: { ...state.preview, ...(preview as EditorContextI["preview"]) },
+//     })),
+//   useEditElement: (data) =>
+//     set((state: any) => {
+//       if (data.type.includes("layout")) {
+//         console.log("antes de alterar o layout");
+//         debounce(() => {
+//           console.log("alterou layout", data.id);
+//           updateCurrentPreviewOnDB({
+//             ...state.previewElements,
+//             ...data,
+//           });
+//         })();
+//         console.log("depois de alterar o layout");
+
+//         return {
+//           previewElements: {
+//             ...state.previewElements,
+//             ...data,
+//           },
+//         };
+//       }
+
+//       const prevClone = { ...state.previewElements };
+
+//       const setDataByPath = (path: number[], newData: Element) => {
+//         let current: EditorContextI["previewElements"] | Element = prevClone;
+
+//         for (let i = 0; i < path.length - 1; i++) {
+//           current = current?.children[path[i]];
+//         }
+
+//         // Obtém o índice final do caminho
+//         const lastIndex = path[path.length - 1];
+
+//         if (current?.children && lastIndex !== undefined) {
+//           current.children[lastIndex] = newData; // Aqui alteramos diretamente a referência correta
+//         }
+
+//         const updateSubEditor = () => {
+//           const newSubEditor = { ...state.subEditor, element: newData };
+
+//           state.setSubEditor(newSubEditor);
+//         };
+//         updateSubEditor();
+//       };
+
+//       console.log("antes de alterar o children");
+//       debounce(() => {
+//         console.log("alterou children", prevClone.id);
+//         updateCurrentPreviewOnDB(prevClone);
+//       })();
+//       console.log("depois de alterar o children");
+
+//       setDataByPath(data?.indexPath || [], data as Element);
+
+//       return { previewElements: prevClone };
+//     }),
+// }));
+
+// Tipos de configuração
+export type PreviewType = {
+  current: "code" | "layout";
+  layout: { edit: boolean };
+  code: { language: "VTEX IO"; styles: boolean };
 };
 
-export type PreviewType = "layout" | "code";
-
-export type PreviewOption<T extends PreviewType> = T extends "layout"
-  ? Options["layout"]
-  : T extends "code"
-    ? Options["code"]
-    : never;
-
-export interface PreviewOptionsI<T extends PreviewType = PreviewType> {
-  type: T;
-  option: PreviewOption<T>;
-  canEdit: boolean;
-  style: boolean;
-}
-
-export type EditableElement = Element & {
-  type: BaseProps["type"] | "layout";
-};
-
-export interface EditorContextI {
-  previewElements: Preview;
-  tree: boolean;
-  setTree: (tree: boolean) => void;
+export type ManagerType = {
+  elements: { visible: boolean };
   subEditor: {
-    open: boolean;
-    element: Element | EditorContextI["previewElements"] | null;
+    visible: boolean;
+    currentElement: EditorType["layout"] | LayoutChildrenType | null;
+    breakpoint: "all" | "sm" | "md" | "lg";
   };
-  setSubEditor: (subEditor: Partial<EditorContextI["subEditor"]>) => void;
-  preview: PreviewOptionsI<"code"> | PreviewOptionsI<"layout">;
-  setPreview: (preview: Partial<EditorContextI["preview"]>) => void;
-  setPreviewElements: (
-    previewElements: Partial<EditorContextI["previewElements"]>
-  ) => void;
-  useEditElement: (data: EditableElement) => void;
-}
+  tree: { visible: boolean };
+};
 
-export const useEditor = create<EditorContextI>((set) => ({
-  previewElements: layoutJSON as Preview,
-  setPreviewElements: (previewElements) =>
-    set((state) => ({
-      previewElements: {
-        ...state.previewElements,
-        ...(previewElements as EditorContextI["previewElements"]),
-      },
-    })),
-  tree: false,
-  setTree: (tree) => set(() => ({ tree: tree })),
-  subEditor: {
-    open: false,
-    element: null,
+export type ElementsType = "container" | "text" | "image" | "link";
+export type LayoutChildrenType =
+  | ImageProps
+  | TextProps
+  | ContainerProps
+  | LinkProps;
+
+export type EditorType = {
+  settings: {
+    manager: ManagerType;
+    preview: PreviewType;
+  };
+  layout: {
+    id: string;
+    type: "layout";
+    name: string;
+    children: LayoutChildrenType[];
+    style: LayoutStyle;
+  };
+  css: string;
+  setCSS: (
+    className: string,
+    styles: Partial<EditorType["layout"]["style"]>
+  ) => void;
+  setSettings: (data: Partial<EditorType["settings"]>) => void;
+  setLayout: (data: Partial<EditorType["layout"] | LayoutChildrenType>) => void;
+  setManagerSubEditor: (data: ManagerType["subEditor"]) => void;
+  setManagerTree: (data: ManagerType["tree"]) => void;
+  setManagerElements: (data: ManagerType["elements"]) => void;
+  setPreviewCode: (
+    data: { current: PreviewType["current"] } & PreviewType["code"]
+  ) => void;
+  setPreviewLayout: (
+    data: { current: PreviewType["current"] } & PreviewType["layout"]
+  ) => void;
+};
+
+// Configurações iniciais
+export const INITIAL_SETTINGS: EditorType["settings"] = {
+  manager: {
+    elements: { visible: true },
+    subEditor: { visible: false, currentElement: null, breakpoint: "all" },
+    tree: { visible: false },
   },
-  setSubEditor: (subEditor) =>
-    set(() => ({ subEditor: subEditor as EditorContextI["subEditor"] })),
   preview: {
-    type: "layout",
-    option: "desktop",
-    canEdit: true,
-    style: false,
+    current: "layout",
+    layout: { edit: true },
+    code: { language: "VTEX IO", styles: false },
   },
-  setPreview: (preview) =>
-    set((state) => ({
-      preview: { ...state.preview, ...(preview as EditorContextI["preview"]) },
-    })),
-  useEditElement: (data) =>
-    set((state: any) => {
-      if (data.type.includes("layout")) {
+};
+
+export const INITIAL_LAYOUT: EditorType["layout"] = {
+  id: "",
+  type: "layout",
+  name: "",
+  children: [],
+  style: {
+    all: {
+      display: "flex",
+      width: "100%",
+      height: "100%",
+      padding: "0",
+      margin: "0",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      alignItems: "flex-start",
+      backgroundColor: "#fff",
+      borderRadius: "0px",
+      borderWidth: "0px",
+      borderStyle: "solid",
+      borderColor: "#000",
+      boxShadow: "none",
+      opacity: "1",
+    },
+  },
+};
+
+export const useEditor = create<EditorType>((set) => {
+  const debouncedUpdate = debounce(updateCurrentPreviewOnDB, 500);
+
+  return {
+    settings: INITIAL_SETTINGS,
+    css: "",
+    setCSS: (className, styles) =>
+      set((state) => {
+        const mappedBreakpoints = {
+          all: null,
+          sm: "@media (width <= 375px)",
+          md: "@media (width <= 820px)",
+          lg: "@media (width > 820px)",
+        };
+
+        const newStyles = (
+          Object.keys(styles) as Array<keyof typeof mappedBreakpoints>
+        ).map((key) => {
+          const breakpoint = key in mappedBreakpoints && mappedBreakpoints[key];
+
+          if (!breakpoint) {
+            return JSON.stringify(mapStyles(styles[key] || {}));
+          }
+
+          return `\n${breakpoint} {
+            .${className} ${JSON.stringify(
+              mapStyles(styles[key] || {}),
+              null,
+              2
+            )
+              .replaceAll(`"`, "")
+              .replaceAll(",", ";")}
+          }\n`;
+        });
+
         return {
-          previewElements: {
-            ...state.previewElements,
-            ...data,
+          css: state.css + newStyles,
+        };
+      }),
+
+    layout: INITIAL_LAYOUT,
+    setSettings: (data) =>
+      set((state) => ({ settings: { ...state.settings, ...data } })),
+    setManagerSubEditor: (data) =>
+      set((state) => ({
+        settings: {
+          ...state.settings,
+          manager: { ...state.settings.manager, subEditor: data },
+        },
+      })),
+    setManagerTree: (data) =>
+      set((state) => ({
+        settings: {
+          ...state.settings,
+          manager: { ...state.settings.manager, tree: data },
+        },
+      })),
+    setManagerElements: (data) =>
+      set((state) => ({
+        settings: {
+          ...state.settings,
+          manager: { ...state.settings.manager, elements: data },
+        },
+      })),
+    setPreviewCode: (data) =>
+      set((state) => ({
+        settings: {
+          ...state.settings,
+          preview: {
+            ...state.settings.preview,
+            current: data.current,
+            code: data,
+          },
+        },
+      })),
+    setPreviewLayout: (data) =>
+      set((state) => ({
+        settings: {
+          ...state.settings,
+          preview: {
+            ...state.settings.preview,
+            current: data.current,
+            layout: data,
+          },
+        },
+      })),
+    setLayout: (data) => {
+      set((state) => {
+        if ((data as EditorType["layout"]).type === "layout") {
+          const newLayout = {
+            ...state.layout,
+            ...(data as EditorType["layout"]),
+          };
+          debouncedUpdate(newLayout);
+
+          if (state.settings.manager.subEditor.visible) {
+            state.setManagerSubEditor({
+              ...state.settings.manager.subEditor,
+              currentElement: newLayout,
+            });
+          }
+
+          return { layout: newLayout };
+        }
+
+        if (
+          (data as LayoutChildrenType)?.indexPath &&
+          (data as LayoutChildrenType)?.indexPath.length > 0
+        ) {
+          const updateElement = (
+            children: LayoutChildrenType[],
+            path: number[]
+          ): LayoutChildrenType[] => {
+            if (path.length === 1) {
+              return children.map((child, index) =>
+                index === path[0]
+                  ? { ...child, ...(data as LayoutChildrenType) }
+                  : child
+              );
+            }
+
+            return children.map((child, index) =>
+              index === path[0] && "children" in child
+                ? {
+                    ...child,
+                    children: updateElement(
+                      child.children as LayoutChildrenType[],
+                      path.slice(1)
+                    ),
+                  }
+                : child
+            );
+          };
+
+          if (state.settings.manager.subEditor.visible) {
+            state.setManagerSubEditor({
+              ...state.settings.manager.subEditor,
+              currentElement: data as LayoutChildrenType,
+            });
+          }
+
+          const updatedChildren = updateElement(
+            state.layout.children,
+            (data as LayoutChildrenType)?.indexPath
+          );
+          const updatedLayout = { ...state.layout, children: updatedChildren };
+
+          debouncedUpdate(updatedLayout);
+          return { layout: updatedLayout };
+        }
+
+        return state;
+      });
+    },
+  };
+});
+
+// 1. Precisa de um estado para gerenciar os objetos construidos pelo editor;
+
+// 2. Precisa de um estado para gerenciar os estilos dos elementos;
+//    1. Precisa gerenciar o estilo do elemento no layout;
+//    2. Precisa gerenciar o estilo do elemento convertido;
+
+// 3. Precisa de um estado para gerenciar as funções do editor;
+//    1. Ligar/Desligar modo de edição;
+//    2. Abir/Fechar árvore;
+//    3. Selecionar modo de visualização: (desktop, tablet, mobile)
+//    4. Abrir/Fechar barra lateral;
+//    5. Selecionar código a ser convertido;
+//       1. Selecionar visualização do código;
+//       2. Selecionar visualização dos estilos;
+//    6. Selecionar o elemento atual a ser editado
+
+export type EditorStoreElementsType =
+  | ImageProps
+  | TextProps
+  | ContainerProps
+  | LinkProps;
+
+export type LayoutStyle = {
+  all?: Record<string, CSSProperties>;
+  sm?: Record<string, CSSProperties>;
+  md?: Record<string, CSSProperties>;
+  lg?: Record<string, CSSProperties>;
+};
+
+export type EditorStoreLayoutType = {
+  id: string;
+  type: "layout";
+  name: string;
+  children: EditorStoreElementsType[];
+  style: LayoutStyle;
+};
+
+export type EditorStoreStylesType = {
+  layout?: Record<string, CSSProperties>;
+  converted?: Record<string, CSSProperties>;
+};
+
+type Breakpoints = "all" | "lg" | "md" | "sm";
+
+export type EditorStoreFunctionsType = {
+  previewEditMode: boolean;
+  currentElementToEdit: EditorStoreLayoutType | EditorStoreElementsType | null;
+  treeOpen: boolean;
+  subEditorOpen: boolean;
+  breakpoint: Breakpoints;
+  viewLayout: boolean;
+  sidebarOpen: boolean;
+  codeSelection: {
+    language: "VTEX IO";
+    viewStyles: boolean;
+  };
+};
+
+export type EditorStore = {
+  layout: EditorStoreLayoutType;
+  styles: EditorStoreStylesType | null;
+  editorFunctions: EditorStoreFunctionsType;
+  setLayout: (layout: EditorStoreLayoutType) => void;
+  setStyles: (
+    className: string,
+    styles: Record<string, CSSProperties>,
+    type: "layout" | "converted"
+  ) => void;
+  setEditorFunctions: (fn: Partial<EditorStore["editorFunctions"]>) => void;
+};
+
+const INITIAL_EDITOR_FUNCTIONS = {
+  previewEditMode: true,
+  currentElementToEdit: null,
+  treeOpen: false,
+  sidebarOpen: true,
+  viewLayout: true,
+  subEditorOpen: false,
+  breakpoint: "all",
+  codeSelection: {
+    languages: "VTEX IO",
+    viewStyles: false,
+  },
+};
+
+export const mappedBreakpoints: { [key in Breakpoints]: string } = {
+  all: "@media screen",
+  sm: "@media (width <= 375px)",
+  md: "@media (width <= 820px)",
+  lg: "@media (width > 820px)",
+};
+
+export const useEditorStore = create<EditorStore>((set) => {
+  const debouncedUpdate = debounce(updateCurrentPreviewOnDB, 500);
+
+  return {
+    layout: INITIAL_LAYOUT,
+    styles: null,
+    editorFunctions: INITIAL_EDITOR_FUNCTIONS,
+    setLayout: (data) => {
+      set((state) => {
+        if ((data as EditorStoreLayoutType).type === "layout") {
+          const newLayout = {
+            ...state.layout,
+            ...(data as EditorStoreLayoutType),
+          };
+          debouncedUpdate(newLayout);
+
+          if (state.editorFunctions.subEditorOpen) {
+            state.setEditorFunctions({
+              ...state.editorFunctions,
+              currentElementToEdit: newLayout,
+            });
+          }
+
+          return { layout: newLayout };
+        }
+
+        if (
+          (data as EditorStoreElementsType)?.indexPath &&
+          (data as LayoutChildrenType)?.indexPath.length > 0
+        ) {
+          const updateElement = (
+            children: EditorStoreElementsType[],
+            path: number[]
+          ): EditorStoreElementsType[] => {
+            if (path.length === 1) {
+              return children.map((child, index) =>
+                index === path[0]
+                  ? { ...child, ...(data as EditorStoreElementsType) }
+                  : child
+              );
+            }
+
+            return children.map((child, index) =>
+              index === path[0] && "children" in child
+                ? {
+                    ...child,
+                    children: updateElement(
+                      child.children as EditorStoreElementsType[],
+                      path.slice(1)
+                    ),
+                  }
+                : child
+            );
+          };
+
+          if (state.editorFunctions.subEditorOpen) {
+            state.setEditorFunctions({
+              ...state.editorFunctions,
+              currentElementToEdit: data,
+            });
+          }
+
+          const updatedChildren = updateElement(
+            state.layout.children,
+            (data as EditorStoreElementsType)?.indexPath
+          );
+          const updatedLayout = { ...state.layout, children: updatedChildren };
+
+          debouncedUpdate(updatedLayout);
+          return { layout: updatedLayout };
+        }
+
+        return state;
+      });
+    },
+    setStyles: (className, styles, type) => {
+      set((state) => {
+        return {
+          styles: {
+            ...state?.styles,
+            [type]: {
+              ...(state?.styles?.[type]
+                ? state?.styles?.[type][
+                    mappedBreakpoints[state.editorFunctions.breakpoint]
+                  ]
+                : {}),
+              [mappedBreakpoints[state.editorFunctions.breakpoint]]: {
+                ...state?.styles?.[type]?.[state.editorFunctions.breakpoint],
+                [`.${className}`]: {
+                  ...styles,
+                },
+              },
+            },
           },
         };
-      }
-
-      const prevClone = { ...state.previewElements };
-
-      const setDataByPath = (path: number[], newData: Element) => {
-        let current: EditorContextI["previewElements"] | Element = prevClone;
-
-        for (let i = 0; i < path.length - 1; i++) {
-          current = current?.children[path[i]];
-        }
-
-        // Obtém o índice final do caminho
-        const lastIndex = path[path.length - 1];
-
-        if (current?.children && lastIndex !== undefined) {
-          current.children[lastIndex] = newData; // Aqui alteramos diretamente a referência correta
-        }
-
-        const updateSubEditor = () => {
-          const newSubEditor = { ...state.subEditor, element: newData };
-
-          state.setSubEditor(newSubEditor);
-        };
-        updateSubEditor();
-      };
-
-      setDataByPath(data?.indexPath || [], data as Element);
-
-      return { previewElements: prevClone };
-    }),
-}));
+      });
+    },
+    setEditorFunctions: (fn) =>
+      set((state) => ({
+        editorFunctions: { ...state.editorFunctions, ...fn },
+      })),
+  };
+});

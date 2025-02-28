@@ -1,3 +1,4 @@
+import { LayoutStyle } from "@/modules/Editor/context";
 import { BaseProps } from "./base";
 
 export type ImageProps = BaseProps & {
@@ -6,11 +7,5 @@ export type ImageProps = BaseProps & {
     alt: string;
     title: string;
   };
-  style: {
-    width: string;
-    height: string;
-    borderRadius: string;
-    boxShadow: string;
-    opacity: string;
-  };
+  style: LayoutStyle;
 };

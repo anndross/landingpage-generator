@@ -5,10 +5,13 @@ import clsx from "clsx";
 import { useState } from "react";
 
 export function FontStyle() {
+  const { setLayout, settings } = useEditor();
+
   const {
-    useEditElement,
-    subEditor: { element },
-  } = useEditor();
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   const [value, setValue] = useState<string[]>([]);
 
@@ -41,10 +44,10 @@ export function FontStyle() {
             } as { [key: string]: string }
           );
 
-          useEditElement({
-            ...element,
+          setLayout({
+            ...currentElement,
             style: {
-              ...element?.style,
+              ...currentElement?.style,
               fontWeight: "",
               fontStyle: "",
               textDecoration: "",

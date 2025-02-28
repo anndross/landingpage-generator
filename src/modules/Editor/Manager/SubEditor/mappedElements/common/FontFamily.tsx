@@ -10,10 +10,13 @@ import { TextProps } from "@/types/text";
 import fontFamily from "@/shared/editor/data/config/Text/font-family.json";
 
 export function FontFamily() {
+  const { setLayout, settings } = useEditor();
+
   const {
-    useEditElement,
-    subEditor: { element },
-  } = useEditor();
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div>
@@ -21,9 +24,9 @@ export function FontFamily() {
 
       <Select
         onValueChange={(value) =>
-          useEditElement({
-            ...element,
-            style: { ...element?.style, fontFamily: value },
+          setLayout({
+            ...currentElement,
+            style: { ...currentElement?.style, fontFamily: value },
           } as TextProps)
         }
         required

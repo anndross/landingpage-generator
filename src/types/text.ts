@@ -1,3 +1,4 @@
+import { LayoutStyle } from "@/modules/Editor/context";
 import { BaseProps } from "./base";
 import fontFamilyJSON from "@/shared/editor/data/config/Text/font-family.json";
 import fontSizeJSON from "@/shared/editor/data/config/Text/font-size.json";
@@ -38,14 +39,6 @@ export type TextProps = BaseProps & {
   settings: {
     value: string;
     as: AvailableTags;
-    link?: string;
   };
-  style: {
-    fontStyle: FontStyle;
-    fontSize: FontSize;
-    fontFamily: FontFamily;
-    textDecoration: string;
-    fontWeight: FontWeight;
-    color: string;
-  };
+  style: LayoutStyle;
 };

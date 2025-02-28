@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { Manager } from "./Manager";
 import { Preview, PreviewProps } from "./Preview";
-import { EditableElement } from "./context";
 
 interface EditorProps {
   id: string;

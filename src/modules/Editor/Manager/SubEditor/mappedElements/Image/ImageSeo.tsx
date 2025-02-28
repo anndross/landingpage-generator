@@ -1,14 +1,14 @@
 import { Input } from "@/components/ui/input";
-import { useEditor } from "@/modules/Editor/context";
-import { ImageProps } from "@/types/image";
+// import { useEditor } from "@/modules/Editor/context";
 
 export function ImageSeo() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  // const { setLayout, settings } = useEditor();
 
-  const element = Element as ImageProps;
+  // const {
+  //   manager: {
+  //     subEditor: { currentElement },
+  //   },
+  // } = settings;
 
   return (
     <div className="flex flex-col items-start">

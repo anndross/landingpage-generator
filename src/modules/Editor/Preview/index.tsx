@@ -1,72 +1,43 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
 import { PreviewCode } from "./PreviewCode";
-import { EditableElement, useEditor } from "../context";
+import { EditorType, useEditorStore } from "../context";
 import { PreviewHeader } from "./components/PreviewHeader";
 import { HideComponent } from "@/components/HideComponent";
 import { PreviewLayout } from "./PreviewLayout";
-import { Element } from "@/types/element";
 
 export interface PreviewProps {
-  layout: EditableElement & {
-    children: Element[];
-    name: string;
-    id: string;
-    type: "layout";
-  };
+  layout: EditorType["layout"];
 }
 
-export function Preview({ layout }: PreviewProps) {
-  const { preview, useEditElement } = useEditor();
+export function Preview({ layout: layoutData }: PreviewProps) {
+  const { setLayout, editorFunctions } = useEditorStore();
 
-  useEffect(() => {
-    useEditElement(layout);
-  }, [layout]);
+  useLayoutEffect(() => {
+    if (layoutData) {
+      setLayout(layoutData);
+    }
+    return () => {};
+  }, [layoutData]);
 
   return (
-    <div className="relative flex flex-col justify-between gap-2 h-full w-[calc(100%-256px)] pt-14">
+    <div className="relative flex flex-col justify-between gap-2 h-full w-full pt-14">
       <PreviewHeader />
 
-      <HideComponent className="w-full h-full" hide={preview.type !== "layout"}>
+      <HideComponent
+        className="w-full h-full overflow-y-auto"
+        hide={editorFunctions.viewLayout}
+      >
         <PreviewLayout />
       </HideComponent>
 
-      <HideComponent className="w-full h-full" hide={preview.type !== "code"}>
+      <HideComponent
+        className="w-full h-full"
+        hide={!editorFunctions.viewLayout}
+      >
         <PreviewCode />
       </HideComponent>
     </div>
   );
 }
-
-// console.log("PreviewElements:::", previewElements);
-
-// const isMountingRef = useRef(true);
-
-// useEffect(() => {
-//   setPreviewElements({ ...layout });
-// }, [layout.id]);
-
-// useEffect(() => {
-//   const updatePreviewElementsOnDB = async () => {
-//     await fetch(`/api/private/preview/update/${previewElements?.id}`, {
-//       method: "PUT",
-//       body: JSON.stringify({
-//         style: previewElements?.style,
-//         children: previewElements?.children,
-//         name: previewElements?.name,
-//       }),
-//       headers: {
-//         Authorization: "Bearer " + cookies.get("auth_token"),
-//         Accept: "application/json",
-//         "Content-Type": "application/json",
-//       },
-//     });
-//   };
-
-//   if (!isMountingRef.current) {
-//     updatePreviewElementsOnDB();
-//   } else {
-//     isMountingRef.current = false;
-//   }
-// }, [previewElements]);

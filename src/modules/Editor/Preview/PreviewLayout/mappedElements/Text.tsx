@@ -1,6 +1,7 @@
 import { TextProps } from "@/types/text";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useEditor } from "@/modules/Editor/context";
+import DOMPurify from "isomorphic-dompurify";
 
 interface EditableTextProps {
   data: TextProps;
@@ -12,11 +13,9 @@ export function Text({
     settings: { as: AS, value },
   },
 }: EditableTextProps) {
-  const {
-    previewElements,
-    useEditElement,
-    preview: { canEdit },
-  } = useEditor();
+  const { layout, setLayout } = useEditor();
+
+  console.log("teste sanitizedContent");
 
   const [editableContent, setEditableContent] = useState(value || "");
   const [isEditable, setIsEditable] = useState(false);
@@ -29,30 +28,26 @@ export function Text({
     (evt: ChangeEvent<HTMLHeadingElement>) => {
       setIsEditable(false);
 
-      setEditableContent(evt.currentTarget.innerHTML);
+      setEditableContent(evt.currentTarget.innerText);
 
-      useEditElement({
+      setLayout({
         ...data,
-        settings: { ...data.settings, value: evt.currentTarget.innerHTML },
+        settings: { ...data.settings, value: evt.currentTarget.innerText },
       });
     },
-    [previewElements]
+    [layout]
   );
+  const sanitizer = DOMPurify.sanitize;
+
+  const sanitizedContent = sanitizer(editableContent);
+  console.log("teste", { sanitizedContent });
 
   const props = {
     contentEditable: isEditable,
     onBlur: onContentBlur,
     onDoubleClick: () => setIsEditable(true),
-    dangerouslySetInnerHTML: { __html: editableContent },
+    dangerouslySetInnerHTML: { __html: sanitizedContent },
   };
 
-  return (
-    <AS
-      {...props}
-      style={{ ...data.style }}
-      {...(AS === "a" && !canEdit
-        ? ({ href: data?.settings?.link || "" } as any)
-        : {})}
-    />
-  );
+  return <AS {...props} style={{ ...data.style }} />;
 }

@@ -9,10 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEditor } from "../../context";
+import { useEditorStore } from "../../context";
 
 export function PreviewDropdown({}) {
-  const { setPreview } = useEditor();
+  const { setEditorFunctions } = useEditorStore();
 
   return (
     <DropdownMenu>
@@ -24,10 +24,9 @@ export function PreviewDropdown({}) {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() =>
-              setPreview({
-                style: false,
-                type: "layout",
-                option: "desktop",
+              setEditorFunctions({
+                breakpoint: "lg",
+                viewLayout: true,
               })
             }
           >
@@ -39,10 +38,12 @@ export function PreviewDropdown({}) {
           <DropdownMenuLabel>Código</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() =>
-              setPreview({
-                style: false,
-                type: "code",
-                option: "VTEX IO",
+              setEditorFunctions({
+                viewLayout: false,
+                codeSelection: {
+                  language: "VTEX IO",
+                  viewStyles: false,
+                },
               })
             }
           >

@@ -3,12 +3,13 @@ import { useEditor } from "@/modules/Editor/context";
 import { ImageProps } from "@/types/image";
 
 export function ImageUrl() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as ImageProps;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div className="flex flex-col gap-2 items-start">
@@ -17,11 +18,14 @@ export function ImageUrl() {
       </label>
       <Input
         placeholder="URL"
-        value={element?.settings.src}
+        value={(currentElement as ImageProps)?.settings.src}
         onChange={(evt) =>
-          useEditElement({
-            ...element,
-            settings: { ...element?.settings, src: evt.target.value },
+          setLayout({
+            ...currentElement,
+            settings: {
+              ...(currentElement as ImageProps)?.settings,
+              href: evt.target.value,
+            },
           })
         }
         id="image-url"

@@ -18,12 +18,15 @@ import {
 import { RxMargin, RxPadding } from "react-icons/rx";
 
 export function Spacing() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as any;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
+
+  const element = currentElement;
 
   const MarginTopIcon = () => (
     <LuSquareDashedBottom className="rotate-180 h-6 w-6" />
@@ -56,7 +59,7 @@ export function Spacing() {
       left: `${marginTopNumber}px ${marginRightNumber}px ${marginBottomNumber}px ${value}px`,
     };
 
-    useEditElement({
+    setLayout({
       ...element,
       style: {
         ...element?.style,
@@ -84,7 +87,7 @@ export function Spacing() {
       left: `${paddingTopNumber}px ${paddingRightNumber}px ${paddingBottomNumber}px ${value}px`,
     };
 
-    useEditElement({
+    setLayout({
       ...element,
       style: {
         ...element?.style,

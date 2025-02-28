@@ -3,24 +3,25 @@ import { useEditor } from "@/modules/Editor/context";
 import { LinkProps } from "@/types/link";
 
 export function LinkHref() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as LinkProps;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">URL</label>
       <Input
-        value={element?.settings?.href || ""}
+        value={(currentElement as LinkProps)?.settings?.href || ""}
         onChange={(evt) => {
-          useEditElement({
-            ...element,
+          setLayout({
+            ...currentElement,
             settings: {
-              ...element?.settings,
-              link: evt.target.value,
+              ...(currentElement as LinkProps)?.settings,
+              href: evt.target.value,
             },
           } as LinkProps);
         }}

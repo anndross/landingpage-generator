@@ -1,6 +1,6 @@
 // lib/firebase.ts
 import admin from "firebase-admin";
-import { getFirestore, setLogFunction } from "firebase-admin/firestore";
+import { getFirestore } from "firebase-admin/firestore";
 
 const config = {
   credential: admin.credential.cert(

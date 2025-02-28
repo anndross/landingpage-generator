@@ -4,25 +4,26 @@ import { useEditor } from "@/modules/Editor/context";
 import { TextProps } from "@/types/text";
 
 export function TextTag() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as TextProps;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Tag</label>
       <ToggleGroup
         variant="outline"
-        value={element?.settings.as}
+        value={(currentElement as TextProps)?.settings.as}
         onValueChange={(value) => {
           if (value)
-            useEditElement({
-              ...element,
+            setLayout({
+              ...currentElement,
               settings: {
-                ...element?.settings,
+                ...(currentElement as TextProps)?.settings,
                 as: value,
               },
             } as TextProps);

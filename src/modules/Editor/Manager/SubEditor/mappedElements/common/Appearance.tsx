@@ -8,45 +8,36 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { InputWithIcon } from "@/components/ui/input-with-icon";
-import { useEditor } from "@/modules/Editor/context";
 import {
   RxCornerBottomLeft,
   RxCornerBottomRight,
   RxCornerTopLeft,
   RxCornerTopRight,
 } from "react-icons/rx";
+import { GetCurrentStyles, UpdateCurrentStyles } from "../../hooks";
 
 export function Appearance() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
-
-  const element = Element as any;
-
   return (
     <div className="">
       <span className="text-sm text-zinc-600 font-medium">Aparência</span>
       <div className="flex flex-col gap-2">
         <ColorPicker
-          color={element?.style.backgroundColor || "#fff"}
+          color={GetCurrentStyles("backgroundColor") || "#fff"}
           setColor={(color) =>
-            useEditElement({
-              ...element,
-              style: { ...element?.style, backgroundColor: color },
-            } as any)
+            UpdateCurrentStyles({
+              backgroundColor: color,
+            })
           }
         />
         <div className="flex gap-2">
           <Input
             max={1}
             min={0}
-            value={element?.style.opacity}
+            value={GetCurrentStyles("opacity")}
             onChange={(evt) =>
-              useEditElement({
-                ...element,
-                style: { ...element?.style, opacity: evt.target.value },
-              } as any)
+              UpdateCurrentStyles({
+                opacity: evt.target.value,
+              })
             }
             type="number"
             placeholder="Opacidade"
@@ -59,13 +50,8 @@ export function Appearance() {
 }
 
 function AppearanceRadius() {
-  const {
-    useEditElement,
-    subEditor: { element },
-  } = useEditor();
-
   const [radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft] =
-    (element as any)?.style.borderRadius
+    GetCurrentStyles("borderRadius")
       ?.split(" ")
       ?.map((radius: string) => radius.replace(/\D/g, "").trim()) || [];
 
@@ -81,52 +67,36 @@ function AppearanceRadius() {
           <InputWithIcon
             value={radiusTopLeft}
             onChange={(evt) => {
-              useEditElement({
-                ...element,
-                style: {
-                  ...element?.style,
-                  borderRadius: `${evt.target.value || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
-                },
-              } as any);
+              UpdateCurrentStyles({
+                borderRadius: `${evt.target.value || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
+              });
             }}
             icon={RxCornerTopLeft}
           />
           <InputWithIcon
             value={radiusTopRight}
             onChange={(evt) => {
-              useEditElement({
-                ...element,
-                style: {
-                  ...element?.style,
-                  borderRadius: `${radiusTopLeft || 0}px ${evt.target.value || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
-                },
-              } as any);
+              UpdateCurrentStyles({
+                borderRadius: `${radiusTopLeft || 0}px ${evt.target.value || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`,
+              });
             }}
             icon={RxCornerTopRight}
           />
           <InputWithIcon
             value={radiusBottomRight}
             onChange={(evt) =>
-              useEditElement({
-                ...element,
-                style: {
-                  ...element?.style,
-                  borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${evt.target.value || 0}px ${radiusBottomLeft || 0}px`,
-                },
-              } as any)
+              UpdateCurrentStyles({
+                borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${evt.target.value || 0}px ${radiusBottomLeft || 0}px`,
+              })
             }
             icon={RxCornerBottomLeft}
           />
           <InputWithIcon
             value={radiusBottomLeft}
             onChange={(evt) =>
-              useEditElement({
-                ...element,
-                style: {
-                  ...element?.style,
-                  borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${evt.target.value || 0}px`,
-                },
-              } as any)
+              UpdateCurrentStyles({
+                borderRadius: `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${evt.target.value || 0}px`,
+              })
             }
             icon={RxCornerBottomRight}
           />

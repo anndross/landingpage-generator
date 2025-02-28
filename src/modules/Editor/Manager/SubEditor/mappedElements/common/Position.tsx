@@ -10,13 +10,14 @@ import {
 } from "react-icons/md";
 import { TbBaselineDensityMedium } from "react-icons/tb";
 
-export function ContainerPosition() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+export function Position() {
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as ContainerProps;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div className="flex flex-col gap-3">
@@ -24,12 +25,12 @@ export function ContainerPosition() {
         <span className="text-sm text-zinc-600 font-medium">Direção</span>
         <ToggleGroup
           variant="outline"
-          value={element?.style.flexDirection}
+          value={currentElement?.style.flexDirection}
           onValueChange={(value) => {
-            useEditElement({
-              ...element,
+            setLayout({
+              ...currentElement,
               style: {
-                ...element?.style,
+                ...currentElement?.style,
                 flexDirection: value,
               },
             } as ContainerProps);
@@ -64,13 +65,13 @@ export function ContainerPosition() {
           variant="outline"
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
-          value={element?.style.justifyContent}
+          value={currentElement?.style.justifyContent}
           onValueChange={(value) => {
             if (value)
-              useEditElement({
-                ...element,
+              setLayout({
+                ...currentElement,
                 style: {
-                  ...element?.style,
+                  ...currentElement?.style,
                   justifyContent: value,
                 },
               } as ContainerProps);
@@ -119,13 +120,13 @@ export function ContainerPosition() {
           variant="outline"
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
-          value={element?.style.alignItems}
+          value={currentElement?.style.alignItems}
           onValueChange={(value) => {
             if (value)
-              useEditElement({
-                ...element,
+              setLayout({
+                ...currentElement,
                 style: {
-                  ...element?.style,
+                  ...currentElement?.style,
                   alignItems: value,
                 },
               } as ContainerProps);

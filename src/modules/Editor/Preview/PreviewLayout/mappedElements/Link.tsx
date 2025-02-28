@@ -1,3 +1,4 @@
+import { useEditorStore } from "@/modules/Editor/context";
 import { LinkProps } from "@/types/link";
 
 interface EditableLinkProps {
@@ -5,14 +6,15 @@ interface EditableLinkProps {
 }
 
 export function Link({ data }: EditableLinkProps) {
+  const {
+    editorFunctions: { breakpoint },
+  } = useEditorStore();
+
   return (
     <a
       {...data.settings}
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        ...data.style,
+        ...data.style[breakpoint],
       }}
     >
       {data.settings.value}

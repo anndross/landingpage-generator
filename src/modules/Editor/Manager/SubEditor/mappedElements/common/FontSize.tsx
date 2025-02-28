@@ -10,10 +10,13 @@ import { TextProps } from "@/types/text";
 import fontSize from "@/shared/editor/data/config/Text/font-size.json";
 
 export function FontSize() {
+  const { setLayout, settings } = useEditor();
+
   const {
-    useEditElement,
-    subEditor: { element },
-  } = useEditor();
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   return (
     <div>
@@ -22,9 +25,9 @@ export function FontSize() {
       </label>
       <Select
         onValueChange={(value) =>
-          useEditElement({
-            ...element,
-            style: { ...element?.style, fontSize: value },
+          setLayout({
+            ...currentElement,
+            style: { ...currentElement?.style, fontSize: value },
           } as TextProps)
         }
         required

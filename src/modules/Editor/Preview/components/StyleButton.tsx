@@ -1,14 +1,17 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useEditor } from "../../context";
+import { useEditorStore } from "../../context";
 
 export function StyleButton() {
-  const { setPreview } = useEditor();
+  const { editorFunctions, setEditorFunctions } = useEditorStore();
   return (
     <Button
       onClick={() => {
-        setPreview({
-          style: true,
+        setEditorFunctions({
+          codeSelection: {
+            ...editorFunctions.codeSelection,
+            viewStyles: true,
+          },
         });
       }}
       variant="outline"

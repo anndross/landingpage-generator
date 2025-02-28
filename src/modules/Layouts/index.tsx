@@ -21,12 +21,14 @@ export async function Layouts() {
   const { layouts } = await response.json();
 
   return (
-    <div>
-      <div className="h-12 pb-0 flex">
+    <div className="flex flex-col pt-14 items-center justify-center">
+      <div className="max-w-[80%] w-full h-12 pb-0 flex gap-4">
         <Search data={layouts || []} />
         <Create />
       </div>
-      <List />
+      <div className="max-w-[80%] w-full">
+        <List />
+      </div>
     </div>
   );
 }

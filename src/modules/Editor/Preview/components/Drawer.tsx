@@ -1,8 +1,8 @@
 "use client";
 import { getElement } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/utils/getElement";
-import { useEditor } from "@/modules/Editor/context";
+import { useEditorStore } from "@/modules/Editor/context";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
-import { CSSProperties } from "react";
+import { CSSProperties, HTMLAttributes } from "react";
 import { Element } from "@/types/element";
 
 interface DrawerProps {
@@ -10,15 +10,23 @@ interface DrawerProps {
   setState: (newState: ItemInterface[]) => void;
   tag: "main" | "div";
   style?: CSSProperties;
+  className?: HTMLAttributes<HTMLDivElement>["className"];
 }
 
-export function Drawer({ tag, state, setState, style }: DrawerProps) {
+export function Drawer({
+  tag,
+  state,
+  setState,
+  style,
+  className,
+}: DrawerProps) {
   const {
-    preview: { canEdit },
-  } = useEditor();
+    editorFunctions: { previewEditMode },
+  } = useEditorStore();
 
   return (
     <ReactSortable
+      className={className}
       tag={tag}
       style={style}
       group={{
@@ -36,7 +44,7 @@ export function Drawer({ tag, state, setState, style }: DrawerProps) {
       }}
     >
       {state.map((item) => {
-        const element = getElement(canEdit, item);
+        const element = getElement(previewEditMode, item);
 
         return element;
       })}

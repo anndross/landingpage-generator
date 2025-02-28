@@ -22,6 +22,7 @@ export function mapStyles(cssData: object) {
     textDecoration: "text-decoration",
     boxShadow: "box-shadow",
     opacity: "opacity",
+    display: "display",
   };
 
   for (const [key, value] of Object.entries(cssData)) {

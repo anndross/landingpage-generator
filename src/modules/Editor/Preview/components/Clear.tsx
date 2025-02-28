@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { AiOutlineClear } from "react-icons/ai";
-import { useEditor } from "../../context";
-import layoutInitialConfig from "@/shared/editor/data/layout.json";
-import { Preview } from "@/types/preview";
+import { INITIAL_LAYOUT, useEditor } from "../../context";
 
 export function Clear() {
-  const { setPreviewElements } = useEditor();
+  const { setLayout, layout } = useEditor();
 
   return (
     <Button
-      onClick={() => setPreviewElements(layoutInitialConfig as Preview)}
+      onClick={() => {
+        setLayout({
+          ...INITIAL_LAYOUT,
+          name: layout.name,
+          id: layout.id,
+        });
+      }}
       variant="outline"
     >
       <AiOutlineClear />

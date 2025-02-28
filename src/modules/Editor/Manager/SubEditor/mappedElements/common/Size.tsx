@@ -15,26 +15,33 @@ import { TbSettings } from "react-icons/tb";
 type UnitType = "px" | "rem" | "em" | "%";
 
 export function Size() {
-  const {
-    useEditElement,
-    subEditor: { element: Element },
-  } = useEditor();
+  const { setLayout, settings } = useEditor();
 
-  const element = Element as any;
+  const {
+    manager: {
+      subEditor: { currentElement },
+    },
+  } = settings;
 
   const [widthUnitValue, setWidthUnitValue] = useState<UnitType>(
-    element.type === "container" ? "%" : "px"
+    currentElement?.type === "container" || currentElement?.type === "layout"
+      ? "%"
+      : "px"
   );
-  const [heightUnitValue, setHeightUnitValue] = useState<UnitType>("px");
+  const [heightUnitValue, setHeightUnitValue] = useState<UnitType>(
+    currentElement?.type === "layout" ? "%" : "px"
+  );
 
   useEffect(() => {
-    if (element) {
-      useEditElement({
-        ...element,
+    if (currentElement) {
+      setLayout({
+        ...currentElement,
         style: {
-          ...element?.style,
-          width: element?.style.width.replace(/\D/g, "") + widthUnitValue,
-          height: element?.style.height.replace(/\D/g, "") + heightUnitValue,
+          ...currentElement?.style,
+          width:
+            currentElement?.style.width.replace(/\D/g, "") + widthUnitValue,
+          height:
+            currentElement?.style.height.replace(/\D/g, "") + heightUnitValue,
         },
       } as any);
     }
@@ -49,12 +56,12 @@ export function Size() {
             type="number"
             id="width-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={element?.style.width.replace(/\D/g, "")}
+            value={currentElement?.style.width.replace(/\D/g, "")}
             onChange={(evt) => {
-              useEditElement({
-                ...element,
+              setLayout({
+                ...currentElement,
                 style: {
-                  ...element?.style,
+                  ...currentElement?.style,
                   width: evt.target.value + widthUnitValue,
                 },
               } as any);
@@ -124,12 +131,12 @@ export function Size() {
             type="number"
             id="height-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={element?.style.height.replace(/\D/g, "")}
+            value={currentElement?.style.height.replace(/\D/g, "")}
             onChange={(evt) => {
-              useEditElement({
-                ...element,
+              setLayout({
+                ...currentElement,
                 style: {
-                  ...element?.style,
+                  ...currentElement?.style,
                   height: evt.target.value + heightUnitValue,
                 },
               } as any);

@@ -3,15 +3,14 @@ import { ReactSortable } from "react-sortablejs";
 import { ReactNode, useState } from "react";
 import { Text } from "./mappedElements/Text";
 import { Container } from "./mappedElements/Container";
-import { PreviewElement } from "@/modules/Editor/context";
 import dataElements from "@/shared/editor/data/elements.json";
 import { Image } from "./mappedElements/Image";
 import { Link } from "./mappedElements/Link";
+import { Element } from "@/types/element";
+import clsx from "clsx";
 
 export function Elements() {
-  const [state, setState] = useState<PreviewElement[]>(
-    dataElements as PreviewElement[]
-  );
+  const [state, setState] = useState<Element[]>(dataElements as Element[]);
 
   return (
     <ReactSortable
@@ -26,13 +25,16 @@ export function Elements() {
       sort={false}
       fallbackOnBody
       ghostClass="ghost"
-      className="w-full h-full grid grid-cols-2 place-content-start gap-2"
+      className={clsx({
+        "w-full h-[100%-80px] overflow-y-auto grid grid-cols-2 place-content-start gap-2":
+          true,
+      })}
       list={state}
       setList={setState}
     >
       {state.map((item) => {
         const elements: Partial<{
-          [key in PreviewElement["type"]]: ReactNode;
+          [key in Element["type"]]: ReactNode;
         }> = {
           text: <Text key={item.id} />,
           container: <Container key={item.id} />,
