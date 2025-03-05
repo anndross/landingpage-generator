@@ -1,4 +1,4 @@
-import { LayoutStyle } from "@/modules/Editor/context";
+import { LayoutStyle } from "@/modules/Editor/store";
 import { BaseProps } from "./base";
 
 export type LinkProps = BaseProps & {

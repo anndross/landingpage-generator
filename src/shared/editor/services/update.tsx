@@ -1,5 +1,5 @@
 "use server";
-import { EditorType } from "@/modules/Editor/context";
+import { EditorType } from "@/modules/Editor/store";
 import { cookies } from "next/headers";
 
 export async function updateCurrentPreviewOnDB(layout: EditorType["layout"]) {

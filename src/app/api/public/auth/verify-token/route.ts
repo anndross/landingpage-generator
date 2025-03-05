@@ -1,4 +1,4 @@
-import { firebase } from "@/config/firebase-admin";
+import { firebase } from "@/configs/firebase-admin";
 import { messages } from "@/helpers/exceptions";
 
 export async function POST(req: Request) {

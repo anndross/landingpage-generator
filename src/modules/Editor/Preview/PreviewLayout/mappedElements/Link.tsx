@@ -1,23 +1,19 @@
-import { useEditorStore } from "@/modules/Editor/context";
 import { LinkProps } from "@/types/link";
+import { GetSettings, GetSettingsProperty, GetStyles } from "../hooks";
 
 interface EditableLinkProps {
   data: LinkProps;
 }
 
 export function Link({ data }: EditableLinkProps) {
-  const {
-    editorFunctions: { breakpoint },
-  } = useEditorStore();
-
   return (
     <a
-      {...data.settings}
+      {...GetSettings(data)}
       style={{
-        ...data.style[breakpoint],
+        ...GetStyles(data),
       }}
     >
-      {data.settings.value}
+      {GetSettingsProperty(data, "value")}
     </a>
   );
 }

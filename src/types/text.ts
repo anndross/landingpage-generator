@@ -1,4 +1,4 @@
-import { LayoutStyle } from "@/modules/Editor/context";
+import { LayoutStyle } from "@/modules/Editor/store";
 import { BaseProps } from "./base";
 import fontFamilyJSON from "@/shared/editor/data/config/Text/font-family.json";
 import fontSizeJSON from "@/shared/editor/data/config/Text/font-size.json";

@@ -6,11 +6,13 @@ import { Container } from "./mappedElements/Container";
 import dataElements from "@/shared/editor/data/elements.json";
 import { Image } from "./mappedElements/Image";
 import { Link } from "./mappedElements/Link";
-import { Element } from "@/types/element";
 import clsx from "clsx";
+import { ElementsType } from "../../store";
 
 export function Elements() {
-  const [state, setState] = useState<Element[]>(dataElements as Element[]);
+  const [state, setState] = useState<ElementsType[]>(
+    dataElements as ElementsType[]
+  );
 
   return (
     <ReactSortable
@@ -34,7 +36,7 @@ export function Elements() {
     >
       {state.map((item) => {
         const elements: Partial<{
-          [key in Element["type"]]: ReactNode;
+          [key in ElementsType["type"]]: ReactNode;
         }> = {
           text: <Text key={item.id} />,
           container: <Container key={item.id} />,

@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEditorStore } from "../../context";
+import { Breakpoints, useEditorStore } from "@/modules/Editor/store";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function PreviewDropdown({}) {
   const { setEditorFunctions } = useEditorStore();
@@ -22,16 +23,7 @@ export function PreviewDropdown({}) {
       <DropdownMenuContent align="start" className="w-56">
         <DropdownMenuLabel>Layout</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() =>
-              setEditorFunctions({
-                breakpoint: "lg",
-                viewLayout: true,
-              })
-            }
-          >
-            Desktop
-          </DropdownMenuItem>
+          <ToggleLayoutSize />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -53,5 +45,34 @@ export function PreviewDropdown({}) {
         <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function ToggleLayoutSize() {
+  const {
+    setEditorFunctions,
+    editorFunctions: { breakpoint },
+  } = useEditorStore();
+
+  return (
+    <ToggleGroup
+      onValueChange={(value) =>
+        setEditorFunctions({ breakpoint: value as Breakpoints })
+      }
+      className="justify-start"
+      value={breakpoint}
+      defaultValue="lg"
+      type="single"
+    >
+      <ToggleGroupItem value="lg" aria-label="Toggle lg">
+        desktop
+      </ToggleGroupItem>
+      <ToggleGroupItem value="md" aria-label="Toggle md">
+        tablet
+      </ToggleGroupItem>
+      <ToggleGroupItem value="sm" aria-label="Toggle sm">
+        celular
+      </ToggleGroupItem>
+    </ToggleGroup>
   );
 }

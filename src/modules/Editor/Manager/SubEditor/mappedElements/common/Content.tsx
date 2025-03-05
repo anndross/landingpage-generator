@@ -1,29 +1,19 @@
 import { Input } from "@/components/ui/input";
-import { useEditor } from "@/modules/Editor/context";
-import { TextProps } from "@/types/text";
+import {
+  useGetCurrentSettings,
+  useUpdateCurrentSettings,
+} from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function Content() {
-  const { setLayout, settings } = useEditor();
-
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Texto</label>
       <Input
-        value={(currentElement as TextProps)?.settings.value}
+        value={useGetCurrentSettings("value") || ""}
         onChange={(evt) => {
-          setLayout({
-            ...currentElement,
-            settings: {
-              ...(currentElement as TextProps)?.settings,
-              value: evt.target.value,
-            },
-          } as TextProps);
+          useUpdateCurrentSettings({
+            value: evt.target.value,
+          });
         }}
         required
         name="value"

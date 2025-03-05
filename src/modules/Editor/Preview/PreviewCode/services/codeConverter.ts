@@ -4,32 +4,32 @@ import flexLayoutRowJson from "@/modules/Editor/Preview/PreviewCode/mappedElemen
 import flexLayoutColJson from "@/modules/Editor/Preview/PreviewCode/mappedElements/vtexIo/flex-layout.col.json";
 import linkJson from "@/modules/Editor/Preview/PreviewCode/mappedElements/vtexIo/link.json";
 
-import {
-  EditorType,
-  LayoutChildrenType,
-  PreviewType,
-} from "@/modules/Editor/context";
 import { TextProps } from "@/types/text";
 import { ImageProps } from "@/types/image";
 import { LinkProps } from "@/types/link";
 import { mapStyles } from "@/helpers/mapStyles";
+import {
+  CodeSelection,
+  EditorStore,
+  ElementsType,
+} from "@/modules/Editor/store";
 
 export function codeConverter(
-  language: PreviewType["code"]["language"],
-  elements: EditorType["layout"]
+  language: CodeSelection["language"],
+  layout: EditorStore["layout"]
 ) {
   const methods = {
     "VTEX IO": vtexIoConverter,
   };
 
-  if (!language || !elements) return null;
+  if (!language || !layout) return null;
 
   const instance = methods[language];
 
-  return instance(elements);
+  return instance(layout);
 }
 
-export function vtexIoConverter(elements: EditorType["layout"]) {
+export function vtexIoConverter(layout: EditorStore["layout"]) {
   let bodyColStyle =
     "/* ==================== BODY COL ==================== */\n";
   let richTextStyle =
@@ -69,7 +69,7 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
   }
 
   function handleFlexLayout(
-    element: EditorType["layout"] | LayoutChildrenType,
+    element: EditorStore["layout"] | ElementsType,
     result: object[] = []
   ) {
     const flexLayoutCol = {
@@ -85,7 +85,7 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
     };
 
     flexLayoutCol[`flex-layout.col#${element.id}`]["children"] =
-      element?.children?.map((el: LayoutChildrenType) => {
+      element?.children?.map((el: ElementsType) => {
         const mappedTypesName = {
           text: `rich-text#${el.id}`,
           container: `flex-layout.row#${el.id}`,
@@ -120,21 +120,21 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
     result.push(flexLayoutRow, flexLayoutCol);
 
     if (element?.children?.length) {
-      for (const el of element?.children as LayoutChildrenType[]) {
-        const mappedTypesElements: {
-          [key in LayoutChildrenType["type"]]: (
-            el: LayoutChildrenType,
+      for (const el of element?.children as ElementsType[]) {
+        const mappedTypeslayout: {
+          [key in ElementsType["type"]]: (
+            el: ElementsType,
             result?: object[]
           ) => object;
         } = {
           text: (data) => handleRichText(data as TextProps),
           container: (data, result?: object[]) =>
-            handleFlexLayout(data as LayoutChildrenType, result),
+            handleFlexLayout(data as ElementsType, result),
           image: (data) => handleImage(data as ImageProps),
           link: (data) => handleLink(data as LinkProps),
         };
 
-        const handleInstance = mappedTypesElements[el.type];
+        const handleInstance = mappedTypeslayout[el.type];
 
         const data = handleInstance(el, result);
 
@@ -158,9 +158,6 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
     };
 
     image[`image#${element.id}`]["props"]["src"] = element.settings.src || "";
-    image[`image#${element.id}`]["props"]["width"] = element.style.width || "";
-    image[`image#${element.id}`]["props"]["height"] =
-      element.style.height || "";
     image[`image#${element.id}`]["props"]["title"] =
       element.settings.title || "";
     image[`image#${element.id}`]["props"]["alt"] = element.settings.alt || "";
@@ -192,15 +189,15 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
   }
 
   const handlers: {
-    [key in LayoutChildrenType["type"]]: (el: LayoutChildrenType) => object;
+    [key in ElementsType["type"]]: (el: ElementsType) => object;
   } = {
     text: (data) => handleRichText(data as TextProps),
-    container: (data) => handleFlexLayout(data as LayoutChildrenType),
+    container: (data) => handleFlexLayout(data as ElementsType),
     image: (data) => handleImage(data as ImageProps),
     link: (data) => handleLink(data as LinkProps),
   };
 
-  const mappedElements = elements.children.map((el) => {
+  const mappedlayout = layout.children.map((el) => {
     const handlerFn = handlers[el.type];
 
     return handlerFn(el);
@@ -214,7 +211,7 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
       children: ["flex-layout.col#landing-page"],
     },
     "flex-layout.col#landing-page": {
-      children: mappedElements.map((el) => Object.keys(el)[0]),
+      children: mappedlayout.map((el) => Object.keys(el)[0]),
       props: {
         blockClass: ["col-landing-page"],
       },
@@ -223,7 +220,7 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
 
   bodyColStyle += `
     .vtex-flex-layout-0-x-flexCol--col-landing-page ${JSON.stringify(
-      mapStyles(elements?.style || {}),
+      mapStyles(layout?.style || {}),
       null,
       2
     )
@@ -239,7 +236,7 @@ export function vtexIoConverter(elements: EditorType["layout"]) {
       `.trim();
   bodyColStyle += "\n\n";
 
-  const page = [mappedPage, ...mappedElements].reduce((acc: any, item: any) => {
+  const page = [mappedPage, ...mappedlayout].reduce((acc: any, item: any) => {
     return {
       ...acc,
       ...item,

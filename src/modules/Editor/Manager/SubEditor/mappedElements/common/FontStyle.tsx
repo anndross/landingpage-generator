@@ -1,18 +1,10 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/context";
 import fontStyleData from "@/shared/editor/data/config/Text/font-style.json";
 import clsx from "clsx";
 import { useState } from "react";
+import { useUpdateCurrentStyles } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function FontStyle() {
-  const { setLayout, settings } = useEditor();
-
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
   const [value, setValue] = useState<string[]>([]);
 
   return (
@@ -44,16 +36,9 @@ export function FontStyle() {
             } as { [key: string]: string }
           );
 
-          setLayout({
-            ...currentElement,
-            style: {
-              ...currentElement?.style,
-              fontWeight: "",
-              fontStyle: "",
-              textDecoration: "",
-              ...mappedValues,
-            },
-          } as any);
+          useUpdateCurrentStyles({
+            ...mappedValues,
+          });
 
           setValue(values);
         }}

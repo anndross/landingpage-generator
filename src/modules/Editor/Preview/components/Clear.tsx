@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { AiOutlineClear } from "react-icons/ai";
-import { INITIAL_LAYOUT, useEditor } from "../../context";
+import { INITIAL_LAYOUT, useEditorStore } from "../../store";
 
 export function Clear() {
-  const { setLayout, layout } = useEditor();
+  const { setLayout, layout } = useEditorStore();
 
   return (
     <Button

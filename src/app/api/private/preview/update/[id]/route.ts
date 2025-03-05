@@ -1,5 +1,5 @@
 import { messages } from "@/helpers/exceptions";
-import { db, firebase } from "@/config/firebase-admin";
+import { db, firebase } from "@/configs/firebase-admin";
 import { Params } from "@/types/routeContext";
 
 export async function PUT(req: Request, context: { params: Params }) {

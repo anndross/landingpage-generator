@@ -1,6 +1,6 @@
 "use client";
 import { getElement } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/utils/getElement";
-import { useEditorStore } from "@/modules/Editor/context";
+import { useEditorStore } from "@/modules/Editor/store";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
 import { CSSProperties, HTMLAttributes } from "react";
 import { Element } from "@/types/element";

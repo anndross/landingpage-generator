@@ -8,42 +8,39 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/context";
+import { useEditorStore } from "@/modules/Editor/store";
 import { useEffect, useState } from "react";
 import { TbSettings } from "react-icons/tb";
+import {
+  useGetCurrentStyles,
+  useUpdateCurrentStyles,
+} from "@/modules/Editor/Manager/SubEditor/hooks";
 
 type UnitType = "px" | "rem" | "em" | "%";
 
 export function Size() {
-  const { setLayout, settings } = useEditor();
-
   const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
+    setLayout,
+    editorFunctions: { currentElementToEdit },
+  } = useEditorStore();
 
   const [widthUnitValue, setWidthUnitValue] = useState<UnitType>(
-    currentElement?.type === "container" || currentElement?.type === "layout"
+    currentElementToEdit?.type === "container" ||
+      currentElementToEdit?.type === "layout"
       ? "%"
       : "px"
   );
   const [heightUnitValue, setHeightUnitValue] = useState<UnitType>(
-    currentElement?.type === "layout" ? "%" : "px"
+    currentElementToEdit?.type === "layout" ? "%" : "px"
   );
 
   useEffect(() => {
-    if (currentElement) {
-      setLayout({
-        ...currentElement,
-        style: {
-          ...currentElement?.style,
-          width:
-            currentElement?.style.width.replace(/\D/g, "") + widthUnitValue,
-          height:
-            currentElement?.style.height.replace(/\D/g, "") + heightUnitValue,
-        },
-      } as any);
+    if (currentElementToEdit) {
+      useUpdateCurrentStyles({
+        width: useGetCurrentStyles("width").replace(/\D/g, "") + widthUnitValue,
+        height:
+          useGetCurrentStyles("height").replace(/\D/g, "") + heightUnitValue,
+      });
     }
   }, [widthUnitValue, heightUnitValue]);
 
@@ -56,15 +53,11 @@ export function Size() {
             type="number"
             id="width-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={currentElement?.style.width.replace(/\D/g, "")}
+            value={useGetCurrentStyles("width").replace(/\D/g, "")}
             onChange={(evt) => {
-              setLayout({
-                ...currentElement,
-                style: {
-                  ...currentElement?.style,
-                  width: evt.target.value + widthUnitValue,
-                },
-              } as any);
+              useUpdateCurrentStyles({
+                width: evt.target.value + widthUnitValue,
+              });
             }}
             placeholder="Largura"
           />
@@ -131,15 +124,11 @@ export function Size() {
             type="number"
             id="height-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={currentElement?.style.height.replace(/\D/g, "")}
+            value={useGetCurrentStyles("height").replace(/\D/g, "")}
             onChange={(evt) => {
-              setLayout({
-                ...currentElement,
-                style: {
-                  ...currentElement?.style,
-                  height: evt.target.value + heightUnitValue,
-                },
-              } as any);
+              useUpdateCurrentStyles({
+                height: evt.target.value + heightUnitValue,
+              });
             }}
             placeholder="Altura"
           />

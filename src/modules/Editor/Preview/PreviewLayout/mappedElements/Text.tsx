@@ -1,7 +1,8 @@
 import { TextProps } from "@/types/text";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useEditor } from "@/modules/Editor/context";
+import { useEditorStore } from "@/modules/Editor/store";
 import DOMPurify from "isomorphic-dompurify";
+import { GetStyles, UpdateSettings } from "../hooks";
 
 interface EditableTextProps {
   data: TextProps;
@@ -13,7 +14,7 @@ export function Text({
     settings: { as: AS, value },
   },
 }: EditableTextProps) {
-  const { layout, setLayout } = useEditor();
+  const layout = useEditorStore((state) => state.layout);
 
   console.log("teste sanitizedContent");
 
@@ -30,10 +31,7 @@ export function Text({
 
       setEditableContent(evt.currentTarget.innerText);
 
-      setLayout({
-        ...data,
-        settings: { ...data.settings, value: evt.currentTarget.innerText },
-      });
+      UpdateSettings(data, { value: evt.currentTarget.innerText });
     },
     [layout]
   );
@@ -49,5 +47,5 @@ export function Text({
     dangerouslySetInnerHTML: { __html: sanitizedContent },
   };
 
-  return <AS {...props} style={{ ...data.style }} />;
+  return <AS {...props} style={{ ...GetStyles(data) }} />;
 }

@@ -1,9 +1,10 @@
-import { LayoutChildrenType, LayoutStyle } from "@/modules/Editor/context";
+import { ElementsType, LayoutStyle } from "@/modules/Editor/store";
 import { BaseProps } from "./base";
 
 export type ContainerElementProps = {
-  children: LayoutChildrenType[];
+  children: ElementsType[];
   style: LayoutStyle;
+  settings: any;
 };
 
 export type ContainerProps = BaseProps & ContainerElementProps;

@@ -1,13 +1,13 @@
 import {
   EditorType,
-  LayoutChildrenType,
+  ElementsType,
   useEditorStore,
-} from "@/modules/Editor/context";
+} from "@/modules/Editor/store";
 import { Element } from "@/types/element";
 import clsx from "clsx";
 
 interface ItemProps {
-  element: EditorType["layout"] | LayoutChildrenType;
+  element: EditorType["layout"] | ElementsType;
 }
 
 const mappedContent: Partial<{ [key in Element["type"]]: string }> = {

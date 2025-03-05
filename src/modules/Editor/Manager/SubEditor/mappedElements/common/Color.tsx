@@ -1,26 +1,19 @@
 import { ColorPicker } from "@/components/ColorPicker";
-import { useEditor } from "@/modules/Editor/context";
-import { TextProps } from "@/types/text";
 import { useEffect, useState } from "react";
+import {
+  useGetCurrentStyles,
+  useUpdateCurrentStyles,
+} from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function Color() {
-  const { setLayout, settings } = useEditor();
-
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
   const [colorPicker, setColorPicker] = useState(
-    currentElement?.style.color || "#000"
+    useGetCurrentStyles("color") || "#000"
   );
 
   useEffect(() => {
-    setLayout({
-      ...currentElement,
-      style: { ...currentElement?.style, color: colorPicker },
-    } as TextProps);
+    useUpdateCurrentStyles({
+      color: colorPicker,
+    });
   }, [colorPicker]);
 
   return <ColorPicker color={colorPicker} setColor={setColorPicker} />;

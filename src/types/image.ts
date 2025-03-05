@@ -1,4 +1,4 @@
-import { LayoutStyle } from "@/modules/Editor/context";
+import { LayoutStyle } from "@/modules/Editor/store";
 import { BaseProps } from "./base";
 
 export type ImageProps = BaseProps & {
@@ -6,6 +6,7 @@ export type ImageProps = BaseProps & {
     src: string;
     alt: string;
     title: string;
+    url: string;
   };
   style: LayoutStyle;
 };

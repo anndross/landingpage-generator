@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useEditorStore } from "../../context";
+import { useEditorStore } from "../../store";
 
 export function StyleButton() {
   const { editorFunctions, setEditorFunctions } = useEditorStore();

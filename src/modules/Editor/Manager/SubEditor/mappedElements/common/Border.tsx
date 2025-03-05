@@ -1,53 +1,39 @@
 import { ColorPicker } from "@/components/ColorPicker";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/context";
 import {
   CgBorderBottom,
   CgBorderLeft,
   CgBorderRight,
   CgBorderTop,
 } from "react-icons/cg";
+import {
+  useGetCurrentStyles,
+  useUpdateCurrentStyles,
+} from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function Border() {
-  const { setLayout, settings } = useEditor();
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
-  console.log(
-    "currentElement",
-    currentElement,
-    currentElement?.style.borderWidth
-  );
   return (
     <div className="">
       <span className="text-sm text-zinc-600 font-medium">Borda</span>
       <div className="flex flex-col  gap-2">
         <div>
           <ColorPicker
-            color={currentElement?.style.borderColor || "#000"}
+            color={useGetCurrentStyles("borderColor") || "#000"}
             setColor={(value) =>
-              setLayout({
-                ...currentElement,
-                style: { ...currentElement?.style, borderColor: value },
-              } as any)
+              useUpdateCurrentStyles({
+                borderColor: `${value}`,
+              })
             }
           />
         </div>
         <div>
           <Input
-            value={currentElement?.style.borderWidth.replace(/\D/g, "")}
+            value={useGetCurrentStyles("borderWidth")?.replace(/\D/g, "") || ""}
             onChange={(evt) =>
-              setLayout({
-                ...currentElement,
-                style: {
-                  ...currentElement?.style,
-                  borderWidth: evt.target.value + "px",
-                },
-              } as any)
+              useUpdateCurrentStyles({
+                borderWidth: evt.target.value + "px",
+              })
             }
             type="number"
             id="width-input"

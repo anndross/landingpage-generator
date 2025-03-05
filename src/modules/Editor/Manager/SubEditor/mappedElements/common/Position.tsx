@@ -1,6 +1,4 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useEditor } from "@/modules/Editor/context";
-import { ContainerProps } from "@/types/container";
 import { BiAlignLeft, BiAlignMiddle, BiAlignRight } from "react-icons/bi";
 import { LuBetweenVerticalStart } from "react-icons/lu";
 import {
@@ -9,31 +7,23 @@ import {
   MdOutlineVerticalAlignTop,
 } from "react-icons/md";
 import { TbBaselineDensityMedium } from "react-icons/tb";
+import {
+  useGetCurrentStyles,
+  useUpdateCurrentStyles,
+} from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function Position() {
-  const { setLayout, settings } = useEditor();
-
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
   return (
     <div className="flex flex-col gap-3">
       <div>
         <span className="text-sm text-zinc-600 font-medium">Direção</span>
         <ToggleGroup
           variant="outline"
-          value={currentElement?.style.flexDirection}
+          value={useGetCurrentStyles("flexDirection") || ""}
           onValueChange={(value) => {
-            setLayout({
-              ...currentElement,
-              style: {
-                ...currentElement?.style,
-                flexDirection: value,
-              },
-            } as ContainerProps);
+            useUpdateCurrentStyles({
+              flexDirection: `${value}` as "row" | "column",
+            });
           }}
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
@@ -65,16 +55,12 @@ export function Position() {
           variant="outline"
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
-          value={currentElement?.style.justifyContent}
+          value={useGetCurrentStyles("justifyContent") || ""}
           onValueChange={(value) => {
             if (value)
-              setLayout({
-                ...currentElement,
-                style: {
-                  ...currentElement?.style,
-                  justifyContent: value,
-                },
-              } as ContainerProps);
+              useUpdateCurrentStyles({
+                justifyContent: value,
+              });
           }}
         >
           <ToggleGroupItem
@@ -120,16 +106,12 @@ export function Position() {
           variant="outline"
           type="single"
           className="w-full flex mt-2 gap-2 justify-between"
-          value={currentElement?.style.alignItems}
+          value={useGetCurrentStyles("alignItems") || ""}
           onValueChange={(value) => {
             if (value)
-              setLayout({
-                ...currentElement,
-                style: {
-                  ...currentElement?.style,
-                  alignItems: value,
-                },
-              } as ContainerProps);
+              useUpdateCurrentStyles({
+                alignItems: value,
+              });
           }}
         >
           <ToggleGroupItem

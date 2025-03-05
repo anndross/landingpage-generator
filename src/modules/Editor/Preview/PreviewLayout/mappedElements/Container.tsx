@@ -1,43 +1,38 @@
 import { Drawer } from "@/modules/Editor/Preview/components/Drawer";
-import { useEditorStore } from "@/modules/Editor/context";
+import { useEditorStore } from "@/modules/Editor/store";
 import { ContainerProps } from "@/types/container";
+import { GetStyleProperty, GetStyles, UpdateStyles } from "../hooks";
 
 interface EditableContainerProps {
   data: ContainerProps;
 }
 
 export function Container({ data }: EditableContainerProps) {
-  const {
-    setLayout,
-    editorFunctions: { breakpoint },
-  } = useEditorStore();
+  const setLayout = useEditorStore((state) => state.setLayout);
 
   return (
     <div
       className="teste"
       onClick={(event) => {
-        setLayout({
-          ...data,
-          style: {
-            ...data?.style?.[breakpoint],
-            width:
-              (event.target as HTMLDivElement)?.style?.width ||
-              data?.style?.[breakpoint]?.width,
-            height:
-              (event.target as HTMLDivElement)?.style?.height ||
-              data?.style?.[breakpoint]?.height,
-          },
+        UpdateStyles(data, {
+          width:
+            (event.target as HTMLDivElement)?.style?.width ||
+            GetStyleProperty(data, "width"),
+          height:
+            (event.target as HTMLDivElement)?.style?.height ||
+            GetStyleProperty(data, "width"),
         });
       }}
       style={{
-        width: data?.style?.[breakpoint]?.width || "100%",
-        height: data?.style?.[breakpoint]?.height || "100px",
+        width: GetStyleProperty(data, "width") || "100%",
+        height: GetStyleProperty(data, "height") || "100px",
         resize: "both",
         overflow: "auto",
+        maxWidth: "100%",
       }}
     >
       <Drawer
-        style={{ ...data.style[breakpoint], width: "100%", height: "100%" }}
+        style={{ ...GetStyles(data), width: "100%", height: "100%" }}
         state={data.children}
         setState={(newState) => {
           const id = `clone-${crypto.randomUUID()}`;

@@ -2,7 +2,7 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { auth, db } from "@/config/firebase";
+import { auth, db } from "@/configs/firebase";
 import {
   onAuthStateChanged,
   signInWithPopup,

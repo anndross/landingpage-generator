@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { IoCloseOutline } from "react-icons/io5";
 import clsx from "clsx";
-import { useEditorStore } from "../../context";
+import { useEditorStore } from "../../store";
 import { Item } from "./Item";
 
 export function Tree() {

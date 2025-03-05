@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEditorStore } from "../../context";
+import { useEditorStore } from "../../store";
 import { PreviewDropdown } from "./PreviewDropdown";
 import { Edit } from "./Edit";
 import { StyleButton } from "./StyleButton";

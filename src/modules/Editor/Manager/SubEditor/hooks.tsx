@@ -1,9 +1,14 @@
 "use client";
 
 import { CSSProperties } from "react";
-import { EditorStoreLayoutType, useEditorStore } from "../../context";
+import {
+  EditorStoreLayoutType,
+  ElementsType,
+  useEditorStore,
+} from "@/modules/Editor/store";
 
-export function UpdateCurrentStyles(styles: any) {
+// Hook para atualizar estilos
+export function useUpdateCurrentStyles(styles: CSSProperties) {
   const {
     editorFunctions: { currentElementToEdit, breakpoint },
     setLayout,
@@ -12,18 +17,45 @@ export function UpdateCurrentStyles(styles: any) {
   setLayout({
     ...currentElementToEdit,
     style: {
-      ...currentElementToEdit?.style[breakpoint],
+      ...currentElementToEdit?.style,
       [breakpoint]: {
+        ...(currentElementToEdit?.style?.[breakpoint] || {}),
         ...styles,
       },
     },
-  } as EditorStoreLayoutType);
+  } as EditorStoreLayoutType | ElementsType);
 }
 
-export function GetCurrentStyles(prop: keyof CSSProperties): string {
+// Hook para obter estilos
+export function useGetCurrentStyles(prop: keyof CSSProperties) {
   const {
     editorFunctions: { currentElementToEdit, breakpoint },
   } = useEditorStore();
 
   return currentElementToEdit?.style?.[breakpoint]?.[prop] as string;
+}
+
+// Hook para atualizar configurações
+export function useUpdateCurrentSettings(settings: any) {
+  const {
+    editorFunctions: { currentElementToEdit },
+    setLayout,
+  } = useEditorStore();
+
+  setLayout({
+    ...currentElementToEdit,
+    settings: {
+      ...currentElementToEdit?.settings,
+      ...settings,
+    },
+  } as EditorStoreLayoutType | ElementsType);
+}
+
+// Hook para obter configurações
+export function useGetCurrentSettings(key: string) {
+  const {
+    editorFunctions: { currentElementToEdit },
+  } = useEditorStore();
+
+  return currentElementToEdit?.settings?.[key] as string;
 }

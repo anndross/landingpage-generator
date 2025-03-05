@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { InputWithIcon } from "@/components/ui/input-with-icon";
-import { useEditor } from "@/modules/Editor/context";
 import {
   LuPanelBottomDashed,
   LuPanelLeftDashed,
@@ -16,18 +15,12 @@ import {
   LuSquareDashedBottom,
 } from "react-icons/lu";
 import { RxMargin, RxPadding } from "react-icons/rx";
+import {
+  useGetCurrentStyles,
+  useUpdateCurrentStyles,
+} from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function Spacing() {
-  const { setLayout, settings } = useEditor();
-
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
-  const element = currentElement;
-
   const MarginTopIcon = () => (
     <LuSquareDashedBottom className="rotate-180 h-6 w-6" />
   );
@@ -41,7 +34,7 @@ export function Spacing() {
   );
 
   const [marginTop, marginRight, marginBottom, marginLeft] =
-    (element?.style.margin?.split(" ") as string[]) || [];
+    (useGetCurrentStyles("margin")?.split(" ") as string[]) || [];
 
   const marginTopNumber = (marginTop || "0").replace(/\D/g, "");
   const marginRightNumber = (marginRight || "0").replace(/\D/g, "");
@@ -59,17 +52,13 @@ export function Spacing() {
       left: `${marginTopNumber}px ${marginRightNumber}px ${marginBottomNumber}px ${value}px`,
     };
 
-    setLayout({
-      ...element,
-      style: {
-        ...element?.style,
-        margin: margin[type],
-      },
-    } as any);
+    useUpdateCurrentStyles({
+      margin: margin[type],
+    });
   };
 
   const [paddingTop, paddingRight, paddingBottom, paddingLeft] =
-    (element?.style.padding?.split(" ") as string[]) || [];
+    (useGetCurrentStyles("padding")?.split(" ") as string[]) || [];
 
   const paddingTopNumber = (paddingTop || "0").replace(/\D/g, "");
   const paddingRightNumber = (paddingRight || "0").replace(/\D/g, "");
@@ -87,13 +76,9 @@ export function Spacing() {
       left: `${paddingTopNumber}px ${paddingRightNumber}px ${paddingBottomNumber}px ${value}px`,
     };
 
-    setLayout({
-      ...element,
-      style: {
-        ...element?.style,
-        padding: padding[type],
-      },
-    } as any);
+    useUpdateCurrentStyles({
+      padding: padding[type],
+    });
   };
 
   return (

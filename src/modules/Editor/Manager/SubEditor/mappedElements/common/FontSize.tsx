@@ -5,19 +5,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditor } from "@/modules/Editor/context";
-import { TextProps } from "@/types/text";
 import fontSize from "@/shared/editor/data/config/Text/font-size.json";
+import { useUpdateCurrentStyles } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function FontSize() {
-  const { setLayout, settings } = useEditor();
-
-  const {
-    manager: {
-      subEditor: { currentElement },
-    },
-  } = settings;
-
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">
@@ -25,10 +16,9 @@ export function FontSize() {
       </label>
       <Select
         onValueChange={(value) =>
-          setLayout({
-            ...currentElement,
-            style: { ...currentElement?.style, fontSize: value },
-          } as TextProps)
+          useUpdateCurrentStyles({
+            fontSize: value,
+          })
         }
         required
         name="font-size"
