@@ -26,7 +26,6 @@ export function Preview({ layout: layoutData }: PreviewProps) {
   } = useEditorStore();
 
   useEffect(() => {
-    console.log("PREVIEW PAi", layoutData);
     if (layoutData) {
       setLayout(layoutData);
     }
@@ -34,7 +33,6 @@ export function Preview({ layout: layoutData }: PreviewProps) {
     return () => {};
   }, [layoutData]);
 
-  console.log("PREVIEW PAi layout estado", layout);
   return (
     <div className="relative flex flex-col justify-between gap-2 h-full w-full pt-14">
       <PreviewHeader />
@@ -63,35 +61,3 @@ export function Preview({ layout: layoutData }: PreviewProps) {
     </div>
   );
 }
-
-// console.log("PreviewElements:::", previewElements);
-
-// const isMountingRef = useRef(true);
-
-// useEffect(() => {
-//   setPreviewElements({ ...layout });
-// }, [layout.id]);
-
-// useEffect(() => {
-//   const updatePreviewElementsOnDB = async () => {
-//     await fetch(`/api/private/preview/update/${previewElements?.id}`, {
-//       method: "PUT",
-//       body: JSON.stringify({
-//         style: previewElements?.style,
-//         children: previewElements?.children,
-//         name: previewElements?.name,
-//       }),
-//       headers: {
-//         Authorization: "Bearer " + cookies.get("auth_token"),
-//         Accept: "application/json",
-//         "Content-Type": "application/json",
-//       },
-//     });
-//   };
-
-//   if (!isMountingRef.current) {
-//     updatePreviewElementsOnDB();
-//   } else {
-//     isMountingRef.current = false;
-//   }
-// }, [previewElements]);

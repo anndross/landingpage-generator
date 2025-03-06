@@ -1,8 +1,8 @@
 "use server";
-import { EditorType } from "@/modules/Editor/store";
+import { EditorStore } from "@/modules/Editor/store";
 import { cookies } from "next/headers";
 
-export async function updateCurrentPreviewOnDB(layout: EditorType["layout"]) {
+export async function updateCurrentPreviewOnDB(layout: EditorStore["layout"]) {
   const token = (await cookies()).get("auth_token")?.value;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 

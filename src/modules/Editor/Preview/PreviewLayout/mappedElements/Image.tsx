@@ -10,12 +10,13 @@ export const Image = ({ data }: EditableImageProps) => {
   return (
     <a href="#">
       <img
+        className={`${data.type}-${data.id}`}
         src={GetSettingsProperty(data, "src")}
         alt={GetSettingsProperty(data, "alt")}
         title={GetSettingsProperty(data, "title")}
         width={GetSettingsProperty(data, "width")}
         height={GetSettingsProperty(data, "height")}
-        style={{ ...GetStyles(data) }}
+        // style={{ ...GetStyles(data) }}
       />
     </a>
   );

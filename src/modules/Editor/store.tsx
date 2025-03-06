@@ -158,9 +158,6 @@ import { mapStyles } from "@/helpers/mapStyles";
 //   tree: { visible: boolean };
 // };
 
-export type ElementsOptions = "container" | "text" | "image" | "link";
-export type ElementsType = ImageProps | TextProps | ContainerProps | LinkProps;
-
 // export type EditorType = {
 //   settings: {
 //     manager: ManagerType;
@@ -378,6 +375,16 @@ export type ElementsType = ImageProps | TextProps | ContainerProps | LinkProps;
 //       2. Selecionar visualização dos estilos;
 //    6. Selecionar o elemento atual a ser editado
 
+export type ElementsOptions = "container" | "text" | "image" | "link";
+export type AllElementsOptions =
+  | "layout"
+  | "container"
+  | "text"
+  | "image"
+  | "link";
+
+export type ElementsType = ImageProps | TextProps | ContainerProps | LinkProps;
+
 export type LayoutStyle = {
   all?: CSSProperties;
   sm?: CSSProperties;
@@ -480,7 +487,7 @@ export type EditorStore = {
   setEditorFunctions: (fn: Partial<EditorStore["editorFunctions"]>) => void;
 };
 
-export const useEditorStore = create<EditorStore>((set, get) => {
+export const useEditorStore = create<EditorStore>((set) => {
   const debouncedUpdate = debounce(updateCurrentPreviewOnDB, 500);
 
   return {

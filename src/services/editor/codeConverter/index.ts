@@ -9,8 +9,10 @@ import { ImageProps } from "@/types/image";
 import { LinkProps } from "@/types/link";
 import { mapStyles } from "@/helpers/mapStyles";
 import {
+  Breakpoints,
   CodeSelection,
   EditorStore,
+  EditorStoreFunctionsType,
   ElementsType,
 } from "@/modules/Editor/store";
 
@@ -61,7 +63,7 @@ export function vtexIoConverter(layout: EditorStore["layout"]) {
     };
 
     richTextStyle += `
-      .vtex-rich-text-0-x-${mappedTags[el?.settings?.as || "p"]}--${el.id} ${JSON.stringify(mapStyles(el.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
+      .vtex-rich-text-0-x-${mappedTags[el?.settings?.as || "p"]}--${el.id} ${el.} ${JSON.stringify(mapStyles(el.style[]), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
     `.trim();
     richTextStyle += "\n\n";
 
@@ -179,7 +181,7 @@ export function vtexIoConverter(layout: EditorStore["layout"]) {
     link[`link#${element.id}`]["props"]["href"] = element.settings.href || "";
     link[`link#${element.id}`]["props"]["label"] = element.settings.value || "";
     link[`link#${element.id}`]["props"]["blockClass"] = element.id;
-    console.log(element.style);
+
     linkStyle += `
       .vtex-store-link-0-x-link--${element.id} ${JSON.stringify(mapStyles(element.style), null, 2).replaceAll(",", ";").replaceAll(`"`, "")}
     `.trim();
@@ -248,3 +250,34 @@ export function vtexIoConverter(layout: EditorStore["layout"]) {
     style: `${bodyColStyle}\n${richTextStyle}\n${flexLayoutStyle}\n${imageStyle}\n${linkStyle}`,
   };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export class CodeConverter {
+  tree: EditorStore["layout"] | ElementsType
+  private css: string
+  
+  constructor(tree: EditorStore["layout"] | ElementsType) {
+    this.tree = tree
+    this.css = ""
+  }
+  
+
+}
+

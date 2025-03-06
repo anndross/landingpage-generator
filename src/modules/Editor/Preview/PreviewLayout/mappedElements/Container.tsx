@@ -12,7 +12,7 @@ export function Container({ data }: EditableContainerProps) {
 
   return (
     <div
-      className="teste"
+      className={`${data.type}-${data.id}`}
       onClick={(event) => {
         UpdateStyles(data, {
           width:
@@ -32,7 +32,7 @@ export function Container({ data }: EditableContainerProps) {
       }}
     >
       <Drawer
-        style={{ ...GetStyles(data), width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%" }}
         state={data.children}
         setState={(newState) => {
           const id = `clone-${crypto.randomUUID()}`;

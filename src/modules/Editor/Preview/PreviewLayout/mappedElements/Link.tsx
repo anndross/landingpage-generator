@@ -7,12 +7,7 @@ interface EditableLinkProps {
 
 export function Link({ data }: EditableLinkProps) {
   return (
-    <a
-      {...GetSettings(data)}
-      style={{
-        ...GetStyles(data),
-      }}
-    >
+    <a className={`${data.type}-${data.id}`} {...GetSettings(data)}>
       {GetSettingsProperty(data, "value")}
     </a>
   );

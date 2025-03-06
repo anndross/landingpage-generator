@@ -21,7 +21,6 @@ export async function PUT(req: Request, context: { params: Params }) {
       );
     }
 
-    console.log("PUT - id: ", id);
     await db
       .collection("layouts")
       .doc(id)

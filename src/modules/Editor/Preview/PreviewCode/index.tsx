@@ -1,14 +1,13 @@
 import { Highlight, themes } from "prism-react-renderer";
-import { codeConverter } from "./services/codeConverter";
 import { useEditorStore } from "../../store";
 import { Button } from "@/components/ui/button";
 import { BsCopy } from "react-icons/bs";
+import { Converter } from "@/services/editor/converter";
 
 export function PreviewCode() {
   const { editorFunctions, layout } = useEditorStore();
 
-  const language =
-    !editorFunctions.viewLayout && editorFunctions.codeSelection.language;
+  const language = editorFunctions.codeSelection.language;
 
   const mappedLanguages = {
     default: "json",
@@ -16,14 +15,25 @@ export function PreviewCode() {
     CSS: "css",
   };
 
-  const { code, style } = (language && codeConverter(language, layout)) || {
-    code: null,
-    style: null,
+  const converter = new Converter(layout);
+
+  const mappedCode = {
+    "VTEX IO": {
+      css: converter.getVtexIoStyles(),
+      page: converter.vtexIoPage(),
+    },
   };
+
+  // const { code, style } = (language && codeConverter(language, layout)) || {
+  //   code: null,
+  //   style: null,
+  // };
 
   const viewStyles = editorFunctions.codeSelection.viewStyles;
 
-  const currentCode = viewStyles ? style || "" : JSON.stringify(code, null, 2);
+  const currentCode = viewStyles
+    ? mappedCode[language]?.css || ""
+    : mappedCode[language]?.page;
 
   return (
     <div className="relative">
