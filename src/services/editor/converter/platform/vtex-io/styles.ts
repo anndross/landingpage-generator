@@ -1,11 +1,8 @@
 import { transformObjectToKebabCase } from "@/helpers/kebabCase";
 import { Breakpoints, EditorStore, ElementsType } from "@/modules/Editor/store";
-import {
-  Constructor,
-  ConverterBase,
-  StylesObject,
-} from "@/services/editor/converter";
+import { ConverterBase, StylesObject } from "@/services/editor/converter";
 import { mappedBreakpoints } from "@/shared/editor/mappedBreakpoints";
+import { Constructor } from "@/types/mixins";
 
 export const VtexIoStylesConverter = (Base: Constructor<ConverterBase>) =>
   class extends Base {
@@ -91,6 +88,7 @@ export const VtexIoStylesConverter = (Base: Constructor<ConverterBase>) =>
         }
       }
     }
+
     getVtexIoStyles() {
       this.buildVtexIoCSS(this.tree);
 

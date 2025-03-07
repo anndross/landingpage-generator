@@ -20,7 +20,6 @@ export interface PreviewProps {
 
 export function Preview({ layout: layoutData }: PreviewProps) {
   const {
-    layout,
     editorFunctions: { viewLayout, breakpoint },
     setLayout,
   } = useEditorStore();

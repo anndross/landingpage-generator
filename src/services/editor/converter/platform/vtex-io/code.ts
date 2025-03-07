@@ -1,4 +1,4 @@
-import { Constructor, ConverterBase } from "@/services/editor/converter/";
+import { ConverterBase } from "@/services/editor/converter/";
 import { TextProps } from "@/types/text";
 import richTextJson from "@/modules/Editor/Preview/PreviewCode/mappedElements/vtexIo/rich-text.json";
 import flexLayoutRowJson from "@/modules/Editor/Preview/PreviewCode/mappedElements/vtexIo/flex-layout.row.json";
@@ -9,6 +9,7 @@ import linkJson from "@/modules/Editor/Preview/PreviewCode/mappedElements/vtexIo
 import { EditorStore, ElementsType } from "@/modules/Editor/store";
 import { LinkProps } from "@/types/link";
 import { ImageProps } from "@/types/image";
+import { Constructor } from "@/types/mixins";
 
 export const VtexIoCodeConverter = (Base: Constructor<ConverterBase>) =>
   class extends Base {
@@ -123,7 +124,7 @@ export const VtexIoCodeConverter = (Base: Constructor<ConverterBase>) =>
       return response;
     }
 
-    vtexIoPage() {
+    vtexIoPage(): string {
       const handlers: {
         [key in ElementsType["type"]]: (el: ElementsType) => object;
       } = {
@@ -154,16 +155,13 @@ export const VtexIoCodeConverter = (Base: Constructor<ConverterBase>) =>
         },
       };
 
-      const code = [mappedPage, ...mappedlayout].reduce(
-        (acc: any, item: any) => {
-          return {
-            ...acc,
-            ...item,
-          };
-        },
-        {}
-      );
+      const code = [mappedPage, ...mappedlayout].reduce((acc, item) => {
+        return {
+          ...acc,
+          ...item,
+        };
+      }, {});
 
-      return code;
+      return JSON.stringify(code, null, 2);
     }
   };

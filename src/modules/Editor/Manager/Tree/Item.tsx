@@ -44,9 +44,9 @@ export function Item({ element }: ItemProps) {
       </span>
 
       <div className="px-2">
-        {element?.children?.map((el: ItemProps["element"]) => {
+        {/* {element?.children?.map((el: ItemProps["element"]) => {
           return <Item key={el.id} element={el} />;
-        })}
+        })} */}
       </div>
     </div>
   );

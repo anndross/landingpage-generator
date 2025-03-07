@@ -10,6 +10,7 @@ interface DrawerProps {
   setState: (newState: ItemInterface[]) => void;
   tag: "main" | "div";
   style?: CSSProperties;
+  onRemove?: () => void;
   className?: HTMLAttributes<HTMLDivElement>["className"];
 }
 
@@ -19,6 +20,7 @@ export function Drawer({
   setState,
   style,
   className,
+  onRemove,
 }: DrawerProps) {
   const {
     editorFunctions: { previewEditMode },
@@ -28,6 +30,7 @@ export function Drawer({
     <ReactSortable
       className={className}
       tag={tag}
+      onRemove={onRemove}
       style={style}
       group={{
         name: "shared",

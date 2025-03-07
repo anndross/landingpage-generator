@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { TbBinaryTree } from "react-icons/tb";
 import { Clear } from "./Clear";
 import { LuPanelLeftClose, LuPanelRightClose } from "react-icons/lu";
+import { SaveButton } from "./SaveButton";
 
 export function PreviewHeader() {
   const {
@@ -55,6 +56,7 @@ export function PreviewHeader() {
       <span className="text-zinc-600 text-xl">{layout.name}</span>
 
       <div className="flex items-center gap-4">
+        <SaveButton />
         <Clear />
         <Button
           onClick={() =>

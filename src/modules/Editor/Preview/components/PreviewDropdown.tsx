@@ -57,7 +57,10 @@ function ToggleLayoutSize() {
   return (
     <ToggleGroup
       onValueChange={(value) =>
-        setEditorFunctions({ breakpoint: value as Breakpoints })
+        setEditorFunctions({
+          viewLayout: true,
+          breakpoint: value as Breakpoints,
+        })
       }
       className="justify-start"
       value={breakpoint}

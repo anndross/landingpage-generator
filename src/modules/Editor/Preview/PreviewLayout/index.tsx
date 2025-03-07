@@ -1,7 +1,6 @@
 "use client";
 import { Drawer } from "@/modules/Editor/Preview/components/Drawer";
 import { ElementsType, useEditorStore } from "@/modules/Editor/store";
-import { CodeConverter } from "@/services/editor/codeConverter";
 import { Converter } from "@/services/editor/converter";
 
 export function PreviewLayout() {
@@ -11,7 +10,7 @@ export function PreviewLayout() {
 
   const styles = codeConverter.getVtexIoStyles();
 
-  console.log("styless", styles);
+  console.log("layout.children", layout.children);
   return (
     <>
       <style>{styles}</style>
@@ -23,10 +22,10 @@ export function PreviewLayout() {
         setState={(newState) => {
           const id = `clone-${crypto.randomUUID()}`;
 
-          const mappedNewState = newState.map((item, index) => ({
+          const mappedNewState = newState.map((item) => ({
             ...item,
             id: item.id.toString()?.startsWith("clone-") ? item.id : id,
-            indexPath: [index],
+            // index: [],
           }));
 
           setLayout({

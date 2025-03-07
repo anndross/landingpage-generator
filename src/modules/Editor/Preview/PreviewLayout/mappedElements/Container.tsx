@@ -1,7 +1,7 @@
 import { Drawer } from "@/modules/Editor/Preview/components/Drawer";
 import { useEditorStore } from "@/modules/Editor/store";
 import { ContainerProps } from "@/types/container";
-import { GetStyleProperty, GetStyles, UpdateStyles } from "../hooks";
+import { GetStyleProperty, UpdateStyles } from "../hooks";
 
 interface EditableContainerProps {
   data: ContainerProps;
@@ -29,6 +29,7 @@ export function Container({ data }: EditableContainerProps) {
         resize: "both",
         overflow: "auto",
         maxWidth: "100%",
+        border: "1px solid black",
       }}
     >
       <Drawer
@@ -37,11 +38,12 @@ export function Container({ data }: EditableContainerProps) {
         setState={(newState) => {
           const id = `clone-${crypto.randomUUID()}`;
 
-          const mappedNewState = newState.map((item, index) => ({
+          const mappedNewState = newState.map((item) => ({
             ...item,
             id: item.id.toString()?.startsWith("clone-") ? item.id : id,
-            indexPath: [...(data.indexPath || []), index],
+            // index: [...(data.index || []), data.id],
           }));
+          console.log("caiu aqui", { ...data, children: mappedNewState });
 
           setLayout({ ...data, children: mappedNewState } as ContainerProps);
         }}

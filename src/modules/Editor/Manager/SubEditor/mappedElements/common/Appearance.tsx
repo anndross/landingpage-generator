@@ -20,7 +20,6 @@ import {
   useGetCurrentStyles,
   useUpdateCurrentStyles,
 } from "@/modules/Editor/Manager/SubEditor/hooks";
-import { useCallback } from "react";
 
 export function Appearance() {
   const backgroundColor = useGetCurrentStyles("backgroundColor");

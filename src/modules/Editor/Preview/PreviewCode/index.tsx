@@ -24,21 +24,16 @@ export function PreviewCode() {
     },
   };
 
-  // const { code, style } = (language && codeConverter(language, layout)) || {
-  //   code: null,
-  //   style: null,
-  // };
-
   const viewStyles = editorFunctions.codeSelection.viewStyles;
 
   const currentCode = viewStyles
-    ? mappedCode[language]?.css || ""
+    ? mappedCode[language]?.css
     : mappedCode[language]?.page;
 
   return (
     <div className="relative">
       <Button
-        onClick={() => navigator.clipboard.writeText(currentCode || "")}
+        onClick={() => navigator.clipboard.writeText("")}
         variant="outline"
         className="absolute top-0 right-0"
       >
@@ -46,7 +41,7 @@ export function PreviewCode() {
       </Button>
 
       <Highlight
-        code={currentCode}
+        code={currentCode || ""}
         language={viewStyles ? "css" : mappedLanguages[language || "default"]}
         theme={themes.github}
       >
