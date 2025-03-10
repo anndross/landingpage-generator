@@ -128,10 +128,7 @@ export const useEditorStore = create<EditorStore>((set) => {
     setLayout: (data) =>
       set((state) => {
         const update = new Update(state.editorFunctions, state.layout);
-
         const tree = update.updateTree(data);
-
-        console.log("treetree", tree);
 
         if (state.editorFunctions.subEditorOpen) {
           state.setEditorFunctions({
@@ -140,77 +137,6 @@ export const useEditorStore = create<EditorStore>((set) => {
         }
 
         return { layout: tree };
-
-        //     const handleDataWhenIsLayout: () => EditorStore["layout"] = () => {
-        //       const newLayout: EditorStore["layout"] = {
-        //         ...state.layout,
-        //         ...(data as EditorStore["layout"]),
-        //       };
-
-        //       if (state.editorFunctions.subEditorOpen) {
-        //         state.setEditorFunctions({
-        //           currentElementToEdit: newLayout,
-        //         });
-        //       }
-
-        //       return newLayout;
-        //     };
-
-        //     if (data.type === "layout") {
-        //       return { layout: handleDataWhenIsLayout() };
-        //     }
-
-        //     const handleDataWhenIsElement: () => EditorStore["layout"] = () => {
-        //       const updateElement = (
-        //         children: ElementsType[],
-        //         path: number[]
-        //       ): ElementsType[] => {
-        //         if (path.length === 1) {
-        //           return children.map((child, index) =>
-        //             index === path[0]
-        //               ? { ...child, ...(data as ElementsType) }
-        //               : child
-        //           );
-        //         }
-
-        //         return children.map((child, index) =>
-        //           index === path[0] && "children" in child
-        //             ? {
-        //                 ...child,
-        //                 children: updateElement(
-        //                   child.children as ElementsType[],
-        //                   path.slice(1)
-        //                 ),
-        //               }
-        //             : child
-        //         );
-        //       };
-
-        //       if (state.editorFunctions.subEditorOpen) {
-        //         state.setEditorFunctions({
-        //           currentElementToEdit: data,
-        //         });
-        //       }
-
-        //       const updatedChildren: ElementsType[] = updateElement(
-        //         state.layout.children,
-        //         (data as ElementsType)?.index
-        //       );
-
-        //       const updatedLayout: EditorStore["layout"] = {
-        //         ...state.layout,
-        //         children: updatedChildren,
-        //       };
-
-        //       return updatedLayout;
-        //     };
-
-        //     if ("index" in data && data.index.length > 0) {
-        //       return { layout: handleDataWhenIsElement() };
-        //     }
-
-        //     return { layout: state.layout };
-        //   }),
       }),
     setEditorFunctions: (data) =>
       set((state) => ({

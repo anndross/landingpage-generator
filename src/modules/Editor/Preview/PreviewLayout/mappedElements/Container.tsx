@@ -1,7 +1,9 @@
 import { Drawer } from "@/modules/Editor/Preview/components/Drawer";
-import { useEditorStore } from "@/modules/Editor/store";
+import { ElementsType, useEditorStore } from "@/modules/Editor/store";
 import { ContainerProps } from "@/types/container";
 import { GetStyleProperty, UpdateStyles } from "../hooks";
+import { useCallback, useEffect, useState } from "react";
+import { ItemInterface } from "react-sortablejs";
 
 interface EditableContainerProps {
   data: ContainerProps;
@@ -9,23 +11,39 @@ interface EditableContainerProps {
 
 export function Container({ data }: EditableContainerProps) {
   const setLayout = useEditorStore((state) => state.setLayout);
+  const [state, setState] = useState<ContainerProps>(data);
+
+  useEffect(() => {
+    if (state && JSON.stringify(state) !== JSON.stringify(data)) {
+      console.log("ALTEROU O ESTADO - state", state);
+
+      setLayout(state);
+    }
+  }, [state, setLayout]);
+
+  const handleSetState = useCallback((newState: ElementsType[]) => {
+    setState((prevState) => ({
+      ...prevState,
+      children: Array.isArray(newState) ? newState : [newState],
+    }));
+  }, []);
 
   return (
     <div
-      className={`${data.type}-${data.id}`}
+      className={`${state.type}-${state.id}`}
       onClick={(event) => {
-        UpdateStyles(data, {
+        UpdateStyles(state, {
           width:
             (event.target as HTMLDivElement)?.style?.width ||
-            GetStyleProperty(data, "width"),
+            GetStyleProperty(state, "width"),
           height:
             (event.target as HTMLDivElement)?.style?.height ||
-            GetStyleProperty(data, "width"),
+            GetStyleProperty(state, "height"),
         });
       }}
       style={{
-        width: GetStyleProperty(data, "width") || "100%",
-        height: GetStyleProperty(data, "height") || "100px",
+        width: GetStyleProperty(state, "width") || "100%",
+        height: GetStyleProperty(state, "height") || "100px",
         resize: "both",
         overflow: "auto",
         maxWidth: "100%",
@@ -34,18 +52,21 @@ export function Container({ data }: EditableContainerProps) {
     >
       <Drawer
         style={{ width: "100%", height: "100%" }}
-        state={data.children}
+        state={state?.children || []}
         setState={(newState) => {
-          const id = `clone-${crypto.randomUUID()}`;
+          if (JSON.stringify(newState) !== JSON.stringify(state.children)) {
+            const id = `clone-${crypto.randomUUID()}`;
 
-          const mappedNewState = newState.map((item) => ({
-            ...item,
-            id: item.id.toString()?.startsWith("clone-") ? item.id : id,
-            // index: [...(data.index || []), data.id],
-          }));
-          console.log("caiu aqui", { ...data, children: mappedNewState });
+            const mappedNewState = newState.map((item) => ({
+              ...item,
+              id: item.id.toString()?.startsWith("clone-") ? item.id : id,
+              index: [...(state.index || []), state.id],
+            }));
 
-          setLayout({ ...data, children: mappedNewState } as ContainerProps);
+            console.log("ALTEROU O ESTADO - mappedNewState", mappedNewState);
+
+            handleSetState(mappedNewState as ElementsType[]);
+          }
         }}
         tag="div"
       />

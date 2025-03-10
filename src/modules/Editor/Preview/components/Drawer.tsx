@@ -1,9 +1,34 @@
 "use client";
-import { getElement } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/utils/getElement";
 import { useEditorStore } from "@/modules/Editor/store";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
-import { CSSProperties, HTMLAttributes } from "react";
+import { CSSProperties, HTMLAttributes, useCallback } from "react";
 import { Element } from "@/types/element";
+import { ReactNode } from "react";
+import { Text as EditableText } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/Text";
+import { Container as EditableContainer } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/Container";
+import { Image as EditableImage } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/Image";
+import { Link as EditableLink } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/Link";
+import { TextProps } from "@/types/text";
+import { ContainerProps } from "@/types/container";
+import { ImageProps } from "@/types/image";
+import { LinkProps } from "@/types/link";
+
+function getElement(canEdit: boolean, data: Element) {
+  const editableElements: Partial<{
+    [key in Element["type"]]: ReactNode;
+  }> = {
+    text: <EditableText data={data as TextProps} key={data.id} />,
+    container: (
+      <EditableContainer data={data as ContainerProps} key={data.id} />
+    ),
+    image: <EditableImage data={data as ImageProps} key={data.id} />,
+    link: <EditableLink data={data as LinkProps} key={data.id} />,
+  };
+
+  if (canEdit) return editableElements[data.type];
+
+  return <div key={data.id}></div>;
+}
 
 interface DrawerProps {
   state: Element[];
@@ -26,6 +51,11 @@ export function Drawer({
     editorFunctions: { previewEditMode },
   } = useEditorStore();
 
+  const getElementMemoized = useCallback(
+    (canEdit: boolean, data: Element) => getElement(canEdit, data),
+    []
+  );
+
   return (
     <ReactSortable
       className={className}
@@ -46,11 +76,7 @@ export function Drawer({
         setState(newState);
       }}
     >
-      {state.map((item) => {
-        const element = getElement(previewEditMode, item);
-
-        return element;
-      })}
+      {state?.map((item) => getElementMemoized(previewEditMode, item))}
     </ReactSortable>
   );
 }

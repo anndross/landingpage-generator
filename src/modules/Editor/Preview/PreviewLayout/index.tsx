@@ -6,11 +6,10 @@ import { Converter } from "@/services/editor/converter";
 export function PreviewLayout() {
   const { layout, setLayout } = useEditorStore();
 
-  const codeConverter = new Converter(layout);
+  const styles = new Converter(layout).getVtexIoStyles();
 
-  const styles = codeConverter.getVtexIoStyles();
+  console.log("layoutlayout", layout);
 
-  console.log("layout.children", layout.children);
   return (
     <>
       <style>{styles}</style>
@@ -25,14 +24,22 @@ export function PreviewLayout() {
           const mappedNewState = newState.map((item) => ({
             ...item,
             id: item.id.toString()?.startsWith("clone-") ? item.id : id,
-            // index: [],
+            index: [],
           }));
 
-          setLayout({
-            ...layout,
-            type: "layout",
-            children: mappedNewState as ElementsType[],
-          });
+          const handleUpate = () => {
+            setLayout({
+              ...layout,
+              type: "layout",
+              children: Array.isArray(mappedNewState)
+                ? (mappedNewState as ElementsType[])
+                : ([mappedNewState] as ElementsType[]),
+            });
+          };
+
+          if (JSON.stringify(newState) !== JSON.stringify(layout.children)) {
+            handleUpate();
+          }
         }}
         tag="main"
       />
