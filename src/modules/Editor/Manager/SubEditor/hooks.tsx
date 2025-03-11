@@ -8,22 +8,24 @@ import {
 } from "@/modules/Editor/store";
 
 // Hook para atualizar estilos
-export function useUpdateCurrentStyles(styles: CSSProperties) {
+export function useUpdateCurrentStyles() {
   const {
     editorFunctions: { currentElementToEdit, breakpoint },
     setLayout,
   } = useEditorStore();
 
-  setLayout({
-    ...currentElementToEdit,
-    style: {
-      ...currentElementToEdit?.style,
-      [breakpoint]: {
-        ...(currentElementToEdit?.style?.[breakpoint] || {}),
-        ...styles,
+  return (styles: CSSProperties) => {
+    setLayout({
+      ...currentElementToEdit,
+      style: {
+        ...currentElementToEdit?.style,
+        [breakpoint]: {
+          ...(currentElementToEdit?.style?.[breakpoint] || {}),
+          ...styles,
+        },
       },
-    },
-  } as EditorStoreLayoutType | ElementsType);
+    } as EditorStoreLayoutType | ElementsType);
+  };
 }
 
 // Hook para obter estilos
@@ -36,19 +38,21 @@ export function useGetCurrentStyles(prop: keyof CSSProperties) {
 }
 
 // Hook para atualizar configurações
-export function useUpdateCurrentSettings(settings: any) {
+export function useUpdateCurrentSettings() {
   const {
     editorFunctions: { currentElementToEdit },
     setLayout,
   } = useEditorStore();
 
-  setLayout({
-    ...currentElementToEdit,
-    settings: {
-      ...currentElementToEdit?.settings,
-      ...settings,
-    },
-  } as EditorStoreLayoutType | ElementsType);
+  return (settings: any) => {
+    setLayout({
+      ...currentElementToEdit,
+      settings: {
+        ...currentElementToEdit?.settings,
+        ...settings,
+      },
+    } as EditorStoreLayoutType | ElementsType);
+  };
 }
 
 // Hook para obter configurações

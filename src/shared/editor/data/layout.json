@@ -15,7 +15,6 @@
       "justifyContent": "flex-start",
       "alignItems": "flex-start",
       "backgroundColor": "#000",
-      "borderRadius": "0px 0px 0px 0px",
       "borderWidth": "0px",
       "borderStyle": "solid",
       "borderColor": "#000",

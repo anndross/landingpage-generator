@@ -6,6 +6,8 @@ import {
 } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function TextTag() {
+  const updateStyles = useUpdateCurrentSettings();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Tag</label>
@@ -14,7 +16,7 @@ export function TextTag() {
         value={useGetCurrentSettings("as") || ""}
         onValueChange={(value) => {
           if (value)
-            useUpdateCurrentSettings({
+            updateStyles({
               as: value,
             });
         }}

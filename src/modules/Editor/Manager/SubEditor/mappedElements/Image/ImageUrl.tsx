@@ -5,6 +5,8 @@ import {
 } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function ImageUrl() {
+  const updateStyles = useUpdateCurrentSettings();
+
   return (
     <div className="flex flex-col gap-2 items-start">
       <label htmlFor="image-url" className="text-sm text-zinc-600 font-medium">
@@ -14,7 +16,7 @@ export function ImageUrl() {
         placeholder="URL"
         value={useGetCurrentSettings("src") || ""}
         onChange={(evt) =>
-          useUpdateCurrentSettings({
+          updateStyles({
             href: evt.target.value,
           })
         }

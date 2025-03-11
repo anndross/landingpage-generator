@@ -5,13 +5,15 @@ import {
 } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function LinkHref() {
+  const updateStyles = useUpdateCurrentSettings();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">URL</label>
       <Input
         value={useGetCurrentSettings("href") || ""}
         onChange={(evt) => {
-          useUpdateCurrentSettings({
+          updateStyles({
             href: evt.target.value,
           });
         }}

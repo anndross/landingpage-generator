@@ -6,6 +6,7 @@ import { useUpdateCurrentStyles } from "@/modules/Editor/Manager/SubEditor/hooks
 
 export function FontStyle() {
   const [value, setValue] = useState<string[]>([]);
+  const updateStyles = useUpdateCurrentStyles();
 
   return (
     <div>
@@ -36,7 +37,7 @@ export function FontStyle() {
             } as { [key: string]: string }
           );
 
-          useUpdateCurrentStyles({
+          updateStyles({
             ...mappedValues,
           });
 

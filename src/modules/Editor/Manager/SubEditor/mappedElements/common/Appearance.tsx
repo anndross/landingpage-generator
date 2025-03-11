@@ -20,18 +20,20 @@ import {
   useGetCurrentStyles,
   useUpdateCurrentStyles,
 } from "@/modules/Editor/Manager/SubEditor/hooks";
+import { useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
 
 export function Appearance() {
-  const backgroundColor = useGetCurrentStyles("backgroundColor");
-  const opacity = useGetCurrentStyles("opacity");
+  const defaultBackgroundColor = useGetCurrentStyles("backgroundColor");
+  const [backgroundColor, setBackgroundColor] = useState(
+    defaultBackgroundColor || "#fff"
+  );
 
-  const handleSetBackground = (color: string) => {
-    useUpdateCurrentStyles({ backgroundColor: `${color}` });
-  };
+  const updateStyles = useUpdateCurrentStyles();
 
-  const handleSetOpacity = (opacity: string) => {
-    useUpdateCurrentStyles({ opacity: `${opacity}` });
-  };
+  useEffect(() => {
+    if (backgroundColor) updateStyles({ backgroundColor: backgroundColor });
+  }, [backgroundColor]);
 
   return (
     <div className="">
@@ -39,17 +41,10 @@ export function Appearance() {
       <div className="flex flex-col gap-2">
         <ColorPicker
           color={backgroundColor || "#fff"}
-          setColor={(color) => handleSetBackground(color)}
+          setColor={(color) => setBackgroundColor(color)}
         />
         <div className="flex gap-2">
-          <Input
-            max={1}
-            min={0}
-            value={opacity || 1}
-            onChange={(evt) => handleSetOpacity(evt.target.value)}
-            type="number"
-            placeholder="Opacidade"
-          />
+          <Opacity />
           <AppearanceRadius />
         </div>
       </div>
@@ -57,15 +52,93 @@ export function Appearance() {
   );
 }
 
-function AppearanceRadius() {
-  const [radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft] =
-    useGetCurrentStyles("borderRadius")
-      ?.split(" ")
-      ?.map((radius: string) => radius.replace(/\D/g, "").trim()) || [];
+function Opacity() {
+  const defaultOpacity = useGetCurrentStyles("opacity");
+  const [opacity, setOpacity] = useState(defaultOpacity || 1);
 
-  const handleSetBorderRadius = (borderRadius: string) => {
-    useUpdateCurrentStyles({ borderRadius: borderRadius });
+  const updateStyles = useUpdateCurrentStyles();
+
+  const handleSetOpacity = useCallback(
+    debounce((opacity: number | string) => {
+      updateStyles({ opacity: `${opacity}` });
+    }, 200),
+    []
+  );
+
+  useEffect(() => {
+    if (opacity) handleSetOpacity(opacity);
+  }, [opacity]);
+
+  return (
+    <Input
+      max={1}
+      min={0}
+      value={opacity}
+      onChange={(evt) => setOpacity(evt.target.value)}
+      type="number"
+      placeholder="Opacidade"
+    />
+  );
+}
+
+function AppearanceRadius() {
+  const getBorderRadius = (
+    side: "topLeft" | "topRight" | "bottomRight" | "bottomLeft"
+  ) => {
+    const [topLeft, topRight, bottomRight, bottomLeft] =
+      useGetCurrentStyles("borderRadius")
+        ?.split(" ")
+        ?.map((radius: string) => radius.replace(/\D/g, "").trim()) || [];
+
+    switch (side) {
+      case "topLeft":
+        return useGetCurrentStyles("borderTopLeftRadius") || topLeft || "0px";
+      case "topRight":
+        return useGetCurrentStyles("borderTopRightRadius") || topRight || "0px";
+      case "bottomRight":
+        return (
+          useGetCurrentStyles("borderBottomRightRadius") || bottomRight || "0px"
+        );
+      case "bottomLeft":
+        return (
+          useGetCurrentStyles("borderBottomLeftRadius") || bottomLeft || "0px"
+        );
+      default:
+        return "0px";
+    }
   };
+
+  const [radius, setRadius] = useState({
+    borderTopLeftRadius: getBorderRadius("topLeft"),
+    borderTopRightRadius: getBorderRadius("topRight"),
+    borderBottomRightRadius: getBorderRadius("bottomRight"),
+    borderBottomLeftRadius: getBorderRadius("bottomLeft"),
+  });
+
+  const updateStyles = useUpdateCurrentStyles();
+
+  const updateDebounced = useCallback(
+    () =>
+      debounce(() => {
+        const radiusItems = Object.values(radius);
+        const firstItem = radiusItems[0];
+        const allItemsIsEqual = radiusItems.every((item) => item === firstItem);
+
+        if (allItemsIsEqual) {
+          updateStyles({ borderRadius: firstItem });
+        } else {
+          updateStyles(radius);
+        }
+      }, 200),
+    []
+  );
+
+  useEffect(() => {
+    updateDebounced();
+  }, [radius]);
+
+  const getRadiusValue = (key: keyof typeof radius) =>
+    radius[key].replace(/\D/g, "");
 
   return (
     <DropdownMenu>
@@ -77,38 +150,42 @@ function AppearanceRadius() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuGroup className="grid grid-cols-2 gap-1 p-1">
           <InputWithIcon
-            value={radiusTopLeft}
+            value={getRadiusValue("borderTopLeftRadius")}
             onChange={(evt) =>
-              handleSetBorderRadius(
-                `${evt.target.value || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`
-              )
+              setRadius((prev) => ({
+                ...prev,
+                borderTopLeftRadius: `${evt.target.value || 0}px`,
+              }))
             }
             icon={RxCornerTopLeft}
           />
           <InputWithIcon
-            value={radiusTopRight}
+            value={getRadiusValue("borderTopRightRadius")}
             onChange={(evt) =>
-              handleSetBorderRadius(
-                `${radiusTopLeft || 0}px ${evt.target.value || 0}px ${radiusBottomRight || 0}px ${radiusBottomLeft || 0}px`
-              )
+              setRadius((prev) => ({
+                ...prev,
+                borderTopRightRadius: `${evt.target.value || 0}px`,
+              }))
             }
             icon={RxCornerTopRight}
           />
           <InputWithIcon
-            value={radiusBottomRight}
+            value={getRadiusValue("borderBottomLeftRadius")}
             onChange={(evt) =>
-              handleSetBorderRadius(
-                `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${evt.target.value || 0}px ${radiusBottomLeft || 0}px`
-              )
+              setRadius((prev) => ({
+                ...prev,
+                borderBottomLeftRadius: `${evt.target.value || 0}px`,
+              }))
             }
             icon={RxCornerBottomLeft}
           />
           <InputWithIcon
-            value={radiusBottomLeft}
+            value={getRadiusValue("borderBottomRightRadius")}
             onChange={(evt) =>
-              handleSetBorderRadius(
-                `${radiusTopLeft || 0}px ${radiusTopRight || 0}px ${radiusBottomRight || 0}px ${evt.target.value || 0}px`
-              )
+              setRadius((prev) => ({
+                ...prev,
+                borderBottomRightRadius: `${evt.target.value || 0}px`,
+              }))
             }
             icon={RxCornerBottomRight}
           />

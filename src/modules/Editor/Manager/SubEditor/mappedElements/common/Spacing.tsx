@@ -33,6 +33,8 @@ export function Spacing() {
     <LuSquareDashedBottom className="rotate-90 h-6 w-6" />
   );
 
+  const updateStyles = useUpdateCurrentStyles();
+
   const [marginTop, marginRight, marginBottom, marginLeft] =
     (useGetCurrentStyles("margin")?.split(" ") as string[]) || [];
 
@@ -52,7 +54,7 @@ export function Spacing() {
       left: `${marginTopNumber}px ${marginRightNumber}px ${marginBottomNumber}px ${value}px`,
     };
 
-    useUpdateCurrentStyles({
+    updateStyles({
       margin: margin[type],
     });
   };
@@ -76,7 +78,7 @@ export function Spacing() {
       left: `${paddingTopNumber}px ${paddingRightNumber}px ${paddingBottomNumber}px ${value}px`,
     };
 
-    useUpdateCurrentStyles({
+    updateStyles({
       padding: padding[type],
     });
   };

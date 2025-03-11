@@ -19,42 +19,26 @@ export const Tree = (Base: Constructor<UpdateBase>) =>
 
     private handleNode() {
       const tree = { ...this.tree };
+      const node = this.node as ElementsType;
 
-      const updateNode = (node: ElementsType) => {
-        let currentChildren = tree?.children;
+      let currentChildren = tree?.children;
 
-        if (!node?.index?.length) {
-          console.log("pathIdspathIds no index", node?.index?.length);
+      const pathIds = node.index;
 
-          const indexOfDirectSon = currentChildren.findIndex(
-            (el) => el.id === node.id
-          );
+      for (const id of pathIds) {
+        const childIndex = currentChildren.findIndex((e) => e.id === id);
 
-          if (indexOfDirectSon > -1) {
-            return (currentChildren[indexOfDirectSon] = node);
-          }
-        }
+        if (childIndex > -1)
+          currentChildren = currentChildren[childIndex]?.children;
+      }
 
-        const pathIds = node.index;
+      const indeexOfElementToUpdate = currentChildren.findIndex(
+        (e) => e.id === node.id
+      );
 
-        console.log("pathIdspathIds", pathIds);
-        for (const id of pathIds?.slice(0, -1)) {
-          const childIndex = currentChildren.findIndex((e) => e.id === id);
-
-          if (childIndex > -1)
-            currentChildren = currentChildren[childIndex]?.children;
-        }
-
-        const lastChildIndex = currentChildren.findIndex(
-          (e) => e.id === pathIds[pathIds.length - 1]
-        );
-
-        if (lastChildIndex > -1) {
-          currentChildren[lastChildIndex] = node;
-        }
-      };
-
-      updateNode(this.node as ElementsType);
+      if (indeexOfElementToUpdate > -1) {
+        currentChildren[indeexOfElementToUpdate] = node;
+      }
 
       return tree;
     }

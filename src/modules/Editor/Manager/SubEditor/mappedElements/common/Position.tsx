@@ -13,6 +13,8 @@ import {
 } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function Position() {
+  const updateStyles = useUpdateCurrentStyles();
+
   return (
     <div className="flex flex-col gap-3">
       <div>
@@ -21,7 +23,7 @@ export function Position() {
           variant="outline"
           value={useGetCurrentStyles("flexDirection") || ""}
           onValueChange={(value) => {
-            useUpdateCurrentStyles({
+            updateStyles({
               flexDirection: `${value}` as "row" | "column",
             });
           }}
@@ -58,7 +60,7 @@ export function Position() {
           value={useGetCurrentStyles("justifyContent") || ""}
           onValueChange={(value) => {
             if (value)
-              useUpdateCurrentStyles({
+              updateStyles({
                 justifyContent: value,
               });
           }}
@@ -109,7 +111,7 @@ export function Position() {
           value={useGetCurrentStyles("alignItems") || ""}
           onValueChange={(value) => {
             if (value)
-              useUpdateCurrentStyles({
+              updateStyles({
                 alignItems: value,
               });
           }}

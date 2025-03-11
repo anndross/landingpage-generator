@@ -36,16 +36,16 @@ export function SubEditor() {
     ),
     container: (
       <Container.Root>
-        {/* <Container.Size />
-        <Container.Border /> */}
+        <Container.Size />
+        <Container.Border />
         <Container.Appearance />
-        {/* <Container.Spacing />
-        <Container.Position /> */}
+        <Container.Spacing />
+        <Container.Position />
       </Container.Root>
     ),
     layout: (
       <Container.Root>
-        {/* <Container.Size /> */}
+        <Container.Size />
         <Container.Border />
         <Container.Appearance />
         <Container.Spacing />
@@ -64,7 +64,7 @@ export function SubEditor() {
     ),
     link: (
       <Link.Root>
-        {/* <Link.Href />
+        <Link.Href />
         <Link.Content />
         <Link.FontFamily />
         <Link.FontSize />
@@ -72,9 +72,9 @@ export function SubEditor() {
         <Link.Color />
         <Link.Border />
         <Link.Appearance />
-        <Link.Position /> */}
+        <Link.Position />
         <Link.Appearance />
-        {/* <Link.Spacing /> */}
+        <Link.Spacing />
       </Link.Root>
     ),
   };

@@ -11,38 +11,39 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEditorStore } from "@/modules/Editor/store";
 import { useEffect, useState } from "react";
 import { TbSettings } from "react-icons/tb";
-import {
-  useGetCurrentStyles,
-  useUpdateCurrentStyles,
-} from "@/modules/Editor/Manager/SubEditor/hooks";
+import { useUpdateCurrentStyles } from "@/modules/Editor/Manager/SubEditor/hooks";
 
-type UnitType = "px" | "rem" | "em" | "%";
+type UnitType = "px" | "%" | "em" | "rem" | "vw" | "vh";
 
 export function Size() {
-  const {
-    setLayout,
-    editorFunctions: { currentElementToEdit },
-  } = useEditorStore();
+  const { currentElementToEdit } = useEditorStore(
+    (state) => state.editorFunctions
+  );
 
-  const [widthUnitValue, setWidthUnitValue] = useState<UnitType>(
-    currentElementToEdit?.type === "container" ||
-      currentElementToEdit?.type === "layout"
-      ? "%"
-      : "px"
-  );
-  const [heightUnitValue, setHeightUnitValue] = useState<UnitType>(
-    currentElementToEdit?.type === "layout" ? "%" : "px"
-  );
+  const type = currentElementToEdit?.type;
+
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+
+  const defaultWidthUnit = "%";
+  const defaultHeightUnit = type === "layout" ? "%" : "px";
+
+  const [widthUnit, setWidthUnit] = useState<UnitType>(defaultWidthUnit);
+  const [heightUnit, setHeightUnit] = useState<UnitType>(defaultHeightUnit);
+
+  const updateStyles = useUpdateCurrentStyles();
 
   useEffect(() => {
-    if (currentElementToEdit) {
-      useUpdateCurrentStyles({
-        width: useGetCurrentStyles("width").replace(/\D/g, "") + widthUnitValue,
-        height:
-          useGetCurrentStyles("height").replace(/\D/g, "") + heightUnitValue,
-      });
-    }
-  }, [widthUnitValue, heightUnitValue]);
+    updateStyles({
+      width: width + widthUnit,
+    });
+  }, [width, widthUnit]);
+
+  useEffect(() => {
+    updateStyles({
+      height: height + heightUnit,
+    });
+  }, [height, heightUnit]);
 
   return (
     <div>
@@ -53,11 +54,9 @@ export function Size() {
             type="number"
             id="width-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={useGetCurrentStyles("width").replace(/\D/g, "")}
+            value={width}
             onChange={(evt) => {
-              useUpdateCurrentStyles({
-                width: evt.target.value + widthUnitValue,
-              });
+              setWidth(Number(evt.target.value) || 0);
             }}
             placeholder="Largura"
           />
@@ -77,9 +76,9 @@ export function Size() {
                   variant="outline"
                   type="single"
                   className="w-full justify-start"
-                  value={widthUnitValue}
-                  onValueChange={(newWidthUnitValue) =>
-                    setWidthUnitValue(newWidthUnitValue as UnitType)
+                  value={widthUnit}
+                  onValueChange={(newWidthUnitValue: UnitType) =>
+                    setWidthUnit(newWidthUnitValue)
                   }
                 >
                   <ToggleGroupItem
@@ -124,11 +123,9 @@ export function Size() {
             type="number"
             id="height-input"
             className="rounded-r-none border-r-0 shadow-none"
-            value={useGetCurrentStyles("height").replace(/\D/g, "")}
+            value={height}
             onChange={(evt) => {
-              useUpdateCurrentStyles({
-                height: evt.target.value + heightUnitValue,
-              });
+              setHeight(Number(evt.target.value) || 0);
             }}
             placeholder="Altura"
           />
@@ -148,9 +145,9 @@ export function Size() {
                   variant="outline"
                   type="single"
                   className="w-full justify-start"
-                  value={heightUnitValue}
-                  onValueChange={(newHeightUnitValue) =>
-                    setHeightUnitValue(newHeightUnitValue as UnitType)
+                  value={heightUnit}
+                  onValueChange={(newHeightUnitValue: UnitType) =>
+                    setHeightUnit(newHeightUnitValue)
                   }
                 >
                   <ToggleGroupItem

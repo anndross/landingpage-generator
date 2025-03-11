@@ -40,20 +40,19 @@ export class ConverterBase {
    * @description Cria os estilos do layout com base na árvore criada pelo editor.
    * @returns Retorna a folha de estilo com breakpoints e suas propriedades atreladas à respectiva classe.
    */
-  getStyles(): string {
+  getStyles(): StylesObject {
     const buildCSS = (element: EditorStore["layout"] | ElementsType) => {
       const breakpoints = Object.keys(element.style) as Breakpoints[];
 
       breakpoints.forEach((breakpoint) => {
         const styles = element.style[breakpoint] || {};
 
-        const mappedBreakpoint =
-          mappedBreakpoints[breakpoint] + this.markerToRemoveColon;
+        const mappedBreakpoint = mappedBreakpoints[breakpoint];
 
         const className =
-          (element.type === "layout"
-            ? ".landing-page"
-            : `.${element.type}-${element.id}`) + this.markerToRemoveColon;
+          element.type === "layout"
+            ? "&.landing-page"
+            : `&.${element.type}-${element.id}`;
 
         this.css = {
           ...this.css,
@@ -75,7 +74,7 @@ export class ConverterBase {
 
     buildCSS(this.tree);
 
-    return this.formatStyleObjectToString(this.css);
+    return this.css;
   }
 }
 

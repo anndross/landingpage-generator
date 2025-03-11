@@ -10,8 +10,10 @@ export function Color() {
     useGetCurrentStyles("color") || "#000"
   );
 
+  const updateStyles = useUpdateCurrentStyles();
+
   useEffect(() => {
-    useUpdateCurrentStyles({
+    updateStyles({
       color: colorPicker,
     });
   }, [colorPicker]);

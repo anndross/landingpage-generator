@@ -9,13 +9,15 @@ import fontFamily from "@/shared/editor/data/config/Text/font-family.json";
 import { useUpdateCurrentStyles } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function FontFamily() {
+  const updateStyles = useUpdateCurrentStyles();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">Fonte</label>
 
       <Select
         onValueChange={(value) =>
-          useUpdateCurrentStyles({
+          updateStyles({
             fontFamily: value,
           })
         }

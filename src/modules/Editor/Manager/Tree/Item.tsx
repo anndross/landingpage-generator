@@ -1,16 +1,17 @@
 import {
-  EditorType,
+  AllElementsOptions,
+  EditorStore,
+  ElementsOptions,
   ElementsType,
   useEditorStore,
 } from "@/modules/Editor/store";
-import { Element } from "@/types/element";
 import clsx from "clsx";
 
 interface ItemProps {
-  element: EditorType["layout"] | ElementsType;
+  element: EditorStore["layout"] | ElementsType;
 }
 
-const mappedContent: Partial<{ [key in Element["type"]]: string }> = {
+const mappedContent: Partial<{ [key in ElementsOptions]: string }> = {
   text: "Texto",
   container: "Container",
   image: "Imagem",
@@ -23,7 +24,8 @@ export function Item({ element }: ItemProps) {
     setEditorFunctions,
   } = useEditorStore();
 
-  const type = element?.type;
+  const type: AllElementsOptions = element?.type;
+
   return (
     <div className="px-4 pt-1">
       <span
@@ -44,9 +46,9 @@ export function Item({ element }: ItemProps) {
       </span>
 
       <div className="px-2">
-        {/* {element?.children?.map((el: ItemProps["element"]) => {
+        {element?.children?.map((el: ItemProps["element"]) => {
           return <Item key={el.id} element={el} />;
-        })} */}
+        })}
       </div>
     </div>
   );

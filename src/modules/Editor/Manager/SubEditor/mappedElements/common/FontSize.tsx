@@ -9,6 +9,8 @@ import fontSize from "@/shared/editor/data/config/Text/font-size.json";
 import { useUpdateCurrentStyles } from "@/modules/Editor/Manager/SubEditor/hooks";
 
 export function FontSize() {
+  const updateStyles = useUpdateCurrentStyles();
+
   return (
     <div>
       <label className="text-sm text-zinc-700 font-medium">
@@ -16,7 +18,7 @@ export function FontSize() {
       </label>
       <Select
         onValueChange={(value) =>
-          useUpdateCurrentStyles({
+          updateStyles({
             fontSize: value,
           })
         }

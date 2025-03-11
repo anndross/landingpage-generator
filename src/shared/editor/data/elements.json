@@ -34,7 +34,7 @@
         "justifyContent": "flex-start",
         "alignItems": "flex-start",
         "backgroundColor": "#fff",
-        "borderRadius": "0px 0px 0px 0px",
+        "borderRadius": "0px",
         "borderWidth": "1px",
         "borderStyle": "solid",
         "borderColor": "#000",
@@ -54,7 +54,7 @@
     },
     "style": {
       "all": {
-        "borderRadius": "0px 0px 0px 0px",
+        "borderRadius": "0px",
         "borderWidth": "0px",
         "borderStyle": "solid",
         "borderColor": "#000",
@@ -78,8 +78,8 @@
     "style": {
       "all": {
         "backgroundColor": "#000",
-        "borderRadius": "0px 0px 0px 0px",
-        "borderWidth": "1px",
+        "borderRadius": "0px",
+        "borderWidth": "0px",
         "borderStyle": "solid",
         "borderColor": "#000",
         "boxShadow": "none",

@@ -3,7 +3,6 @@ import { ElementsType, useEditorStore } from "@/modules/Editor/store";
 import { ContainerProps } from "@/types/container";
 import { GetStyleProperty, UpdateStyles } from "../hooks";
 import { useCallback, useEffect, useState } from "react";
-import { ItemInterface } from "react-sortablejs";
 
 interface EditableContainerProps {
   data: ContainerProps;
@@ -24,10 +23,11 @@ export function Container({ data }: EditableContainerProps) {
   const handleSetState = useCallback((newState: ElementsType[]) => {
     setState((prevState) => ({
       ...prevState,
-      children: Array.isArray(newState) ? newState : [newState],
+      children: newState,
     }));
   }, []);
 
+  console.log("styles className", `${state.type}-${state.id}`);
   return (
     <div
       className={`${state.type}-${state.id}`}
@@ -55,11 +55,11 @@ export function Container({ data }: EditableContainerProps) {
         state={state?.children || []}
         setState={(newState) => {
           if (JSON.stringify(newState) !== JSON.stringify(state.children)) {
-            const id = `clone-${crypto.randomUUID()}`;
-
             const mappedNewState = newState.map((item) => ({
               ...item,
-              id: item.id.toString()?.startsWith("clone-") ? item.id : id,
+              id: item.id.toString()?.startsWith("clone-")
+                ? item.id
+                : `clone-${crypto.randomUUID()}`,
               index: [...(state.index || []), state.id],
             }));
 
