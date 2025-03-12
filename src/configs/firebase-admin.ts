@@ -23,8 +23,6 @@ const config = {
   ),
 };
 
-// setLogFunction(console.log);
-
 export const firebase = admin.apps.length
   ? admin.app()
   : admin.initializeApp(config);

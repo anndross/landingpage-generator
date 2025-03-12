@@ -29,30 +29,37 @@ export class ConverterBase {
    * @returns Retorna a folha de estilo com breakpoints e suas propriedades atreladas à respectiva classe em uma string.
    */
   formatStyleObjectToString(styles: StylesObject): string {
+    const regexToGetPropertyWithoutSemicolon = new RegExp(
+      /\b[a-z-]+:\s*[^;}\n]+(?=\s*[}\n])/g
+    );
+
     return JSON.stringify(styles, null, 2)
       .slice(1, -1)
       .replace(/"/g, "")
       .replace(/@@@:/g, " ")
-      .replace(/,/g, ";");
+      .replace(/,/g, ";")
+      .replaceAll("};", "}")
+      .replace(regexToGetPropertyWithoutSemicolon, "$&;");
   }
 
   /**
    * @description Cria os estilos do layout com base na árvore criada pelo editor.
    * @returns Retorna a folha de estilo com breakpoints e suas propriedades atreladas à respectiva classe.
    */
-  getStyles(): StylesObject {
+  getStyles(): string {
     const buildCSS = (element: EditorStore["layout"] | ElementsType) => {
       const breakpoints = Object.keys(element.style) as Breakpoints[];
 
       breakpoints.forEach((breakpoint) => {
         const styles = element.style[breakpoint] || {};
 
-        const mappedBreakpoint = mappedBreakpoints[breakpoint];
+        const mappedBreakpoint =
+          mappedBreakpoints[breakpoint] + this.markerToRemoveColon;
 
         const className =
-          element.type === "layout"
-            ? "&.landing-page"
-            : `&.${element.type}-${element.id}`;
+          (element.type === "layout"
+            ? ".landing-page"
+            : `.${element.type}-${element.id}`) + this.markerToRemoveColon;
 
         this.css = {
           ...this.css,
@@ -74,7 +81,7 @@ export class ConverterBase {
 
     buildCSS(this.tree);
 
-    return this.css;
+    return this.formatStyleObjectToString(this.css);
   }
 }
 

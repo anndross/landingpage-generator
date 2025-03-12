@@ -11,8 +11,11 @@ import {
   useGetCurrentStyles,
   useUpdateCurrentStyles,
 } from "@/modules/Editor/Manager/SubEditor/hooks";
+import { useEffect, useState } from "react";
 
 export function Border() {
+  const useUpdate = useUpdateCurrentStyles();
+
   return (
     <div className="">
       <span className="text-sm text-zinc-600 font-medium">Borda</span>
@@ -21,7 +24,7 @@ export function Border() {
           <ColorPicker
             color={useGetCurrentStyles("borderColor") || "#000"}
             setColor={(value) =>
-              useUpdateCurrentStyles({
+              useUpdate({
                 borderColor: `${value}`,
               })
             }
@@ -31,7 +34,7 @@ export function Border() {
           <Input
             value={useGetCurrentStyles("borderWidth")?.replace(/\D/g, "") || ""}
             onChange={(evt) =>
-              useUpdateCurrentStyles({
+              useUpdate({
                 borderWidth: evt.target.value + "px",
               })
             }
@@ -40,10 +43,13 @@ export function Border() {
             placeholder="Largura"
           />
         </div>
-        <ToggleGroup
+        {/* <ToggleGroup
           variant="outline"
           type="multiple"
           className="w-full justify-start"
+          onValueChange={(values) => {
+            setBorders(values);
+          }}
         >
           <ToggleGroupItem
             className="w-full aspect-square h-auto"
@@ -77,7 +83,7 @@ export function Border() {
           >
             <CgBorderLeft />
           </ToggleGroupItem>
-        </ToggleGroup>
+        </ToggleGroup> */}
       </div>
     </div>
   );

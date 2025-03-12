@@ -19,8 +19,28 @@ import {
   useGetCurrentStyles,
   useUpdateCurrentStyles,
 } from "@/modules/Editor/Manager/SubEditor/hooks";
+import { use, useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
+import { debounceTimeMs } from "../utils";
+import { useEditorStore } from "@/modules/Editor/store";
 
 export function Spacing() {
+  return (
+    <div className="">
+      <span className="text-sm text-zinc-600 font-medium">Espaçamento</span>
+      <div className="w-full flex gap-2">
+        <Margin />
+        <Padding />
+      </div>
+    </div>
+  );
+}
+
+export function Margin() {
+  const { currentElementToEdit } = useEditorStore(
+    (state) => state.editorFunctions
+  );
+
   const MarginTopIcon = () => (
     <LuSquareDashedBottom className="rotate-180 h-6 w-6" />
   );
@@ -33,136 +53,231 @@ export function Spacing() {
     <LuSquareDashedBottom className="rotate-90 h-6 w-6" />
   );
 
+  const getMargin = (side: "top" | "right" | "bottom" | "left") => {
+    const [top, right, bottom, left] =
+      useGetCurrentStyles("margin")
+        ?.split(" ")
+        ?.map((margin: string) => margin.replace(/\D/g, "").trim()) || [];
+
+    switch (side) {
+      case "top":
+        return useGetCurrentStyles("marginTop") || top || "0px";
+      case "right":
+        return useGetCurrentStyles("marginRight") || right || "0px";
+      case "bottom":
+        return useGetCurrentStyles("marginBottom") || bottom || "0px";
+      case "left":
+        return useGetCurrentStyles("marginLeft") || left || "0px";
+      default:
+        return "0px";
+    }
+  };
+
+  const [margin, setMargin] = useState({
+    marginTop: getMargin("top"),
+    marginRight: getMargin("right"),
+    marginBottom: getMargin("bottom"),
+    marginLeft: getMargin("left"),
+  });
+
   const updateStyles = useUpdateCurrentStyles();
 
-  const [marginTop, marginRight, marginBottom, marginLeft] =
-    (useGetCurrentStyles("margin")?.split(" ") as string[]) || [];
+  const updateDebounced = useCallback(
+    debounce((marginObj: typeof margin) => {
+      const marginValues = Object.values(marginObj);
+      const firstItem = marginValues[0];
+      const allItemsIsEqual = marginValues.every((item) => item === firstItem);
 
-  const marginTopNumber = (marginTop || "0").replace(/\D/g, "");
-  const marginRightNumber = (marginRight || "0").replace(/\D/g, "");
-  const marginBottomNumber = (marginBottom || "0").replace(/\D/g, "");
-  const marginLeftNumber = (marginLeft || "0").replace(/\D/g, "");
+      if (allItemsIsEqual) {
+        updateStyles({ margin: firstItem });
+      } else {
+        updateStyles(marginObj);
+      }
+    }, debounceTimeMs),
+    [currentElementToEdit?.id]
+  );
 
-  const updateMargin = (
-    value: string,
-    type: "top" | "right" | "bottom" | "left"
-  ) => {
-    const margin = {
-      top: `${value}px ${marginRightNumber}px ${marginBottomNumber}px ${marginLeftNumber}px`,
-      right: `${marginTopNumber}px ${value}px ${marginBottomNumber}px ${marginLeftNumber}px`,
-      bottom: `${marginTopNumber}px ${marginRightNumber}px ${value}px ${marginLeftNumber}px`,
-      left: `${marginTopNumber}px ${marginRightNumber}px ${marginBottomNumber}px ${value}px`,
-    };
+  useEffect(() => {
+    updateDebounced(margin);
+  }, [margin]);
 
-    updateStyles({
-      margin: margin[type],
-    });
-  };
-
-  const [paddingTop, paddingRight, paddingBottom, paddingLeft] =
-    (useGetCurrentStyles("padding")?.split(" ") as string[]) || [];
-
-  const paddingTopNumber = (paddingTop || "0").replace(/\D/g, "");
-  const paddingRightNumber = (paddingRight || "0").replace(/\D/g, "");
-  const paddingBottomNumber = (paddingBottom || "0").replace(/\D/g, "");
-  const paddingLeftNumber = (paddingLeft || "0").replace(/\D/g, "");
-
-  const updatePadding = (
-    value: string,
-    type: "top" | "right" | "bottom" | "left"
-  ) => {
-    const padding = {
-      top: `${value}px ${paddingRightNumber}px ${paddingBottomNumber}px ${paddingLeftNumber}px`,
-      right: `${paddingTopNumber}px ${value}px ${paddingBottomNumber}px ${paddingLeftNumber}px`,
-      bottom: `${paddingTopNumber}px ${paddingRightNumber}px ${value}px ${paddingLeftNumber}px`,
-      left: `${paddingTopNumber}px ${paddingRightNumber}px ${paddingBottomNumber}px ${value}px`,
-    };
-
-    updateStyles({
-      padding: padding[type],
-    });
-  };
+  const getMarginValue = (key: keyof typeof margin) =>
+    margin[key].replace(/\D/g, "");
 
   return (
-    <div className="">
-      <span className="text-sm text-zinc-600 font-medium">Espaçamento</span>
-      <div className="w-full flex gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="w-full">
-            <Button variant="outline">
-              <RxMargin />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuGroup className="flex items-center justify-center flex-col gap-2 p-1">
-              <div className="w-1/2">
-                <InputWithIcon
-                  value={marginTopNumber || 0}
-                  onChange={(evt) => updateMargin(evt.target.value, "top")}
-                  icon={MarginTopIcon}
-                />
-              </div>
-              <div className="flex gap-2">
-                <InputWithIcon
-                  value={marginLeftNumber || 0}
-                  onChange={(evt) => updateMargin(evt.target.value, "left")}
-                  icon={MarginLeftIcon}
-                />
-                <InputWithIcon
-                  value={marginRightNumber || 0}
-                  onChange={(evt) => updateMargin(evt.target.value, "right")}
-                  icon={MarginRightIcon}
-                />
-              </div>
-              <div className="w-1/2">
-                <InputWithIcon
-                  value={marginBottomNumber || 0}
-                  onChange={(evt) => updateMargin(evt.target.value, "bottom")}
-                  icon={LuSquareDashedBottom}
-                />
-              </div>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="w-full">
+        <Button variant="outline">
+          <RxMargin />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-56">
+        <DropdownMenuGroup className="flex items-center justify-center flex-col gap-2 p-1">
+          <div className="w-1/2">
+            <InputWithIcon
+              value={getMarginValue("marginTop") || 0}
+              onChange={(evt) =>
+                setMargin((prev) => ({
+                  ...prev,
+                  marginTop: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={MarginTopIcon}
+            />
+          </div>
+          <div className="flex gap-2">
+            <InputWithIcon
+              value={getMarginValue("marginLeft") || 0}
+              onChange={(evt) =>
+                setMargin((prev) => ({
+                  ...prev,
+                  marginLeft: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={MarginLeftIcon}
+            />
+            <InputWithIcon
+              value={getMarginValue("marginRight") || 0}
+              onChange={(evt) =>
+                setMargin((prev) => ({
+                  ...prev,
+                  marginRight: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={MarginRightIcon}
+            />
+          </div>
+          <div className="w-1/2">
+            <InputWithIcon
+              value={getMarginValue("marginBottom") || 0}
+              onChange={(evt) =>
+                setMargin((prev) => ({
+                  ...prev,
+                  marginBottom: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={LuSquareDashedBottom}
+            />
+          </div>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="w-full">
-            <Button variant="outline">
-              <RxPadding />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuGroup className="flex items-center justify-center flex-col gap-2 p-1">
-              <div className="w-1/2">
-                <InputWithIcon
-                  value={paddingTopNumber}
-                  onChange={(evt) => updatePadding(evt.target.value, "top")}
-                  icon={LuPanelTopDashed}
-                />
-              </div>
-              <div className="flex gap-2">
-                <InputWithIcon
-                  value={paddingLeftNumber}
-                  onChange={(evt) => updatePadding(evt.target.value, "left")}
-                  icon={LuPanelLeftDashed}
-                />
-                <InputWithIcon
-                  value={paddingRightNumber}
-                  onChange={(evt) => updatePadding(evt.target.value, "right")}
-                  icon={LuPanelRightDashed}
-                />
-              </div>
-              <div className="w-1/2">
-                <InputWithIcon
-                  value={paddingBottomNumber}
-                  onChange={(evt) => updatePadding(evt.target.value, "bottom")}
-                  icon={LuPanelBottomDashed}
-                />
-              </div>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
+export function Padding() {
+  const { currentElementToEdit } = useEditorStore(
+    (state) => state.editorFunctions
+  );
+
+  const getPadding = (side: "top" | "right" | "bottom" | "left") => {
+    const [top, right, bottom, left] =
+      useGetCurrentStyles("padding")
+        ?.split(" ")
+        ?.map((padding: string) => padding.replace(/\D/g, "").trim()) || [];
+
+    switch (side) {
+      case "top":
+        return useGetCurrentStyles("paddingTop") || top || "0px";
+      case "right":
+        return useGetCurrentStyles("paddingRight") || right || "0px";
+      case "bottom":
+        return useGetCurrentStyles("paddingBottom") || bottom || "0px";
+      case "left":
+        return useGetCurrentStyles("paddingLeft") || left || "0px";
+      default:
+        return "0px";
+    }
+  };
+
+  const [padding, setPadding] = useState({
+    paddingTop: getPadding("top"),
+    paddingRight: getPadding("right"),
+    paddingBottom: getPadding("bottom"),
+    paddingLeft: getPadding("left"),
+  });
+
+  const updateStyles = useUpdateCurrentStyles();
+
+  const updateDebounced = useCallback(
+    debounce((paddingObj: typeof padding) => {
+      const paddingValues = Object.values(paddingObj);
+      const firstItem = paddingValues[0];
+      const allItemsIsEqual = paddingValues.every((item) => item === firstItem);
+
+      if (allItemsIsEqual) {
+        updateStyles({ padding: firstItem });
+      } else {
+        updateStyles(paddingObj);
+      }
+    }, debounceTimeMs),
+    [currentElementToEdit?.id]
+  );
+
+  useEffect(() => {
+    updateDebounced(padding);
+  }, [padding]);
+
+  const getPaddingValue = (key: keyof typeof padding) =>
+    padding[key].replace(/\D/g, "");
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="w-full">
+        <Button variant="outline">
+          <RxPadding />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuGroup className="flex items-center justify-center flex-col gap-2 p-1">
+          <div className="w-1/2">
+            <InputWithIcon
+              value={getPaddingValue("paddingTop") || 0}
+              onChange={(evt) =>
+                setPadding((prev) => ({
+                  ...prev,
+                  paddingTop: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={LuPanelTopDashed}
+            />
+          </div>
+          <div className="flex gap-2">
+            <InputWithIcon
+              value={getPaddingValue("paddingLeft") || 0}
+              onChange={(evt) =>
+                setPadding((prev) => ({
+                  ...prev,
+                  paddingLeft: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={LuPanelLeftDashed}
+            />
+            <InputWithIcon
+              value={getPaddingValue("paddingRight") || 0}
+              onChange={(evt) =>
+                setPadding((prev) => ({
+                  ...prev,
+                  paddingRight: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={LuPanelRightDashed}
+            />
+          </div>
+          <div className="w-1/2">
+            <InputWithIcon
+              value={getPaddingValue("paddingBottom") || 0}
+              onChange={(evt) =>
+                setPadding((prev) => ({
+                  ...prev,
+                  paddingBottom: `${evt.target.value || 0}px`,
+                }))
+              }
+              icon={LuPanelBottomDashed}
+            />
+          </div>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

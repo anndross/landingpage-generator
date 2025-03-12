@@ -1,7 +1,13 @@
 "use client";
 import { useEditorStore } from "@/modules/Editor/store";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
-import { CSSProperties, HTMLAttributes, useCallback } from "react";
+import {
+  CSSProperties,
+  forwardRef,
+  HTMLAttributes,
+  Ref,
+  useCallback,
+} from "react";
 import { Element } from "@/types/element";
 import { ReactNode } from "react";
 import { Text as EditableText } from "@/modules/Editor/Preview/PreviewLayout/mappedElements/Text";
@@ -35,18 +41,13 @@ interface DrawerProps {
   setState: (newState: ItemInterface[]) => void;
   tag: "main" | "div";
   style?: CSSProperties;
-  onRemove?: () => void;
   className?: HTMLAttributes<HTMLDivElement>["className"];
 }
 
-export function Drawer({
-  tag,
-  state,
-  setState,
-  style,
-  className,
-  onRemove,
-}: DrawerProps) {
+export const Drawer = forwardRef(function Drawer(
+  { tag, state, setState, style, className }: DrawerProps,
+  ref: Ref<ReactSortable<Element>>
+) {
   const {
     editorFunctions: { previewEditMode },
   } = useEditorStore();
@@ -58,9 +59,9 @@ export function Drawer({
 
   return (
     <ReactSortable
+      ref={ref as Ref<ReactSortable<Element>>}
       className={className}
       tag={tag}
-      onRemove={onRemove}
       style={style}
       group={{
         name: "shared",
@@ -79,4 +80,4 @@ export function Drawer({
       {state?.map((item) => getElementMemoized(previewEditMode, item))}
     </ReactSortable>
   );
-}
+});

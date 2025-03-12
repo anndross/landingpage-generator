@@ -131,7 +131,6 @@ export const useEditorStore = create<EditorStore>((set) => {
         const tree = update.updateTree(data);
 
         if (state.editorFunctions.subEditorOpen) {
-          console.log("UPDATED");
           state.setEditorFunctions({
             currentElementToEdit: data,
           });

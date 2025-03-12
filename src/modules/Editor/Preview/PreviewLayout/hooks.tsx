@@ -27,27 +27,27 @@ export function GetStyles(
   return element.style[breakpoint];
 }
 
-export function UpdateStyles(
+export function useUpdateStyles(): (
   element: EditorStore["layout"] | ElementsType,
   styles: CSSProperties
-): void {
+) => void {
   const {
     setLayout,
     editorFunctions: { breakpoint },
   } = useEditorStore();
 
-  setLayout({
-    ...element,
-    style: {
-      ...element.style,
-      [breakpoint]: {
-        ...element.style[breakpoint],
-        ...styles,
+  return (element, styles) => {
+    setLayout({
+      ...element,
+      style: {
+        ...element.style,
+        [breakpoint]: {
+          ...element.style[breakpoint],
+          ...styles,
+        },
       },
-    },
-  });
-
-  return;
+    });
+  };
 }
 
 // ------------------ HOOKS PARA AS CONFIGURAÇÕES ------------------

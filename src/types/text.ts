@@ -11,7 +11,6 @@ export type AvailableTags =
   | "h5"
   | "h6"
   | "p"
-  | "a"
   | "span";
 
 export type FontFamily = (typeof fontFamilyJSON)[number]["value"];

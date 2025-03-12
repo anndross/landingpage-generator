@@ -22,27 +22,15 @@ import {
 } from "@/modules/Editor/Manager/SubEditor/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
+import { useEditorStore } from "@/modules/Editor/store";
+import { debounceTimeMs } from "../utils";
 
 export function Appearance() {
-  const defaultBackgroundColor = useGetCurrentStyles("backgroundColor");
-  const [backgroundColor, setBackgroundColor] = useState(
-    defaultBackgroundColor || "#fff"
-  );
-
-  const updateStyles = useUpdateCurrentStyles();
-
-  useEffect(() => {
-    if (backgroundColor) updateStyles({ backgroundColor: backgroundColor });
-  }, [backgroundColor]);
-
   return (
     <div className="">
       <span className="text-sm text-zinc-600 font-medium">Aparência</span>
       <div className="flex flex-col gap-2">
-        <ColorPicker
-          color={backgroundColor || "#fff"}
-          setColor={(color) => setBackgroundColor(color)}
-        />
+        <Background />
         <div className="flex gap-2">
           <Opacity />
           <AppearanceRadius />
@@ -52,7 +40,40 @@ export function Appearance() {
   );
 }
 
+function Background() {
+  const { currentElementToEdit } = useEditorStore(
+    (state) => state.editorFunctions
+  );
+
+  const defaultBackgroundColor = useGetCurrentStyles("backgroundColor");
+  const [backgroundColor, setBackgroundColor] = useState(
+    defaultBackgroundColor || "#fff"
+  );
+
+  const updateStyles = useUpdateCurrentStyles();
+
+  const updateStylesDebounced = useCallback(
+    debounce((bg) => updateStyles({ backgroundColor: bg }), debounceTimeMs),
+    [currentElementToEdit?.id]
+  );
+
+  useEffect(() => {
+    if (backgroundColor) updateStylesDebounced(backgroundColor);
+  }, [backgroundColor]);
+
+  return (
+    <ColorPicker
+      color={backgroundColor || "#fff"}
+      setColor={(color) => setBackgroundColor(color)}
+    />
+  );
+}
+
 function Opacity() {
+  const { currentElementToEdit } = useEditorStore(
+    (state) => state.editorFunctions
+  );
+
   const defaultOpacity = useGetCurrentStyles("opacity");
   const [opacity, setOpacity] = useState(defaultOpacity || 1);
 
@@ -61,8 +82,8 @@ function Opacity() {
   const handleSetOpacity = useCallback(
     debounce((opacity: number | string) => {
       updateStyles({ opacity: `${opacity}` });
-    }, 200),
-    []
+    }, debounceTimeMs),
+    [currentElementToEdit?.id]
   );
 
   useEffect(() => {
@@ -82,6 +103,10 @@ function Opacity() {
 }
 
 function AppearanceRadius() {
+  const { currentElementToEdit } = useEditorStore(
+    (state) => state.editorFunctions
+  );
+
   const getBorderRadius = (
     side: "topLeft" | "topRight" | "bottomRight" | "bottomLeft"
   ) => {
@@ -118,23 +143,22 @@ function AppearanceRadius() {
   const updateStyles = useUpdateCurrentStyles();
 
   const updateDebounced = useCallback(
-    () =>
-      debounce(() => {
-        const radiusItems = Object.values(radius);
-        const firstItem = radiusItems[0];
-        const allItemsIsEqual = radiusItems.every((item) => item === firstItem);
+    debounce((radiusObj: typeof radius) => {
+      const radiusItems = Object.values(radiusObj);
+      const firstItem = radiusItems[0];
+      const allItemsIsEqual = radiusItems.every((item) => item === firstItem);
 
-        if (allItemsIsEqual) {
-          updateStyles({ borderRadius: firstItem });
-        } else {
-          updateStyles(radius);
-        }
-      }, 200),
-    []
+      if (allItemsIsEqual) {
+        updateStyles({ borderRadius: firstItem });
+      } else {
+        updateStyles(radiusObj);
+      }
+    }, debounceTimeMs),
+    [currentElementToEdit?.id]
   );
 
   useEffect(() => {
-    updateDebounced();
+    updateDebounced(radius);
   }, [radius]);
 
   const getRadiusValue = (key: keyof typeof radius) =>
