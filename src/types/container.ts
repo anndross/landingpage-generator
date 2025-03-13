@@ -1,4 +1,4 @@
-import { ElementsType, LayoutStyle } from "@/modules/Editor/store";
+import { ElementsType, LayoutStyle } from "@/modules/editor/store";
 import { BaseProps } from "./base";
 
 export type ContainerElementProps = {

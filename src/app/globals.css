@@ -111,3 +111,8 @@ body {
   border-radius: 10px;
   border: 4px solid #fff;
 }
+
+.preview-wrapper {
+  container-type: inline-size;
+  container-name: wrapper;
+}

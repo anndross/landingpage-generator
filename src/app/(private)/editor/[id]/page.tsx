@@ -1,4 +1,4 @@
-import { Editor as EditorModule } from "@/modules/Editor";
+import { Editor as EditorModule } from "@/modules/editor";
 import { Header } from "@/components/Header";
 import { Params } from "@/types/routeContext";
 

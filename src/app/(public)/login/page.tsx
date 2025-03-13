@@ -1,6 +1,7 @@
 "use client";
-import { SignInForm } from "@/modules/Auth/SignIn";
-import { SignUpForm } from "@/modules/Auth/SignUp";
+
+import { SignInForm } from "@/modules/auth/SignIn";
+import { SignUpForm } from "@/modules/auth/SignUp";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { useState } from "react";

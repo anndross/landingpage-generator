@@ -1,4 +1,4 @@
-import { LayoutStyle } from "@/modules/Editor/store";
+import { LayoutStyle } from "@/modules/editor/store";
 import { BaseProps } from "./base";
 
 export type ImageProps = BaseProps & {
